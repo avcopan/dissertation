@@ -1,0 +1,140 @@
+\documentclass[12pt,notitlepage]{report}
+\usepackage{fullpage}
+\usepackage{setspace}\doublespacing
+\textfloatsep 0.75in
+\usepackage[nottoc]{tocbibind}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+\usepackage[square]{natbib}
+\usepackage{amsmath}
+\usepackage{pgfornament}
+\usepackage[bindingoffset=6mm,twoside]{geometry}
+\usepackage[toc]{appendix}
+\usepackage[english]{babel}
+\usepackage{lipsum}
+
+% Title
+\newcommand{\dissertationtitle}{%
+    Density Cumulant Theory\\for Ground and Excited Electronic states}
+\newcommand{\whoami}{Andreas Victor Copan}
+
+\setcounter{tocdepth}{1}
+
+\begin{document}
+
+% Make the official abstract page
+\newpage
+\thispagestyle{empty}
+\vspace*{18pt}
+\begin{center}
+\textsc{\large{\dissertationtitle}}\\[18pt]
+by\\[18pt]
+\textsc{\whoami}\\[12pt]
+(Under the Direction of Henry F. Schaefer III)\\[12pt]
+\textsc{Abstract}
+\end{center}
+Here is my abstract. Here is my abstract. Here is my abstract. Here is my
+abstract. Here is my abstract. Here is my abstract. Here is my abstract. Here is
+my abstract. Here is my abstract. Here is my abstract. Here is my abstract.
+\thispagestyle{empty}
+
+\begin{list}{\textsc{Index words:\hfill}}{\labelwidth 1.2in\leftmargin 1.4in\labelsep 0.2in}
+\item 
+\begin{flushleft}\singlespacing
+Cool stuff,
+Deep learning,
+Big data,
+Crowdsourcing,
+Computer vision,
+Computer science
+\end{flushleft}
+\end{list}
+
+% Make the official title page
+\newpage
+\pagenumbering{roman}
+\thispagestyle{empty}
+\vspace*{18pt}
+\begin{center}
+\textsc{\large{\dissertationtitle}}\\[18pt]
+by\\[18pt]
+\textsc{\whoami}\\[12pt]
+B.A., Bethel University, 2013\\
+\vfill
+A Dissertation Submitted to the Graduate Faculty \\
+of The University of Georgia in Partial Fulfillment \\
+of the \\
+Requirements for the Degree \\[10pt]
+\textsc{Doctor of Philosophy}\\[36pt]
+\textsc{Athens, Georgia}\\[18pt]
+2018
+\end{center}
+
+% Make the copyright page
+\newpage
+\thispagestyle{empty}
+\vspace*{5.5in}
+\begin{center}
+\copyright 2018 \\
+\whoami \\
+All Rights Reserved
+\end{center}
+
+% Make the approval page
+\newpage
+\thispagestyle{empty}
+\vspace*{18pt}
+\begin{center}
+\textsc{\large{\dissertationtitle}}\\[18pt]
+by\\[18pt]
+\textsc{\whoami}
+\end{center}
+\vfill
+\begin{flushleft}\singlespacing
+\hskip 200pt {Approved:}\\
+\vspace{12pt}
+
+\hspace*{200pt}\makebox[100pt][l]{Major Professor:}Henry F.~Schaefer III\\
+\vspace{12pt}
+\hspace*{200pt}\makebox[100pt][l]{Committee:}Gary E.~Douberly\\
+\hspace*{200pt}\makebox[100pt][l]{}Henning Meyer\\
+% Approval words
+\vfill
+Electronic Version Approved:\\[12pt]
+Suzanne Barbour\\
+Dean of the Graduate School\\
+The University of Georgia\\
+December 2018
+\end{flushleft}
+
+\newpage
+\vspace*{1.5in}
+\begin{center}
+\emph{In memory of Valery Andreiyevich and Valtraut Kirsch Copan}\\
+\vspace{6pt}
+\pgfornament[width=4cm,color=black]{88}
+\end{center}
+
+\input{acknowledgments}
+
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+
+% Chapters. Organize and name as you wish, as long as these refer to files that exist.
+\input{introduction}
+\input{related_work}
+\input{methodology}
+\input{experiments}
+\input{conclusion}
+
+\begin{appendices}
+	\input{extended_results}
+\end{appendices}
+
+\newpage
+\bibliographystyle{plainnat}
+\bibliography{dissertation}
+
+\end{document}
