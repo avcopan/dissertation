@@ -6,13 +6,31 @@
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage{wrapfig}
-\usepackage[square]{natbib}
+\usepackage[super,sort&compress]{natbib}
 \usepackage{amsmath}
 \usepackage{pgfornament}
 \usepackage[bindingoffset=6mm,twoside]{geometry}
 \usepackage[toc]{appendix}
 \usepackage[english]{babel}
+\usepackage{cleveref}
 \usepackage{lipsum}
+
+% Control header sizes
+\usepackage{titlesec}
+\usepackage{lmodern}
+\newcommand{\chapfnt}{\fontsize{14}{16}}
+\newcommand{\secfnt}{\fontsize{12}{14}}
+\newcommand{\ssecfnt}{\fontsize{12}{14}}
+\titleformat{\chapter}[display]
+{\normalfont\chapfnt\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\chapfnt}
+\titleformat{\section}
+{\normalfont\secfnt\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+{\normalfont\ssecfnt\bfseries}{\thesubsection}{1em}{}
+
+% Use symbolic rather than numeric footnotes
+\usepackage[symbol]{footmisc}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
 
 % Title
 \newcommand{\dissertationtitle}{%
@@ -124,9 +142,9 @@ December 2018
 
 % Chapters. Organize and name as you wish, as long as these refer to files that exist.
 \input{introduction}
-\input{related_work}
-\input{methodology}
-\input{experiments}
+\input{benchmark}
+\input{response}
+\input{davidson}
 \input{conclusion}
 
 \begin{appendices}
@@ -134,7 +152,7 @@ December 2018
 \end{appendices}
 
 \newpage
-\bibliographystyle{plainnat}
+\bibliographystyle{aipnum4-1}
 \bibliography{dissertation}
 
 \end{document}

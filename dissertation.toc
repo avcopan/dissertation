@@ -1,0 +1,15 @@
+\select@language {english}
+\contentsline {chapter}{Acknowledgments}{v}
+\contentsline {chapter}{\numberline {1}Introduction}{1}
+\contentsline {section}{\numberline {1.1}Stuff}{1}
+\contentsline {subsection}{\numberline {1.1.1}Artificial Neural Networks}{1}
+\contentsline {chapter}{\numberline {2}Ground-State Density Cumulant Theory:\\ Thermochemical and Kinetic Benchmark Calculations }{3}
+\contentsline {section}{\numberline {2.1}Abstract}{3}
+\contentsline {section}{\numberline {2.2}Introduction}{4}
+\contentsline {section}{\numberline {2.3}Overview of DCFT}{7}
+\contentsline {chapter}{\numberline {3}Linear-Response Density Cumulant Theory for Excited States:\\ First Implementation and Benchmark Calculations }{9}
+\contentsline {chapter}{\numberline {4}Linear-Response Density Cumulant Theory for Excited States:\\ Better Algorithms, Bigger Systems }{12}
+\contentsline {chapter}{\numberline {5}Conclusion}{16}
+\contentsline {chapter}{Appendices}{19}
+\contentsline {chapter}{\numberline {A}Extended Results}{19}
+\contentsline {chapter}{Bibliography}{22}

@@ -1,0 +1,233 @@
+\chapter[%
+	Ground-State Density Cumulant Theory:\\
+	Thermochemical and Kinetic Benchmark Calculations
+]{%
+	Ground-State Density Cumulant Theory:\\
+	Thermochemical and Kinetic Benchmark Calculations\footnote{%
+        A.~V.~Copan, A.~Yu.~Sokolov, and H.~F.~Schaefer.,
+        J.~Chem.~Theory~Comput.
+        {\bfseries 10},
+        2389
+        (2014).
+        Adapted with permission of the American Chemical Society.
+    }
+}
+\label{ch:benchmark}
+
+\section{Abstract}
+We present an extensive benchmark study of density cumulant functional theory
+(DCFT) for thermochemistry and kinetics of closed- and open-shell molecules. The
+performance of DCFT methods (DC-06, DC-12, ODC-06, and ODC-12) is compared to
+that of coupled-electron pair methods (CEPA$_0$ and OCEPA$_0$) and
+coupled-cluster theory (CCSD and CCSD(T)) for the description of noncovalent
+interactions (A24 database), barrier heights of hydrogen-transfer reactions
+(HTBH38), radical stabilization energies (RSE30), adiabatic ionization energies
+(AIE), and covalent bond stretching in diatomic molecules. Our results indicate
+that out of four DCFT methods the ODC-12 method is the most reliable and
+accurate DCFT formulation to date. Compared to CCSD, ODC-12 shows superior
+results for all benchmark tests employed in our study. With respect to
+coupled-pair theories, ODC-12 outperforms CEPA$_0$, and shows similar accuracy
+to the orbital-optimized CEPA$_0$ variant (OCEPA$_0$) for systems at equilibrium
+geometries. For covalent bond stretching, ODC-12 is found to be more reliable
+than OCEPA$_0$. For the RSE30 and AIE datasets, ODC-12 shows competitive
+performance with CCSD(T). In addition to benchmark results, we report new
+reference values for the RSE30 dataset computed using coupled cluster theory
+with up to perturbative quadruple excitations.
+
+
+\section{Introduction}
+
+Recent developments in {\itshape ab initio} quantum chemistry have resulted in a
+variety of computational models for studying molecules.
+Apart from concerns about efficiency and accuracy, several concepts have evolved
+as criteria for judging the merits of a particular method.
+Energy-based criteria typically define an ``ideal'' approximation as one
+yielding correlation energies that are size-consistent,
+extensive\cite{Nooijen:2005p2277},
+well-defined (giving continuous, unique potential surfaces), and
+variational.\cite{Pople:1976p1} 
+While it has been argued that the practical benefits of variationality are
+rather limited,\cite{Bartlett:1981p359} 
+the efficiency of gradient computations, at least, is improved by formulating a
+theory in terms of a Hermitian and stationary energy
+functional.\cite{Szalay:1995p281}
+With respect to scope and stability, methods that show consistent performance
+for open-shell systems, strongly correlated states, and non-equilibrium
+geometries are particularly valuable.\cite{Bartlett:1981p359}
+
+The incorrect scaling of truncated configuration interaction (CI) energies with
+system size has inspired the development of size-extensive alternatives. Among
+the earliest formulations, the coupled electron pair approximations (CEPAs)
+\cite{Kelly:1963p2091,Kelly:1964pA1450,Meyer:1973p1017,Ahlrichs:1979p31,Koch:1981p387}
+attracted much attention in
+1970s,\cite{Gelus:1970p503,Staemmler:1972p187,Ahlrichs:1975p1235,Kollmar:1977p3583,Wasilewski:1988p1289}
+offering rigorous extensivity and size-consistency while retaining much of the
+linearity\cite{Taube:2009p1441122} of CI in their equations.
+CEPA methods, however, have been shown to rapidly deteriorate as the molecular
+geometry deviates from equilibrium\cite{Taube:2009p1441122} and yield energies
+that vary under the rotation of the occupied orbitals.\cite{Ahlrichs:1979p31}
+Partly in light of such defects, CEPA has been largely displaced by
+coupled-cluster (CC)
+theory.\cite{Coester:1958p421,Coester:1960p477,Cizek:1966p4256,Bartlett:1978p561,Bartlett:1981p359,Crawford:2000p33,Bartlett:2007p291,Shavitt:2009}
+In addition to size-extensivity, CC offers orbital invariance and improved
+stability for non-equilibrium structures\cite{Taube:2009p1441122}, but has a
+non-Hermitian energy functional and non-linear equations which are not readily
+amenable to parallel implementation.
+Although neither class of methods is strictly variational, VCEPA (variational
+CEPA) has been shown to be effectively equivalent to its non-variational
+counterpart.\cite{Kollmar:2010p2449}
+Various other modifications to resolve the deficiencies of traditional CEPA have
+been explored, including self-consistent size-consistent CI,
+\cite{Daudey:1993p1240,Malrieu:2010p179} orbital-invariant CEPA,
+\cite{Nooijen:2006p25,Kollmar:2011p084102} and orbital-optimized CEPA
+formulations.
+\cite{Kollmar:2010p311,Bozkaya:2013p054104,Soydas:2014p1073,Bozkaya:2013p154105}
+Recently, the CEPA methods have been revived by Neese and
+co-workers\cite{Wennmohs:2008p217,Neese:2009p114108,Kollmar:2010p2449} who
+developed the local pair-natural-orbital CEPA (LPNO-CEPA) methods and have
+implemented them for massively parallel computer architectures.
+
+It has recently been
+demonstrated\cite{Kutzelnigg:2006p171101,Mazziotti:2008p253002,Mazziotti:2010p062515,DePrince:2012p1917}
+that CEPA methods naturally arise in the context of theories that obtain the
+molecular energies from density cumulants, the connected and extensive
+components of the reduced density matrices
+(RDMs).\cite{Kutzelnigg:1997p432,Mazziotti:1998p419,Mazziotti:1998p4219,Kutzelnigg:1999p2800,Kong:2011p3541,Hanauer:2012p50}
+The advantage of cumulant-based theories is that, unlike their RDM-based
+counterparts,\cite{Nakata:2009p042109,vanAggelen:2010p114112,Verstichel:2010p114113}
+they are naturally size-extensive and
+size-consistent.\cite{Kutzelnigg:1999p2800,Herbert:2007p261}
+We have recently achieved the first
+implementation\cite{Simmonett:2010p174122,Sokolov:2012p054105} of density
+cumulant functional theory (DCFT), proposed by Kutzelnigg in
+2006.\cite{Kutzelnigg:2006p171101}
+In DCFT, the molecular energy is obtained in terms of a mean-field one-particle
+RDM and the two-particle density cumulant, constrained to be at least
+approximately $N$-representable ({\it i.e.}\@ to correspond to a physical
+$N$-electron wavefunction).
+Like traditional CC theory, DCFT is size-extensive and orbital-invariant, but it
+has the additional advantage of a stationary and Hermitian energy functional,
+which simplifies the computation of molecular properties.
+In the original DCFT formulation
+(DC-06)\cite{Kutzelnigg:2006p171101,Simmonett:2010p174122,Sokolov:2012p054105}
+$N$-representability conditions derived from second-order M\o ller-Plesset
+perturbation theory (MPPT) were used,\cite{Kutzelnigg:2004p7350} yielding
+equations similar to those of the simplest CEPA model
+(CEPA$_0$),\cite{Meyer:1973p1017,Koch:1981p387} but including higher-order terms
+in the description of one-particle correlation effects.
+Using the same set of conditions, we have developed new formulations of DCFT
+that take advantage of an improved description of the one-particle density
+matrix (DC-12)\cite{Sokolov:2013p024107} and full orbital optimization (ODC-06
+and ODC-12 methods).\cite{Sokolov:2013p204110}
+
+Our previous
+studies\cite{Simmonett:2010p174122,Sokolov:2012p054105,Sokolov:2013p024107,Sokolov:2013p204110}
+demonstrated for a limited set of systems that the DC-06, DC-12, ODC-06 and
+ODC-12 methods generally yield molecular energies and properties competitive
+with those obtained by CCSD and CCSD(T), but may exhibit unstable performance
+due to imbalances in the description of electron correlation.
+Herein, we present an extensive benchmark of the DCFT methods with respect to
+thermochemical and kinetic molecular properties, including noncovalent
+interactions, barrier heights in hydrogen-transfer reactions, radical
+stabilization energies, and adiabatic ionization energies for challenging
+electron-dense systems.
+We conclude our benchmark study by testing the performance of DCFT for covalent
+bond stretching in diatomic molecules.
+
+
+\section{Overview of DCFT}
+In this section a short overview of DCFT is presented. For details on the theory
+the reader is referred to our earlier
+publications.\cite{Simmonett:2010p174122,Sokolov:2013p024107,Sokolov:2013p204110}
+In the RDM methods\cite{Mazziotti:2007} the exact molecular energy is expressed
+as a functional of the one- and two-particle reduced density matrices,
+$\boldsymbol{\gamma}_1$ and $\boldsymbol{\gamma}_2$ (1-RDM and 2-RDM):
+\begin{equation}
+	\label{e-rdm}
+	E
+    = 
+	h_p^q
+    \gamma_q^p
+    +
+    \tfrac{1}{2}
+    g_{pq}^{rs}
+    \gamma_{rs}^{pq} \ ,
+	\qquad
+	[\boldsymbol{\gamma}_1]_q^p
+    \equiv
+    \gamma_q^p \ , 
+	\qquad
+	[\boldsymbol{\gamma}_2]_{rs}^{pq}
+    \equiv
+    \gamma_{rs}^{pq}\,.
+\end{equation}
+In \cref{e-rdm}, $h_p^q$ and $g_{pq}^{rs}$ are the usual one- and two-electron
+integrals in the orthonormal spin-orbital basis $\{\psi_p\}$ and summation over
+the repeated indices is implied.
+Expressing $\boldsymbol{\gamma}_1$ through $\boldsymbol{\gamma}_2$ via
+the partial trace relation $\sum_r\gamma_{qr}^{pr}=(N-1)\gamma_q^p$, the energy
+functional \eqref{e-rdm} can be minimized by varying $\boldsymbol{\gamma}_2$
+subject to $N$-representability constraints.
+This is the essence of the variational 2-RDM approach.\cite{Mazziotti:2007}
+
+
+In DCFT, some of the challenges of the 2-RDM approach are circumvented by
+expanding $\boldsymbol{\gamma}_2$ in terms of its irreducible components -- the 1-RDM and
+the two-particle cumulant (denoted by $\boldsymbol{\lambda}_2$):
+\begin{equation}
+	\label{lambda}
+	\gamma_{rs}^{pq}
+    =
+	\gamma_r^p
+    \gamma_s^q
+    -
+    \gamma_r^q
+    \gamma_s^p
+	+
+    \lambda_{rs}^{pq}\,.
+\end{equation}
+In \cref{lambda}, $\boldsymbol{\lambda}_2$ describes the correlated part of $\boldsymbol{\gamma}_2$ that
+cannot be expressed via $\boldsymbol{\gamma}_1$. The cumulant also determines the correlation
+contribution to $\boldsymbol{\gamma}_1$, allowing the 1-RDM to be decomposed as the sum of an
+idempotent 1-RDM ($\boldsymbol{\kappa}$) and a correlation correction ($\boldsymbol{\tau}$):
+\begin{equation}
+	\label{tau}
+	\boldsymbol{\gamma}_1
+    =
+    \boldsymbol{\kappa}
+    +
+    \boldsymbol{\tau}\,.
+\end{equation}
+The correlation component $\boldsymbol{\tau}$ is fully specified by $\boldsymbol{\lambda}_2$, whereas
+$\boldsymbol{\kappa}$ is independent of $\boldsymbol{\lambda}_2$. \cref{lambda,tau} allow us to write an
+equivalent energy expression with $\boldsymbol{\kappa}$ and $\boldsymbol{\lambda}_2$ as independent
+functional parameters:
+\begin{equation}
+	\label{e-dcft}
+    \begin{array}{c}
+        E[\boldsymbol{\kappa},\boldsymbol{\lambda}_2]
+        =
+        \tfrac{1}{2}
+        (h_p^q+f_p^q)
+        (\kappa_q^p+\tau_q^p)
+        +
+        \tfrac{1}{4}
+        \overline{g}_{pq}^{rs}
+        \lambda_{pq}^{rs}
+        ,
+        \\
+        f_p^q
+        =
+        h_p^q
+        +
+        \overline{g}_{pr}^{qs}
+        (\kappa_s^r+\tau_s^r)
+        ,
+        \quad
+        \overline{g}_{rs}^{pq}
+        =
+        g_{rs}^{pq}
+        -
+        g_{rs}^{qp}\,.
+    \end{array}
+\end{equation}
