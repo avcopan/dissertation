@@ -6,7 +6,7 @@
 %Control: page (0) single
 %Control: year (1) truncated
 %Control: production of eprint (0) enabled
-\begin{thebibliography}{54}%
+\begin{thebibliography}{64}%
 \makeatletter
 \providecommand \@ifxundefined [1]{%
  \@ifx{#1\undefined}
@@ -491,4 +491,109 @@
   {Advances in Chemical Physics}, Vol.\ \bibinfo {volume} {134}\ (\bibinfo
   {publisher} {John Wiley \& Sons, Inc.},\ \bibinfo {address} {Hoboken, NJ},\
   \bibinfo {year} {2007})\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Turney}\ \emph {et~al.}(2012)\citenamefont {Turney},
+  \citenamefont {Simmonett}, \citenamefont {Parrish}, \citenamefont
+  {Hohenstein}, \citenamefont {Evangelista}, \citenamefont {Fermann},
+  \citenamefont {Mintz}, \citenamefont {Burns}, \citenamefont {Wilke},
+  \citenamefont {Abrams}, \citenamefont {Russ}, \citenamefont {Leininger},
+  \citenamefont {Janssen}, \citenamefont {Seidl}, \citenamefont {Allen},
+  \citenamefont {Schaefer}, \citenamefont {King}, \citenamefont {Valeev},
+  \citenamefont {Sherrill},\ and\ \citenamefont {Crawford}}]{Turney:2012p556}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~M.}\ \bibnamefont
+  {Turney}}, \bibinfo {author} {\bibfnamefont {A.~C.}\ \bibnamefont
+  {Simmonett}}, \bibinfo {author} {\bibfnamefont {R.~M.}\ \bibnamefont
+  {Parrish}}, \bibinfo {author} {\bibfnamefont {E.~G.}\ \bibnamefont
+  {Hohenstein}}, \bibinfo {author} {\bibfnamefont {F.~A.}\ \bibnamefont
+  {Evangelista}}, \bibinfo {author} {\bibfnamefont {J.~T.}\ \bibnamefont
+  {Fermann}}, \bibinfo {author} {\bibfnamefont {B.~J.}\ \bibnamefont {Mintz}},
+  \bibinfo {author} {\bibfnamefont {L.~A.}\ \bibnamefont {Burns}}, \bibinfo
+  {author} {\bibfnamefont {J.~J.}\ \bibnamefont {Wilke}}, \bibinfo {author}
+  {\bibfnamefont {M.~L.}\ \bibnamefont {Abrams}}, \bibinfo {author}
+  {\bibfnamefont {N.~J.}\ \bibnamefont {Russ}}, \bibinfo {author}
+  {\bibfnamefont {M.~L.}\ \bibnamefont {Leininger}}, \bibinfo {author}
+  {\bibfnamefont {C.~L.}\ \bibnamefont {Janssen}}, \bibinfo {author}
+  {\bibfnamefont {E.~T.}\ \bibnamefont {Seidl}}, \bibinfo {author}
+  {\bibfnamefont {W.~D.}\ \bibnamefont {Allen}}, \bibinfo {author}
+  {\bibfnamefont {H.~F.}\ \bibnamefont {Schaefer}}, \bibinfo {author}
+  {\bibfnamefont {R.~A.}\ \bibnamefont {King}}, \bibinfo {author}
+  {\bibfnamefont {E.~F.}\ \bibnamefont {Valeev}}, \bibinfo {author}
+  {\bibfnamefont {C.~D.}\ \bibnamefont {Sherrill}}, \ and\ \bibinfo {author}
+  {\bibfnamefont {T.~D.}\ \bibnamefont {Crawford}},\ }\href@noop {} {\bibfield
+  {journal} {\bibinfo  {journal} {WIREs Comput. Mol. Sci.}\ }\textbf {\bibinfo
+  {volume} {2}},\ \bibinfo {pages} {556} (\bibinfo {year} {2012})}\BibitemShut
+  {NoStop}%
+\bibitem [{\citenamefont {Raghavachari}\ \emph {et~al.}(1989)\citenamefont
+  {Raghavachari}, \citenamefont {Trucks}, \citenamefont {Pople},\ and\
+  \citenamefont {Head-Gordon}}]{Raghavachari:1989p479}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {K.}~\bibnamefont
+  {Raghavachari}}, \bibinfo {author} {\bibfnamefont {G.~W.}\ \bibnamefont
+  {Trucks}}, \bibinfo {author} {\bibfnamefont {J.~A.}\ \bibnamefont {Pople}}, \
+  and\ \bibinfo {author} {\bibfnamefont {M.}~\bibnamefont {Head-Gordon}},\
+  }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Chem. Phys.
+  Lett.}\ }\textbf {\bibinfo {volume} {157}},\ \bibinfo {pages} {479} (\bibinfo
+  {year} {1989})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Stanton}(1997)}]{Stanton:1997p130}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.~F.}\ \bibnamefont
+  {Stanton}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Chem.
+  Phys. Lett.}\ }\textbf {\bibinfo {volume} {281}},\ \bibinfo {pages} {130}
+  (\bibinfo {year} {1997})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Dunning}(1989)}]{Dunning:1989p1007}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {T.~H.}\ \bibnamefont
+  {Dunning}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {J.
+  Chem. Phys.}\ }\textbf {\bibinfo {volume} {90}},\ \bibinfo {pages} {1007}
+  (\bibinfo {year} {1989})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Woon}\ and\ \citenamefont
+  {Dunning}(1995)}]{Woon:1995p4572}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {D.~E.}\ \bibnamefont
+  {Woon}}\ and\ \bibinfo {author} {\bibfnamefont {T.~H.}\ \bibnamefont
+  {Dunning}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {J.
+  Chem. Phys.}\ }\textbf {\bibinfo {volume} {103}},\ \bibinfo {pages} {4572}
+  (\bibinfo {year} {1995})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Kendall}, \citenamefont {Dunning},\ and\
+  \citenamefont {Harrison}(1992)}]{Kendall:1992p6796}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {R.~A.}\ \bibnamefont
+  {Kendall}}, \bibinfo {author} {\bibfnamefont {T.~H.}\ \bibnamefont
+  {Dunning}}, \ and\ \bibinfo {author} {\bibfnamefont {R.~J.}\ \bibnamefont
+  {Harrison}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {J.
+  Chem. Phys.}\ }\textbf {\bibinfo {volume} {96}},\ \bibinfo {pages} {6796}
+  (\bibinfo {year} {1992})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Řez{\'{a}}{\v{c}}}\ and\ \citenamefont
+  {Hobza}(2013)}]{Rezac:2013p2151}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {J.}~\bibnamefont
+  {Řez{\'{a}}{\v{c}}}}\ and\ \bibinfo {author} {\bibfnamefont
+  {P.}~\bibnamefont {Hobza}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo
+  {journal} {J. Chem. Theory Comput.}\ }\textbf {\bibinfo {volume} {9}},\
+  \bibinfo {pages} {2151} (\bibinfo {year} {2013})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Zhao}, \citenamefont {Lynch},\ and\ \citenamefont
+  {Truhlar}(2005)}]{Zhao:2005p43}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {Y.}~\bibnamefont
+  {Zhao}}, \bibinfo {author} {\bibfnamefont {B.~J.}\ \bibnamefont {Lynch}}, \
+  and\ \bibinfo {author} {\bibfnamefont {D.~G.}\ \bibnamefont {Truhlar}},\
+  }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Phys. Chem. Chem.
+  Phys.}\ }\textbf {\bibinfo {volume} {7}},\ \bibinfo {pages} {43} (\bibinfo
+  {year} {2005})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Soydaş}\ and\ \citenamefont
+  {Bozkaya}(2013)}]{Soydas:2013p1452}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {E.}~\bibnamefont
+  {Soydaş}}\ and\ \bibinfo {author} {\bibfnamefont {U.}~\bibnamefont
+  {Bozkaya}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {J.
+  Chem. Theory Comput.}\ }\textbf {\bibinfo {volume} {9}},\ \bibinfo {pages}
+  {1452} (\bibinfo {year} {2013})}\BibitemShut {NoStop}%
+\bibitem [{\citenamefont {Lynch}, \citenamefont {Zhao},\ and\ \citenamefont
+  {Truhlar}()}]{MN-Database}%
+  \BibitemOpen
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {B.~J.}\ \bibnamefont
+  {Lynch}}, \bibinfo {author} {\bibfnamefont {Y.}~\bibnamefont {Zhao}}, \ and\
+  \bibinfo {author} {\bibfnamefont {D.~G.}\ \bibnamefont {Truhlar}},\ }\href
+  {http://comp.chem.umn.edu/db/} {\enquote {\bibinfo {title} {{The Minnesota
+  Databases for Chemistry and Solid-State Physics}},}\ }\BibitemShut {NoStop}%
 \end{thebibliography}%

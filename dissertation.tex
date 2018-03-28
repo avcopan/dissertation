@@ -13,6 +13,12 @@
 \usepackage[toc]{appendix}
 \usepackage[english]{babel}
 \usepackage{cleveref}
+\usepackage[version=3]{mhchem}
+\usepackage{pdflscape}
+\usepackage{longtable}
+\usepackage{capt-of}
+\usepackage{afterpage}
+\usepackage{xspace}
 \usepackage{lipsum}
 
 % Control header sizes
@@ -31,6 +37,15 @@
 % Use symbolic rather than numeric footnotes
 \usepackage[symbol]{footmisc}
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+% Define some macros
+\newcommand{\hartree}{\ensuremath{E_\mathrm{h}}\xspace}
+\newcommand{\bohr}{\ensuremath{a_0}\xspace}
+\newcommand{\kcal}{\ensuremath{\mathrm{kcal}~\mathrm{mol}^{-1}}\xspace}
+\newcommand{\std}{\ensuremath{\Delta_\mathrm{SD}}\xspace}
+\newcommand{\mae}{\ensuremath{\Delta_\mathrm{MAE}}\xspace}
+\newcommand{\rel}{\ensuremath{\Delta_\mathrm{rel}}\xspace}
+\newcommand{\termsymbol}[1]{\ensuremath{\mathrm{#1}}\xspace}
 
 % Title
 \newcommand{\dissertationtitle}{%
@@ -153,6 +168,6 @@ December 2018
 
 \newpage
 \bibliographystyle{aipnum4-1}
-\bibliography{dissertation}
+\bibliography{papers,other}
 
 \end{document}
