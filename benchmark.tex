@@ -199,7 +199,7 @@ idempotent 1-RDM ($\boldsymbol{\kappa}$) and a correlation correction ($\boldsym
     \boldsymbol{\tau}\,.
 \end{equation}
 The correlation component $\boldsymbol{\tau}$ is fully specified by $\boldsymbol{\lambda}_2$, whereas
-$\boldsymbol{\kappa}$ is independent of $\boldsymbol{\lambda}_2$. \cref{lambda,tau} allow us to write an
+$\boldsymbol{\kappa}$ is independent of $\boldsymbol{\lambda}_2$. \Cref{lambda,tau} allow us to write an
 equivalent energy expression with $\boldsymbol{\kappa}$ and $\boldsymbol{\lambda}_2$ as independent
 functional parameters:
 \begin{equation}
@@ -641,23 +641,6 @@ DC-06 and ODC-06 methods, which encounter frequent convergence problems due to
 the poor description of $N$-representability (see Supporting Information for
 incomplete DC-06 results).
 
-\begin{figure}[hb!]
-	\centering
-	\caption{%
-        \label{htbh-f}
-        Mean absolute deviations (\mae, \kcal) and the standard deviations from
-        the mean signed error (\std, \kcal) of barrier heights for 18
-        hydrogen-transfer reactions (\ce{R1 + R2H $\rightarrow$ R1H + R2},
-        HTBH38 database) computed using five methods with the aug-cc-pVTZ basis
-        set.
-        The errors are relative to CCSD(T)/aug-cc-pVTZ reference values.
-        The \mae value is represented as a height of each colored box, while the
-        \std value is depicted as a radius of the black vertical bar.
-        See \cref{htbh-t} for data on individual database members.
-	}
-	\includegraphics[width=0.8\textwidth]{figures/htbh.pdf}
-\end{figure}
-
 Mean absolute deviations (\mae) and standard deviations (\std) for the
 hydrogen-transfer barrier heights are presented in \cref{htbh-t} and plotted in
 \cref{htbh-f}.
@@ -675,6 +658,23 @@ values, which are commonly used to benchmark performance for reaction kinetics.
 The smallest \rel values are 29\% and 40\% for OCEPA$_0$ and ODC-12,
 respectively.
 
+\begin{figure}[hb!]
+	\centering
+	\caption{%
+        \label{htbh-f}
+        Mean absolute deviations (\mae, \kcal) and the standard deviations from
+        the mean signed error (\std, \kcal) of barrier heights for 18
+        hydrogen-transfer reactions (\ce{R1 + R2H $\rightarrow$ R1H + R2},
+        HTBH38 database) computed using five methods with the aug-cc-pVTZ basis
+        set.
+        The errors are relative to CCSD(T)/aug-cc-pVTZ reference values.
+        The \mae value is represented as a height of each colored box, while the
+        \std value is depicted as a radius of the black vertical bar.
+        See \cref{htbh-t} for data on individual database members.
+	}
+	\includegraphics[width=0.8\textwidth]{figures/htbh.pdf}
+\end{figure}
+
 Turning to barrier heights for individual hydrogen-transfer reactions
 (\cref{htbh-t}), the largest errors are observed for reactions 6 and 14, both
 involving the OH radical, for which CEPA$_0$ and DC-12 give errors of $\sim$
@@ -683,8 +683,6 @@ The best results for these reactions are obtained from OCEPA$_0$, with errors
 ranging from 0.51 to 1.18~\kcal.
 The ODC-12 method tends to predict larger barrier heights than OCEPA$_0$,
 yielding smaller errors only when OCEPA$_0$ underestimates the barrier heights.
-
-
 
 \afterpage{%
     \clearpage
@@ -929,3 +927,364 @@ For these systems, the average CEPA$_0$ and DC-12 errors are 8.05 and
 4.72~\kcal, and the average CCSD(T) error is 0.68~\kcal.
 OCEPA$_0$ and ODC-12 offer remarkably better performance for this subset, with
 average errors of 0.24~\kcal and 0.26~\kcal.
+
+
+\afterpage{%
+    \clearpage
+    \begin{landscape}
+        \begin{center}
+            \captionof{table}{%
+                \label{ip-t}
+                Errors in adiabatic ionization energies (AIEs, \eV) for 10 di-
+                and triatomic molecules computed using six methods with the
+                cc-pCVQZ basis set.
+                The errors are relative to experimental values
+                (\(\mathrm{IE}_\mathrm{ref}\), \eV) from
+                Ref.~\citenum{Lias:1988p1}, unless noted otherwise.
+                For all AIEs the harmonic zero-point vibrational energy
+                corrections were included.
+                For each method the mean absolute deviations from
+                \(\mathrm{IE}_\mathrm{ref}\) (\mae, \eV) and the standard
+                deviations from the mean signed error (\std, \eV) are also
+                shown.
+            }
+            \vspace{1em}
+            \renewcommand\arraystretch{0.6}
+            \small
+            \begin{tabular}{ccrrrrrrc}
+                \hline
+                \hline
+                Molecule & Transition &
+                $\Delta$CEPA$_0$ &
+                $\Delta$DC-12 &
+                $\Delta$CCSD &
+                $\Delta$OCEPA$_0$ &
+                $\Delta$ODC-12 &
+                $\Delta$CCSD(T) &
+                $\mathrm{IE}_\mathrm{ref}$
+                \\
+                \hline
+                \ce{N2} &
+                \(\termsymbol{{}^1\Sigma_g^+}\rightarrow\termsymbol{{}^2\Sigma_g^+}\) &
+                0.08 & 0.17 & 0.12 &-0.05 & 0.07 &-0.03 &
+                15.581  $\pm$ 0.008 $^a$ \\
+                \ce{O2} &
+                \(\termsymbol{{}^3\Sigma_g^-}\rightarrow\termsymbol{{}^2\Pi_g}\) &
+                -0.11 &-0.03 & 0.04 &-0.09 &-0.02 &-0.04 &
+                12.0697 $\pm$ 0.0002 \\
+                \ce{F2} &
+                \(\termsymbol{{}^1\Sigma_g^+}\rightarrow\termsymbol{{}^2\Pi_g}\) &
+                0.06 & 0.06 & 0.04 & 0.08 & 0.01 &-0.03	&
+                15.697 $\pm$ 0.003 \\
+                \ce{NO} &
+                \(\termsymbol{{}^2\Pi}\rightarrow\termsymbol{{}^1\Sigma^+}\) &
+                -0.15 &-0.05 &-0.05 &-0.05 &-0.02 &-0.09 &
+                9.26438 $\pm$ 0.00005 \\
+                \ce{OF} &
+                \(\termsymbol{{}^2\Pi}\rightarrow\termsymbol{{}^3\Sigma^-}\) &
+                0.11 & 0.12 &-0.10 &-0.03 &-0.02 &-0.11	&
+                12.77 $\pm$ 0.01 $^b$ \\
+                \ce{HNC} &
+                \(\termsymbol{{}^1\Sigma_g^+}\rightarrow\termsymbol{{}^2\Sigma^+}\) &
+                0.27 & 0.14 &-0.12 &-0.14 &-0.08 &-0.04	&
+                12.04 $\pm$ 0.01 $^c$ \\
+                \ce{HOF} &
+                \(\termsymbol{{}^1A'}\rightarrow\termsymbol{{}^2A''}\) &
+                0.20 & 0.17 &-0.10 &-0.03 &-0.04 &-0.07	&
+                12.71 $\pm$ 0.01 \\
+                \ce{FNO} &
+                \(\termsymbol{{}^1A'}\rightarrow\termsymbol{{}^2A''}\) &
+                0.51 & 0.10 &-0.02 &-0.02 &-0.00 & 0.04	&
+                12.63 $\pm$ 0.03 \\
+                \ce{F2N} &
+                \(\termsymbol{{}^2B_1}\rightarrow\termsymbol{{}^1A_1}\) &
+                0.07 & 0.10 & 0.07 & 0.01 & 0.03 &-0.08	&
+                11.63$\pm$ 0.01 \\
+                \ce{F2O} &
+                \(\termsymbol{{}^1A_1}\rightarrow\termsymbol{{}^2B_1}\) &
+                0.49 & 0.37 &-0.01 & 0.05 & 0.04 &-0.04	&
+                13.11 $\pm$ 0.01 \\
+                \hline
+                & \mae: & 0.21 & 0.13 & 0.06 & 0.05 & 0.03 & 0.06 & \\
+                & \std: & 0.22 & 0.12 & 0.08 & 0.06 & 0.04 & 0.04 & \\
+                \hline
+                \hline
+            \end{tabular}
+        \end{center}
+        $^a$ Reference \citenum{Trickl:1989p6006}. \\
+        $^b$ Reference \citenum{Zhang:1994p377}. \\
+        $^c$ Reference \citenum{Hansel:1998p1748}.
+    \end{landscape}
+}
+
+\subsection{Adiabatic Ionization Energies in Electron-Dense Molecules}
+
+We conclude the assessment of DCFT methods for the description of thermodynamic
+properties by computing adiabatic ionization energies (AIEs) for a set of 10 di-
+and triatomic electron-dense molecules (\cref{ip-t}), i.e.\ those that
+are composed of elements with small atomic radius, high electron affinity, and
+high electronegativity (N, O, F), in order to increase the magnitude of electron
+correlation effects.
+We use experimentally measured ionization energies reported to high precision
+($\sim$0.01~\eV)\cite{Lias:1988p1,Trickl:1989p6006,Zhang:1994p377,Hansel:1998p1748}
+as reference values for our benchmark (\(\mathrm{IE}_\mathrm{ref}\),
+\cref{ip-t}).
+The AIEs were computed using the cc-pCVQZ basis set, with harmonic ZPVE
+corrections applied to each neutral and cationic system.
+
+The \mae and \std values for our computed AIEs relative to experiment are
+plotted in \cref{ip-f}.
+Of the six methods, CEPA$_0$ and DC-12 exhibit the largest \mae values (0.21 and
+0.13~\eV, respectively).
+The closest agreement with experiment is given by ODC-12, with \mae = 0.03~\eV.
+OCEPA$_0$, CCSD, and CCSD(T) show somewhat poorer performance (\mae = 0.05, 0.06
+and 0.06~\eV, respectively). 
+The \std for ODC-12 matches that of CCSD(T) (0.04~\eV).
+For the other methods, the \std values decrease in the order CEPA$_0$ (0.22~\eV)
+$>$ DC-12 (0.12) $>$ CCSD (0.08) $>$ OCEPA$_0$ (0.06).
+
+\begin{figure}
+	\centering
+	\caption{%
+        \label{ip-f}
+        Mean absolute deviations (\mae, \eV) and the standard deviations from
+        the mean signed error (\std, \eV) of adiabatic ionization energies for
+        10 di- and triatomic molecules computed using six methods with the
+        cc-pCVQZ basis set.
+        The errors are relative to experimental
+        values.\cite{Lias:1988p1,Trickl:1989p6006,Zhang:1994p377,Hansel:1998p1748}
+        The \mae value is represented as a height of each colored box, while the
+        \std value is depicted as a radius of the black vertical bar.
+        See \cref{ip-t} for data on individual molecules.
+	}
+	\includegraphics[width=0.8\textwidth]{figures/ip.pdf}
+\end{figure}
+
+Individual errors for each system are shown in \cref{ip-t}.
+Both DC-12 and CEPA$_0$ exhibit large deviations for $\mathrm{F_2O}$ (0.49 and
+0.37~\eV), and CEPA$_0$ also gives a large error for FNO (0.51~\eV) which is the
+maximum error for this dataset.
+Both DC-12 and CEPA$_0$ give errors exceeding 0.1~\eV for seven of the ten
+systems, whereas CCSD exhibits errors in excess of 0.1~\eV for only three
+systems (OF, HNC, and HOF).
+CCSD(T) has only one such error (0.11~\eV for OF), as does OCEPA$_0$ (0.14~\eV
+for HNC).
+ODC-12 does the best of the methods considered, with a maximum error of
+0.08~\eV, found for the AIE of HNC.
+
+
+\begin{figure}
+	\centering
+	\caption{%
+        \label{bh-f}
+        Error in the total energy (\mhartree), relative to full CI, as a
+        function of B--H internuclear separation (\AA) computed using six
+        methods with the DZP basis set.
+        The full CI reference is depicted with a horizontal dotted line.
+        The dashed vertical line indicates the full CI equilibrium bond
+        distance.
+	}
+	\includegraphics[width=0.8\textwidth]{figures/bh.pdf}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\caption{%
+        \label{hf-f}
+        Error in the total energy (\mhartree), relative to full CI, as a
+        function of H--F internuclear separation (\AA) computed using six
+        methods with the DZP basis set.
+        The full CI reference is depicted with a horizontal dotted line.
+        The dashed vertical line indicates the full CI equilibrium bond
+        distance.
+	}
+	\includegraphics[width=0.8\textwidth]{figures/hf.pdf}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\caption{%
+        \label{beo-f}
+        Error in the total energy (\mhartree), relative to full CI, as a
+        function of Be--O internuclear separation (\AA) computed using six
+        methods with the 6-31G basis set.
+        The full CI reference is depicted with a horizontal dotted line.
+        The dashed vertical line indicates the full CI equilibrium bond
+        distance.
+	}
+	\includegraphics[width=0.8\textwidth]{figures/beo.pdf}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\caption{%
+        \label{n2-f}
+        Error in the total energy (\mhartree), relative to full CI, as a
+        function of N--N internuclear separation (\AA) computed using six
+        methods with the 6-31G basis set.
+        The full CI reference is depicted with a horizontal dotted line.
+        The dashed vertical line indicates the full CI equilibrium bond
+        distance.
+	}
+	\includegraphics[width=0.8\textwidth]{figures/n2.pdf}
+\end{figure}
+
+
+
+\subsection{Covalent Bond Stretching in Diatomic Molecules}
+
+Finally, we benchmark DCFT methods for covalent bond stretching.
+Although accurate description of bond stretching demands the use of
+multireference methods, our aim here is to explore the limits of DCFT away from
+equilibrium.
+For this purpose, we compute the energy as a function of bond distance for
+diatomic molecules with single (HF and BH), double (BeO), and triple (\ce{N2})
+bonds using the CEPA$_0$, OCEPA$_0$, DC-12, ODC-12, CCSD, and CCSD(T) methods.
+We restrict ourselves to modest basis sets in order to use full CI (FCI) as a
+reference, and plot the errors with respect to FCI ($\Delta E$) as a function of
+internuclear distance for each molecule.
+The relative performance of the methods is described below using non-parallelity
+errors (NPE $=\Delta E_\mathrm{max}-\Delta E_\mathrm{min}$, \mhartree) computed
+for specific bond distance ranges.
+
+
+\paragraph{BH}
+
+\Cref{bh-f} shows errors relative to FCI for the BH molecule.
+DC-12 and CCSD increasingly overestimate the energy at larger internuclear
+distances, whereas the CEPA$_0$ error curve is concave down.
+Orbital optimization lowers the binding energy for OCEPA$_0$ even further
+compared to CEPA$_0$, leading to large errors with respect to FCI for $r$(B--H)
+> 1.5 \re, where \re is the FCI equilibrium bond distance (\re$=1.244$~\AA). At
+1.87 \re, OCEPA$_0$ encounters convergence problems, which originate from
+numerical instabilities due to the method's deficiencies in the description of
+$N$-representability.
+The ODC-12 method exhibits much more stable behavior with respect to bond
+stretching in this case, fortuitously showing smaller errors and better
+parallelity than CCSD(T).
+For the range $[0.72\ \re, 2.47\ \re]$, the NPEs decrease in the order 
+DC-12    (24~\mhartree) $>$
+CEPA$_0$ (15) $>$
+CCSD     (5) $>$
+CCSD(T)  (3) $>$
+ODC-12   (1).
+
+
+\paragraph{HF}
+Errors for HF bond stretching are plotted in \cref{hf-f}.
+The $\Delta E$ values of CCSD and DC-12 increase as a function of $r$(H--F),
+while CEPA$_0$ fortuitously maintains parallelity similar to CCSD(T) over the
+range $[0.74\ \re, 1.94\ \re]$ ($\re = 0.929$~\AA).
+OCEPA$_0$ increasingly overestimates the HF binding energy away from
+equilibrium, failing to converge past 1.82 \re.
+The ODC-12 method exhibits larger NPE than was observed for BH, and encounters
+convergence problems past 1.94 \re.
+CCSD(T) shows the best overall performance, with errors between 0 and
+1~\mhartree.
+In the range $[0.74\ \re, 1.94\ \re]$ the computed NPE values are:
+DC-12    (15~\mhartree) $>$
+CCSD     (7) $>$
+ODC-12   (3) $>$
+CEPA$_0$ (1) $\approx$
+CCSD(T)  (1).
+Recently, the orbital-optimized variants of CCSD(T) have been shown to yield
+good performance for HF bond stretching.\cite{Bozkaya:2012p204114}
+
+\paragraph{BeO}
+The double bond of BeO presents a more challenging test for the single-reference
+methods under consideration (\cref{beo-f}).
+All methods but CCSD(T) show qualitatively similar error curves, with inflection
+points near the FCI equilibrium ($\re=1.394$~\AA) and valleys/peaks around 0.6
+\re/1.2 \re.
+OCEPA$_0$ encounters convergence problems past 1.10 \re.
+The ODC-12 method performs similarly to CCSD\@.
+Overall, the NPEs for the range $[0.65\ \re, 1.10\ \re]$ decrease in the
+following order:
+DC-12    (29~\mhartree) $>$ 
+CEPA$_0$ (24) $>$
+ODC-12   (19) $>$
+CCSD     (17) $>$
+CCSD(T)  (3).
+
+\paragraph{\ce{N2}}
+\Cref{n2-f} depicts the errors relative to FCI for triple bond stretching in
+\ce{N2}.
+Here, OCEPA$_0$ fails to converge past 1.24 \re ($\re = 1.135$~\AA).
+The ODC-12 method significantly overestimates the binding energy, possibly due
+to the lack of three-body correlation effects, but shows much more stable
+performance compared to methods other than CCSD(T).
+NPEs in the range $[0.79\ \re, 1.39\ \re]$ decrease in the order:
+CEPA$_0$ (802~\mhartree)\footnotemark $>$
+\footnotetext{%
+    CEPA$_0$ exhibits a vertical asymptote at 1.36 \re for N$_2$ stretching.
+}
+CCSD     (27) $>$
+DC-12    (21) $>$
+ODC-12   (14) $>$
+CCSD(T)  (4).
+
+
+\section{Conclusions}
+
+We have presented the benchmark study of four density cumulant functional theory
+(DCFT) methods (DC-06, DC-12, ODC-06, and ODC-12) developed recently in our
+group.\cite{Simmonett:2010p174122,Sokolov:2012p054105,Sokolov:2013p024107,Sokolov:2013p204110}
+Specifically we have compared the performance of DCFT to that of coupled
+electron pair methods (CEPA$_0$ and OCEPA$_0$), as well as coupled-cluster
+theory [CCSD and CCSD(T)] for predicting a variety of chemical properties
+relevant to thermochemistry and kinetics, with a particular focus on open-shell,
+electron-dense, and non-equilibrium systems.
+
+Our results indicate that among the four DCFT methods, the best agreement with
+available reference data is obtained for the ODC-12 method.
+While all four DCFT formulations yield similar results for the description of
+noncovalent interactions, DC-06, DC-12, and ODC-06 exhibit worse performance
+than ODC-12 for thermodynamic and kinetic properties of reactions involving
+open-shell molecules.
+In particular, DC-06 and ODC-06 frequently encounter convergence problems that
+originate from poor description of $N$-representability.
+In comparing ODC-12 to other methods, several trends can be observed: 
+
+(i) For all benchmark datasets, ODC-12 outperforms CCSD with errors smaller by
+almost a factor of two, on average.
+ODC-12 is also superior to CCSD for the description of single bond stretching in
+BH and HF, although it does not converge for all bond distances.
+
+(ii) The performance of ODC-12 and OCEPA$_0$ is comparable.
+In particular, for hydrogen-transfer reaction barrier heights, the OCEPA$_0$
+method yields smaller percent errors than ODC-12, whereas, for the radical
+stabilization energies (RSE) and adiabatic ionization energies (AIE) in
+electron-dense molecules, the ODC-12 method smaller standard deviations than
+OCEPA$_0$.
+For AIEs, ODC-12 gives smaller mean absolute deviations by almost a factor of
+two.
+ODC-12 also shows significantly smaller non-parallelity errors than OCEPA$_0$
+for covalent bond stretching, and can be converged for a larger range of
+distances for all diatomic molecules studied.
+
+(iii) For the two most challenging datasets, RSE and AIE, the standard deviation
+of ODC-12 and CCSD(T) are similar.
+While CCSD(T) yields smaller mean absolute errors for the RSE database, the
+ODC-12 method significantly outperforms CCSD(T) for the AIE test case.
+However, for bond stretching ODC-12 is competitive with CCSD(T) only for the BH
+dissociation and shows worse results for other molecules.
+
+Overall, the data presented herein indicates that the ODC-12 method can be used
+as an efficient $\mathcal{O}(n^6)$ alternative to CCSD, capable of predicting
+thermodynamic and kinetic quantities that are competitive in accuracy with the
+``gold-standard'' $\mathcal{O}(n^7)$ CCSD(T).
+Although our current implementation of ODC-12 is far from optimal, the ODC-12
+equations have reduced non-linearities compared to CCSD, which makes them more
+amenable to parallel implementation.
+The efficiency of ODC-12 can also greatly benefit from
+spin-adaptation,\cite{Kutzelnigg:1999p2800,Kutzelnigg:2002p4787,Kutzelnigg:2010p433}
+local
+approximations,\cite{Werner:2003p8149,Taube:2005p837,Neese:2009p064103,Neese:2009p114108}
+and density
+fitting.\cite{Vahtras:1993p514,Hetzer:2000p9443,Schutz:2001p661,Werner:2003p8149}
+Another important advantage of ODC-12 over CCSD is its stationarity, which makes
+the computation of first-order properties and analytic gradients more efficient
+and easily accessible.
+In particular, ODC-12 has potential to be used for computing accurate response
+properties which do not suffer from a lack of
+gauge-invariance.\cite{Pedersen:1999p8318,Pedersen:2001p6983}
