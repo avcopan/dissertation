@@ -463,8 +463,6 @@ Here CEPA$_0$, DC-12, and their orbital-optimized variants offer much better
 agreement with CCSD(T), with errors ranging from 0.01 to 0.15 \kcal.
 
 
-\subsection{Hydrogen-Transfer Reaction Barrier Heights}
-
 \afterpage{%
     \clearpage
     \begin{landscape}
@@ -477,10 +475,10 @@ agreement with CCSD(T), with errors ranging from 0.01 to 0.15 \kcal.
                 with the aug-cc-pVTZ basis set.
                 The errors are relative to CCSD(T) reference values (\kcal)
                 shown in the rightmost column.
-                Each reaction includes barrier heights in the forward (\ce{R1 + R2H
-                $\rightarrow$ [R1R2H]^*}) and reverse (\ce{[R1R2H]^* $\leftarrow$
-                R1H + R2}) directions, respectively, except in the case of \(\ce{R1}
-                = \ce{R2} = H\) where they are the same.
+                Each reaction includes barrier heights in the forward (\ce{R1 +
+                R2H $\rightarrow$ [R1R2H]^*}) and reverse (\ce{[R1R2H]^*
+                $\leftarrow$ R1H + R2}) directions, respectively, except in the
+                case of \(\ce{R1} = \ce{R2} = H\) where they are the same.
                 The mean absolute (\mae, \kcal) and the mean percent (\rel, \%)
                 errors with respect to CCSD(T), as well as the standard
                 deviations from the mean signed error (\std, \kcal) are also
@@ -605,6 +603,7 @@ agreement with CCSD(T), with errors ranging from 0.01 to 0.15 \kcal.
     \end{landscape}
 }
 
+\subsection{Hydrogen-Transfer Reaction Barrier Heights}
 
 We continue by assessing the performance of DCFT methods in predicting barrier
 heights for 18 hydrogen-transfer reactions from the HTBH38
@@ -624,6 +623,22 @@ DC-06 and ODC-06 methods, which encounter frequent convergence problems due to
 the poor description of $N$-representability (see Supporting Information for
 incomplete DC-06 results).
 
+\begin{figure}[hb!]
+	\centering
+	\caption{%
+        \label{htbh-f}
+        Mean absolute deviations (\mae, \kcal) and the standard deviations from
+        the mean signed error (\std, \kcal) of barrier heights for 18
+        hydrogen-transfer reactions (\ce{R1 + R2H $\rightarrow$ R1H + R2},
+        HTBH38 database) computed using five methods with the aug-cc-pVTZ basis
+        set.
+        The errors are relative to CCSD(T)/aug-cc-pVTZ reference values.
+        The \mae value is represented as a height of each colored box, while the
+        \std value is depicted as a radius of the black vertical bar.
+        See \cref{htbh-t} for data on individual database members.
+	}
+	\includegraphics[width=0.8\textwidth]{figures/htbh.pdf}
+\end{figure}
 
 Mean absolute deviations (\mae) and standard deviations (\std) for the
 hydrogen-transfer barrier heights are presented in \cref{htbh-t} and plotted in
@@ -641,23 +656,6 @@ In addition to \mae and \std, \cref{htbh-t} includes mean percent error (\rel)
 values, which are commonly used to benchmark performance for reaction kinetics.
 The smallest \rel values are 29\% and 40\% for OCEPA$_0$ and ODC-12,
 respectively.
-
-\begin{figure}
-	\centering
-	\caption{%
-        \label{htbh-f}
-        Mean absolute deviations (\mae, \kcal) and the standard deviations from
-        the mean signed error (\std, \kcal) of barrier heights for 18
-        hydrogen-transfer reactions (\ce{R1 + R2H $\rightarrow$ R1H + R2},
-        HTBH38 database) computed using five methods with the aug-cc-pVTZ basis
-        set.
-        The errors are relative to CCSD(T)/aug-cc-pVTZ reference values.
-        The \mae value is represented as a height of each colored box, while the
-        \std value is depicted as a radius of the black vertical bar.
-        See \cref{htbh-t} for data on individual database members.
-	}
-	\includegraphics[width=0.8\textwidth]{figures/htbh.pdf}
-\end{figure}
 
 Turning to barrier heights for individual hydrogen-transfer reactions
 (\cref{htbh-t}), the largest errors are observed for reactions 6 and 14, both
