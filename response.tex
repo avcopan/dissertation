@@ -10,4 +10,141 @@
 }
 \label{ch:response}
 
-\lipsum
+
+\section{Abstract}
+
+We present a linear-response formulation of density cumulant functional theory
+(DCT) that provides accurate access to many electronic states.
+DCT expresses the electronic energy as a Hermitian, size-extensive, and
+stationary functional of the one-particle density matrix and the two-particle
+density cumulant.
+In the original DCT formulation only the information about a single electronic
+state (usually, the ground state) is obtained.
+In this research, we combine DCT with linear response theory to obtain
+information about many electronic states simultaneously.
+We discuss the derivation of linear-response DCT, present its implementation for
+the ODC-12 method (LR-ODC-12), and benchmark its performance against highly
+accurate equation-of-motion coupled cluster theory with up to full triple
+excitations (EOM-CCSDT).
+Our results for a set of small molecules demonstrate that LR-ODC-12 vertical
+excitation energies are in closer agreement with EOM-CCSDT than those obtained
+from equation-of-motion coupled cluster theory with up to double excitations
+(EOM-CCSD).
+In addition, we report a linear-response formulation of the orbital-optimized
+linearized coupled cluster theory with double excitations (LR-OLCCD), which we
+obtain by neglecting the non-linear terms in the LR-ODC-12 equations.
+
+
+\section{Introduction}
+
+Accurate simulation of excited electronic states remains one of the major
+challenges in modern electronic structure theory. 
+{\it Ab initio}\/ methods for excited states can be divided into
+single-reference and multi-reference categories, based on their ability to
+treat static electron correlation.
+Multi-reference methods can correctly describe static correlation in
+near-degenerate valence orbitals and electronic states with multiple-excitation
+character, but often lack accurate treatment of important dynamic correlation
+effects (e.g., multi-configurational self-consistent field or multi-reference
+perturbation theories)
+\cite{Knowles:1985p259,Werner:1985p5053,Wolinski:1987p225,Hirao:1992p374,Finley:1998p299,Andersson:1990p5483,Andersson:1992p1218,Werner:1996p645,Angeli:2001p10252,Angeli:2001p297}
+or become very costly when the number of near-degenerate orbitals is large
+(e.g., multi-reference configuration interaction or coupled cluster theories).
+\cite{Mukherjee:1977p955,Lindgren:1978p33,Siegbahn:1980p1647,Jeziorski:1981p1668,Werner:1988p5803,Mahapatra:1998p157,Mahapatra:1999p6171,Pittner:2003p10876,Evangelista:2007p024102,Datta:2011p214116,Evangelista:2011p114102,Kohn:2013p176,Nooijen:2014p081102}
+Meanwhile,
+single-reference methods
+\cite{Foresman:1992p135,Sherrill:1999p143,Geertsen:1989p57,Comeau:1993p414,Stanton:1993p7029,Krylov:2008p433,Crawford:2000p33,Shavitt:2009,Sekino:1984p255,Koch:1990p3345,Koch:1990p3333,Nooijen:1997p6441,Nooijen:1997p6812,Nakatsuji:1978p2053,Nakatsuji:1979p329}
+often provide a compromise between the computational
+cost and accuracy, and can be used to reliably compute properties of molecules
+in low-lying electronic states near the equilibrium geometries. In these
+situations, single-reference equation-of-motion coupled cluster theory
+(EOM-CC)
+\cite{Geertsen:1989p57,Comeau:1993p414,Stanton:1993p7029,Krylov:2008p433,Crawford:2000p33,Shavitt:2009}
+is usually the method of choice, especially when high accuracy
+is desired. 
+
+The EOM-CC methods yield size-intensive excitation energies
+\cite{Koch:1990p3345,Koch:1990p3333}
+and can be
+systematically improved by increasing the excitation rank of the cluster
+operator in the exponential parametrization of the wavefunction. Although EOM-CC
+is usually formulated in the context of a similarity-transformed Hamiltonian,
+its excitation energies are equivalent to those obtained from linear-response
+coupled cluster theory (LR-CC).
+\cite{Sekino:1984p255,Koch:1990p3345,Koch:1990p3333}
+Both EOM-CC and LR-CC are based on non-Hermitian eigenvalue problems,
+complicating the computation of molecular properties (e.g., transition dipoles)
+by requiring evaluation of left and right eigenvectors.
+\cite{Stanton:1993p8840,Stanton:1994p4695,Stanton:1994p8938,Levchenko:2005p224106}
+% may result in an incorrect description of potential energy surfaces in the
+% vicinity of conical intersections where complex excitation energies may be
+% obtained.  \cite{Hattig:2005p37,Kohn:2007p044105,Kjonstad:2017p164105}
+Several Hermitian alternatives to EOM-CC and LR-CC have been
+proposed to avoid these problems, such as  
+algebraic diagrammatic construction
+\cite{Schirmer:1982p2395,Schirmer:1991p4647,Schirmer:2004p11449,Harbach:2014p064113,Dreuw:2014p82}, 
+unitary and variational LR-CC,
+\cite{Taube:2006p3393,Kats:2011p062503,Walz:2012p052519}
+similarity-constrained CC,
+\cite{Kjonstad:2017p4801}
+and propagator-based LR-CC.
+\cite{Moszynski:2005p1109,Korona:2010p14977}
+
+In this work, we present the development of linear-response density cumulant
+functional theory (LR-DCT), a size-intensive approach for excited
+electronic states. In density cumulant functional theory (DCT),
+\cite{Kutzelnigg:2006p171101,Simmonett:2010p174122,Sokolov:2012p054105,Sokolov:2013p024107,Sokolov:2013p204110,Sokolov:2014p074111,Wang:2016p4833}
+the
+electronic energy is obtained by optimizing the energy functional directly in
+terms of the one-particle reduced density matrix and the two-particle density
+cumulant, a fully connected part of the two-particle reduced density matrix
+(2-RDM).
+\cite{Fulde:1991,Ziesche:1992p597,Kutzelnigg:1997p432,Mazziotti:1998p419,Mazziotti:1998p4219,Kutzelnigg:1999p2800,Ziesche:2000p33,Herbert:2007p261,Kong:2011p214109,Hanauer:2012p50}
+In this regard, DCT is related to approaches that are based on
+the variational optimization
+\cite{Colmenero:1993p979,Nakatsuji:1996p1039,Mazziotti:1998p4219,Mazziotti:2006p143002,Kollmar:2006p084108,DePrince:2007p042501,DePrince:2016p164109}
+or parametrization
+\cite{Mazziotti:2008p253002,Mazziotti:2010p062515,DePrince:2012p1917}
+of 2-RDM\@. On
+the other hand, DCT has a close relationship
+\cite{Sokolov:2013p024107,Sokolov:2013p204110}
+with wavefunction-based electronic
+structure theories, such as linearized, unitary, and variational coupled
+cluster theory.
+\cite{Kutzelnigg:1991p349,Kutzelnigg:1998p65,VanVoorhis:2000p8873,Kutzelnigg:1982p3081,Bartlett:1989p133,Watts:1989p359,Szalay:1995p281,Cooper:2010p234102,Evangelista:2011p224102}
+In contrast to variational 2-RDM theory
+\cite{Nakata:2009p042109,vanAggelen:2010p114112,Verstichel:2010p114113}
+and traditional
+coupled cluster methods [e.g., CCSD and CCSD(T)],
+\cite{Crawford:2000p33,Shavitt:2009}
+DCT naturally combines
+size-extensivity and a Hermitian energy functional. In addition, the DCT
+electronic energy is fully relaxed with respect to all of its parameters, which
+greatly simplifies computation of the first-order molecular properties.
+\cite{Scheiner:1987p5361,Salter:1989p1752,Gauss:1991p2623,Gauss:1991p207}
+We have successfully applied DCT to a variety of chemical systems with
+different electronic structure effects (e.g., open-shell, symmetry-breaking,
+and multi-reference).
+\cite{Sokolov:2013p204110,Sokolov:2014p074111,Wang:2016p4833,Copan:2014p2389,Mullinax:2015p2487}
+One limitation of the original DCT formulation is
+that it can only obtain information about the lowest-energy state of a
+particular symmetry (usually, the ground state). By combining DCT with linear
+response theory, we remove this limitation, providing access to many electronic
+states simultaneously.
+
+We begin with a brief overview of DCT (\cref{sec:dct}) and linear response
+theory (\cref{sec:lr}). We then discuss the derivation of linear-response
+theory for the ODC-12 method (LR-ODC-12, \cref{sec:lr_odc12}).
+% and the details of its implementation (\cref{sec:implementation}). 
+In section \cref{sec:olccd}, 
+we derive equations for the linear-response orbital-optimized linearized
+coupled cluster theory with double excitations (LR-OLCCD), which we obtain by
+neglecting the non-linear terms in the LR-ODC-12 equations. 
+We outline the
+computational details in \cref{sec:comp_details}.
+In section \cref{sec:results}, we demonstrate that the LR-ODC-12 excitation
+energies are size-intensive (\cref{sec:size_intensivity}), test the performance
+of LR-ODC-12 for the dissociation of \ce{H2} (\cref{sec:two_electron}), and
+benchmark the accuracy of LR-ODC-12 for vertical
+excitation energies of small molecules (\cref{sec:vert_excit}).
+Finally, we present our conclusions in section \cref{sec:conclusions}. 
