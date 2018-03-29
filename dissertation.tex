@@ -3,9 +3,6 @@
 \usepackage{setspace}\doublespacing
 \textfloatsep 0.75in
 \usepackage[nottoc]{tocbibind}
-\usepackage{graphicx}
-\usepackage{subcaption}
-\usepackage{wrapfig}
 \usepackage[super,sort&compress]{natbib}
 \usepackage{amsmath}
 \usepackage{pgfornament}
@@ -20,7 +17,8 @@
 \usepackage{capt-of}
 \usepackage{afterpage}
 \usepackage{xspace}
-\usepackage{lipsum}
+\usepackage{subfig}
+\usepackage{graphicx}
 
 % Control header sizes
 \usepackage{titlesec}
@@ -71,20 +69,13 @@ by\\[18pt]
 (Under the Direction of Henry F. Schaefer III)\\[12pt]
 \textsc{Abstract}
 \end{center}
-Here is my abstract. Here is my abstract. Here is my abstract. Here is my
-abstract. Here is my abstract. Here is my abstract. Here is my abstract. Here is
-my abstract. Here is my abstract. Here is my abstract. Here is my abstract.
+Here is my abstract.
 \thispagestyle{empty}
 
 \begin{list}{\textsc{Index words:\hfill}}{\labelwidth 1.2in\leftmargin 1.4in\labelsep 0.2in}
 \item 
 \begin{flushleft}\singlespacing
-Cool stuff,
-Deep learning,
-Big data,
-Crowdsourcing,
-Computer vision,
-Computer science
+    Electronic structure theory
 \end{flushleft}
 \end{list}
 
@@ -165,10 +156,6 @@ December 2018
 \input{response}
 \input{davidson}
 \input{conclusion}
-
-\begin{appendices}
-	\input{extended_results}
-\end{appendices}
 
 \newpage
 \bibliographystyle{aipnum4-1}

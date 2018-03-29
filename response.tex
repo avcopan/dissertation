@@ -854,3 +854,1085 @@ CCSD [for EOM-CCSD, EOM-CC(2,3), and EOM-CCSDT].
 For alkenes in \cref{sec:alkenes}, the frozen-core MP2/cc-pVQZ geometries were
 used as in Refs.~\citenum{Daday:2012p4441} and \citenum{Zimmerman:2017p4712}.
 
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Size-Intensivity of the LR-ODC-12 Energies}
+\label{sec:size_intensivity}
+
+\begin{table*}[h!]
+    \caption{%
+        \label{tab:size_int}
+        Ground-state energies (in \hartree) and vertical excitation energies (in
+        eV) for the four lowest-energy excited states of the CO molecule and
+        noninteracting systems of CO with Ne atoms (\mbox{CO $+$ $n$Ne}, $n$ =
+        1, 2, 3) computed using the ODC-12 and LR-ODC-12 methods (cc-pVDZ basis
+        set).
+        The noninteracting systems were separated from each other by \mbox{10000
+        \AA} and the C--O bond distance was set to 1.12547 \AA\@.
+        Results demonstrate size-intensivity of the LR-ODC-12 excitation
+        energies.
+    }
+    \begin{tabular}{ccccc}
+        \hline
+        \hline
+        & CO & CO $+$ Ne & CO $+$ 2Ne & CO $+$ 3Ne \\
+        \hline
+        \({X}\,^1\Sigma_g^+\) & $-$113.051282 & $-$241.730913 & $-$370.410543 & $-$499.090174\\
+        \({}^3\Pi\) & 6.48596 & 6.48596 & 6.48596 & 6.48596 \\
+        \({}^3\Sigma^+\) & 8.41225 & 8.41225 & 8.41225 & 8.41225 \\
+        \({}^1\Pi\) & 8.90866 & 8.90866 & 8.90866 & 8.90866 \\
+        \({}^3\Delta\) & 9.33189 & 9.33189 & 9.33189 & 9.33189 \\
+        \hline
+        \hline
+    \end{tabular}
+\end{table*}
+
+In \cref{sec:dct}, we discussed that all DCT methods are by construction {\it size-extensive}, meaning that their electronic energies scale linearly with the number of electrons.
+In this section, we demonstrate that the LR-ODC-12 excitation energies are {\it
+size-intensive}, i.e.\@ they satisfy the following property: $E(A^*+B) = E(A^*)
++ E(B)$, where $A$ and $B$ are two noninteracting fragments in their
+corresponding ground states and $A^*$ is the fragment $A$ in an excited state.
+\cref{tab:size_int} shows the ODC-12 ground-state energies and the LR-ODC-12
+excitation energies for the CO molecule and noninteracting systems composed of
+CO and the neon atoms separated by 10000 \AA\ (\mbox{CO $+$ $n$Ne}, $n$ = 1, 2,
+3).
+The scaling of the ODC-12 energies for the ground \({X}\,^1\Sigma_g^+\)
+electronic state is perfectly linear up to $10^{-8}$ \hartree, which is the
+convergence parameter used in our ODC-12 computations.
+Upon the addition of the neon atoms, the excitation energies of the CO molecule
+remain constant up to the convergence threshold set in LR-ODC-12 ($10^{-6}$
+eV).
+These results provide numerical evidence that the LR-ODC-12 excitation energies
+are size-intensive.
+
+
+\subsection{H$_2$ Dissociation}
+\label{sec:two_electron}
+
+\begin{figure*}[h!]
+    \subfloat[]{\label{fig:H2_diss_odc}\includegraphics[width=0.45\textwidth]{figures/H2_odc.pdf}} \qquad
+    \subfloat[]{\label{fig:H2_diss_olccd}\includegraphics[width=0.45\textwidth]{figures/H2_olccd.pdf}} \quad
+    \captionsetup{justification=raggedright,singlelinecheck=false}
+    \caption{%
+        \label{fig:H2_diss}
+        Errors in vertical excitation energies (eV) for six lowest-lying
+        electronic states of \ce{H2} computed using LR-ODC-12
+        (\ref{fig:H2_diss_odc}) and LR-OLCCD (\ref{fig:H2_diss_olccd}) as a
+        function of the H--H bond length, relative to full configuration
+        interaction.
+        All methods employed the d-aug-cc-pvtz basis set.
+        In each figure, the inset shows the same plot for a larger range of
+        errors.
+    }
+\end{figure*}
+
+One of the desirable properties of an electronic structure method is exactness
+for two-electron systems. While the ODC-12 method is not exact for two-electron
+systems, it has been shown to provide a very good description of the
+ground-state \ce{H2} dissociation curve, with errors of $\sim$ 1 \kcal with
+respect to full configuration interaction (FCI) near the dissociation
+limit.\cite{Sokolov:2013p204110} Here, we investigate the performance of
+LR-ODC-12 for the excited states of \ce{H2}. \cref{fig:H2_diss_odc} shows the
+errors in vertical excitation energies for six lowest-lying electronic states as
+a function of the \ce{H-H} distance, relative to FCI\@. The FCI energies were
+computed using the EOM-CCSD method, which is exact for two-electron systems. At
+the equilibrium geometry (\re = 0.742 \AA) the errors in excitation energies
+for all states do not exceed 0.02 eV. Between 0.6 and 1.45 \AA\
+(\mbox{$r\approx2\re$}), the LR-ODC-12 excitation energies remain to be in a
+good agreement with FCI, with errors less than 0.1 eV for all states. In this
+range, the largest error is observed for the $^3\Sigma_u^+$ state. For $r$ $\ge$
+1.5 \AA, the error in the $^1\Sigma_g^+$ excited state energy rapidly increases
+from 0.10 eV (at 1.5 \AA) to 2.13 eV (at 2.35 \AA), while for other states the
+errors increase much more slowly. Analysis of the FCI wavefunction for the
+$^1\Sigma_g^+$ state shows a significant contribution from the
+$(1\sigma_g)^2\rightarrow(1\sigma_u)^2$ double excitation already at $r$ $=$
+1.55 \AA\@. This contribution becomes dominant for $r$ $\ge$ 1.75 \AA\@.
+Thus, the large LR-ODC-12 errors observed for the $^1\Sigma_g^+$ state are
+likely due to the double-excitation character of this electronic state at long
+\ce{H-H} bond distances.
+The second largest error near the dissociation is observed for the
+$^3\Sigma_u^+$ state (0.43 eV).
+For other electronic states, smaller errors of $\sim$ 0.25 eV are observed near
+the dissociation.
+
+We now compare the performance of LR-ODC-12 to that of the LR-OLCCD method,
+which can be considered as an approximation to LR-ODC-12 where all of the
+non-linear terms are removed in the description of electron correlation.
+\cref{fig:H2_diss_olccd} shows the errors in the LR-OLCCD vertical excitation
+energies as a function of the \ce{H-H} bond length.
+Although near the equilibrium geometry the performance of LR-OLCCD and LR-ODC-12
+is similar, the LR-OLCCD errors increase much faster with increasing \ce{H-H}
+distance compared to LR-ODC-12.
+At $r$ = 1.3 \AA, the LR-OLCCD error for the $^3\Sigma_u^+$ state (0.4 eV) is
+almost six times larger than the corresponding error from LR-ODC-12 (0.07 eV).
+For $r$ $\ge$ 1.35 \AA, the LR-OLCCD errors for all excitation energies show
+very steep increase in magnitude, ranging from 1.5 to 4.7 eV already at $r$ =
+1.75 \AA\@. We were unable to converge the LR-OLCCD equations for $r$ $\ge$ 1.80
+\AA\@.
+Overall, our results demonstrate that the non-linear terms in LR-ODC-12
+significantly improve the description of excited states at long \ce{H-H}
+distances when the electron correlation effects become particularly strong.
+
+
+\subsection{Benchmark: Small Molecules}
+\label{sec:vert_excit}
+
+\begin{table*}[h!]
+    \caption{%
+        \label{tab:vertical_singlet}
+        Errors in vertical excitation energies (eV) for singlet states computed
+        using LR-OLCCD, LR-ODC-12, and EOM-CCSD, relative to EOM-CCSDT
+        (aug-cc-pVTZ basis set).
+        All electrons were correlated in all computations.
+        Also shown are mean absolute errors (\mae) and standard deviations
+        (\std) computed for each method.
+    }
+    \begin{threeparttable}
+        \begin{tabular}{clcccc}
+            \hline
+            \hline
+            && \(\Delta\)EOM-CCSD & \(\Delta\)LR-OLCCD & \(\Delta\)LR-ODC-12 & 
+            EOM-CCSDT \\
+            \hline
+            \ce{N2}
+            & \({}^1\Pi_g\)        &
+            \( \)0.18 & \( \)0.08 & \( \)0.20 &  9.29 \\
+            & \({}^1\Sigma_u^-\)   &
+            \( \)0.23 & \( \)0.15 & \( \)0.09 &  9.84 \\
+            & \({}^1\Delta_u\)     &
+            \( \)0.26 & \( \)0.14 & \( \)0.10 & 10.26 \\
+            \ce{CO}                            
+            & \({}^1\Pi\)          &
+            \( \)0.16 & \( \)0.09 & \( \)0.17 &  8.46 \\
+            & \({}^1\Sigma^-\)     &
+            \( \)0.19 & \(-\)0.10 & \(-\)0.01 &  9.89 \\
+            & \({}^1\Delta\)       &
+            \( \)0.19 & \(-\)0.22 & \(-\)0.05 & 10.03 \\
+            \ce{HCN}                           
+            & \({}^1\Sigma^-\)     &
+            \( \)0.16 & \( \)0.05 & \( \)0.00 & 8.25 \\
+            & \({}^1\Delta\)       &
+            \( \)0.17 & \( \)0.04 & \( \)0.01 & 8.61 \\
+            & \({}^1\Pi\)          &
+            \( \)0.17 & \( \)0.05 & \( \)0.20 & 9.12 \\
+            \ce{HNC}                           
+            & \({}^1\Pi\)          &
+            \( \)0.15 & \(-\)0.01 & \( \)0.10 & 8.13 \\
+            & \({}^1\Sigma^+\)     &
+            \( \)0.24 & \( \)0.05 & \( \)0.12 & 8.46 \\
+            & \({}^1\Sigma^-\)     &
+            \( \)0.15 & \(-\)0.09 & \( \)0.04 & 8.67 \\
+            & \({}^1\Delta\)       &
+            \( \)0.15 & \(-\)0.18 & \(-\)0.03 & 8.84 \\
+            \ce{H2C2}                          
+            & \({}^1\Sigma_u^-\)   &
+            \( \)0.12 & \( \)0.06 & \( \)0.02 & 7.11 \\
+            & \({}^1\Delta_u\)     &
+            \( \)0.10 & \( \)0.07 & \( \)0.03 & 7.45 \\
+            \ce{H2CO}                                                 
+            & \({}^1\mathrm{A_2}\) &
+            \( \)0.10 & \(-\)0.07 & \( \)0.02 & 3.95 \\
+            \hline
+            \mae & & 0.09 & 0.08 & 0.17 &  \\		
+            \std & & 0.11 & 0.08 & 0.05 &  \\ 		
+            \hline
+            \hline
+        \end{tabular}
+    \end{threeparttable}
+\end{table*}
+
+
+\begin{table*}[h!]
+    \caption{%
+        \label{tab:vertical_triplet}
+        Errors in vertical excitation energies (eV) for triplet states computed
+        using LR-OLCCD, LR-ODC-12, and EOM-CCSD, relative to EOM-CCSDT
+        (aug-cc-pVTZ basis set).
+        All electrons were correlated in all computations.
+        Also shown are mean absolute errors (\mae) and standard deviations
+        (\std) computed for each method.
+    }
+    \begin{threeparttable}
+        \begin{tabular}{clcccc}
+            \hline
+            \hline
+            && \(\Delta\)EOM-CCSD & \(\Delta\)LR-OLCCD & \(\Delta\)LR-ODC-12 &
+            EOM-CCSDT \\
+            \hline
+            \ce{N2}
+            & \({}^3\Sigma_u^+\)   & \( \)0.11 & \( \)0.04 & \(-\)0.02 &  7.63 \\\
+            & \({}^3\Pi_g\)        & \( \)0.15 & \( \)0.06 & \( \)0.11 &  8.00 \\\
+            & \({}^3\Delta_u\)     & \( \)0.17 & \( \)0.08 & \( \)0.03 &  8.82 \\\
+            & \({}^3\Sigma_u^-\)   & \( \)0.28 & \( \)0.03 & \( \)0.01 &  9.63 \\\
+            & \({}^3\Pi_u\)        & \( \)0.14 & \(-\)0.01 & \( \)0.10 & 11.18 \\\
+            \ce{CO}                            
+            & \({}^3\Pi\)          & \( \)0.12 & \( \)0.06 & \( \)0.08 &  6.27 \\\
+            & \({}^3\Sigma^+\)     & \( \)0.05 & \(-\)0.03 & \(-\)0.03 &  8.38 \\\
+            & \({}^3\Delta\)       & \( \)0.11 & \(-\)0.07 & \(-\)0.03 &  9.21 \\\
+            & \({}^3\Sigma^-\)     & \( \)0.19 & \(-\)0.18 & \(-\)0.06 &  9.72 \\\
+            \ce{HCN}                           
+            & \({}^3\Sigma^+\)     & \( \)0.05 & \(-\)0.04 & \(-\)0.10 &  6.40 \\
+            & \({}^3\Delta\)       & \( \)0.13 & \(-\)0.02 & \(-\)0.06 &  7.40 \\
+            & \({}^3\Pi\)          & \( \)0.10 & \( \)0.08 & \( \)0.06 &  8.01 \\
+            & \({}^3\Sigma^-\)     & \( \)0.16 & \(-\)0.10 & \(-\)0.05 &  8.15 \\
+            \ce{HNC}                                                      
+            & \({}^3\Pi\)          & \( \)0.09 & \( \)0.00 & \( \)0.03 &  6.06 \\
+            & \({}^3\Sigma^+\)     & \( \)0.04 & \(-\)0.09 & \(-\)0.11 &  7.20 \\
+            & \({}^3\Delta\)       & \( \)0.10 & \(-\)0.14 & \(-\)0.11 &  8.02 \\
+            & \({}^3\Sigma^+\)     & \( \)0.22 & \(-\)0.05 & \( \)0.04 &  8.38 \\
+            & \({}^3\Sigma^-\)     & \( \)0.15 & \(-\)0.02 & \( \)0.11 &  8.56 \\
+            \ce{H2C2}                                                     
+            & \({}^3\Sigma_u^+\)   & \( \)0.01 & \(-\)0.02 & \(-\)0.08 &  5.52 \\
+            & \({}^3\Delta_u\)     & \( \)0.08 & \(-\)0.02 & \(-\)0.05 &  6.41 \\
+            & \({}^3\Sigma_u^-\)   & \( \)0.10 & \(-\)0.03 & \(-\)0.05 &  7.10 \\
+            \ce{H2CO}                                                     
+            & \({}^3\mathrm{A_2}\) & \( \)0.04 & \(-\)0.02 & \( \)0.01 &  3.56 \\
+            & \({}^3\mathrm{A_1}\) & \( \)0.02 & \(-\)0.06 & \(-\)0.14 &  6.06 \\
+            \hline
+            \mae & & 0.05 & 0.06 & 0.11 &  \\ 		
+            \std & & 0.07 & 0.07 & 0.06 &  \\ 		
+            \hline
+            \hline
+        \end{tabular}
+        \begin{tablenotes}
+        \item[a]
+            For CO, HCN, HNC, and \ce{H2C2}, the ${}^3\Sigma^-$
+            (${}^3\Sigma_u^-$) excitation energies were obtained from
+            EOM-CC(2,3), which energies were shifted to reproduce the EOM-CCSDT
+            energy for the ${}^1\Sigma^-$ (${}^1\Sigma_u^-$) state.
+        \end{tablenotes}    
+    \end{threeparttable}
+\end{table*}
+
+\begin{figure}
+    \centering
+    \caption{Mean absolute errors. {\color{red}(provide more description)}}
+    \includegraphics[width=0.8\textwidth]{figures/excitation-energies.pdf}
+\end{figure}
+
+Here we investigate the performance of our method for vertical excitation
+energies in several small molecules: \ce{N2}, \ce{CO}, \ce{HCN}, \ce{HNC},
+\ce{H2C2}, and \ce{H2CO}.
+The reference values have been computed with EOM-CCSDT and we compare
+all-electron calculations with the same aug-cc-pVTZ basis in order to exclude
+basis set incompleteness error from the comparison.
+As an aggregate measure of the tendency for each method to deviate from the
+reference values, we calculate their mean absolute errors (\mae).
+As a measure of the degree to which the errors are systematically clustered
+above or below the reference values, we look at their standard deviation from
+the average signed error (\std).
+
+For the singlets, LR-ODC-12 has errors above 0.15~eV for three states, with a
+maximum error of 0.20~eV.
+All three of these occur for \({}^1\Pi\) states of linear molecules, which are
+dominated by \(\sigma\rightarrow\pi^*\) excitations.
+EOM-CCSD has eleven errors greater than 0.15~eV, with a maximum error of 0.26~eV
+and no predictable pattern -- the largest three errors occur for three
+qualitatively unrelated states: \({}^1\Delta\), \({}^1\Sigma^-\), and
+\({}^1\Sigma^+\).
+Interestingly, the EOM-CCSD errors are relatively tightly clustered around their
+mean error of 0.17~eV, with a standard deviation of 0.05~eV compared to 0.08~eV
+for LR-OCD-12.
+For the triplets, LR-ODC-12 has no errors at all above 0.15~eV, whereas EOM-CCSD
+has six, with a maximum error of 0.28~eV for the \({}^3\Sigma_u^-\) state of
+\ce{N2}.
+Here the EOM-CCSD description of \({}^3\Sigma^-\) states is consistently poor,
+but some of the larger errors occur for \({}^3\Sigma^+\) and \({}^3\Delta\)
+states as well.
+In aggregate, we see that LR-ODC-12 cuts the mean absolute errors of EOM-CCSD
+roughly in half for both singlet and triplet states.
+Notably, whereas the EOM-CCSD errors are exclusively positive, the LR-ODC-12
+errors are more centered on 0~eV, suggesting a more balanced treatment of the
+ground and excited states.
+
+Comparing LR-ODC-12 to LR-OLCCD we see that most of the errors are within 0.1~eV
+of each other, suggesting that the non-linear terms are relatively unimportant
+for many of these states.
+Significant differences occur for the \({}^1\Delta\) states of CO and HCN, where
+LR-OLCCD shows some deterioration, and for the \({}^1\Pi\) state of HCN,
+where the linearization leads to a significant error cancellation.
+
+
+\section{Conclusions}
+\label{sec:conclusions}
+
+Our conclusions.
+
+\begin{subappendices}
+    \section{Differentiating the One-Body Density in Density Cumulant Theory}
+    \label{sec:appendix}
+
+    Repeated differentiation of the one-body \(n\)-representability condition in
+    DCT (\cref{eq:one-body-n-rep}) gives the following formulas for first and
+    second derivatives of the cumulant trace.
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            \dfrac{\partial \lambda^{pr}_{qr}}{\partial{y}}
+            =
+            \gamma^p_s
+            \dfrac{\partial \gamma^s_q}{\partial{y}}
+            +
+            \dfrac{\partial \gamma^p_s}{\partial{y}}
+            \gamma^s_q
+            -
+            \dfrac{\partial \gamma^p_q}{\partial{y}}
+        \end{array}
+    \end{equation}
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            \dfrac{\partial^2 \lambda^{pr}_{qr}}{%
+                \partial{x}
+                \partial{y}
+            }
+            =
+            &
+            \gamma^p_s
+            \dfrac{\partial \gamma^s_q}{%
+                \partial{x}
+                \partial{y}
+            }
+            +
+            \dfrac{\partial \gamma^p_s}{%
+                \partial{x} \partial{y}
+            }
+            \gamma^s_q
+            -
+            \dfrac{\partial \gamma^p_q}{%
+                \partial{x}
+                \partial{y}
+            }
+            \\[15pt]
+            &
+            +
+            \dfrac{\partial \gamma^p_s}{\partial{x}}
+            \dfrac{\partial \gamma^s_q}{\partial{y}}
+            +
+            \dfrac{\partial \gamma^s_q}{\partial{x}}
+            \dfrac{\partial \gamma^p_s}{\partial{y}}
+        \end{array}
+    \end{equation}
+    In the natural spin-orbital basis (NSO, denoted by prime indices), where the
+    one-body density matrix is diagonal, we can invert these equations to
+    determine the first and second derivatives derivatives of the one-body
+    density from the cumulant derivatives.
+    \begin{equation}
+        \label{eq:one-body-n-rep-gradient}
+        \begin{array}{r@{\,}l}
+            \dfrac{\partial \gamma^{p'}_{q'}}{\partial{y}}
+            =
+            &
+            \theta_{p'q'}
+            \dfrac{\partial \lambda^{p'r}_{q'r}}{\partial{y}}
+        \end{array}
+    \end{equation}
+    \begin{equation}
+        \label{eq:one-body-n-rep-hessian}
+        \begin{array}{r@{\,}l}
+            \dfrac{\partial^2 \gamma^{p'}_{q'}}{%
+                \partial{x}
+                \partial{y}
+            }
+            =
+            &
+            \theta_{p'q'}
+            \dfrac{\partial^2 \lambda^{p'r}_{q'r}}{%
+                \partial{x}
+                \partial{y}
+            }
+            -
+            \delta_{r'}^{s'}
+            \theta_{p'q'}
+            \theta_{p's'}
+            \theta_{q'r'}
+            \dfrac{\partial \lambda^{p't}_{s't}}{%
+                \partial{x}
+            }
+            \dfrac{\partial \lambda^{r'u}_{q'u}}{\partial{y}}
+            \\[15pt]
+            &
+            -
+            \delta_{r'}^{s'}
+            \theta_{p'q'}
+            \theta_{p's'}
+            \theta_{q'r'}
+            \dfrac{\partial \lambda^{r'u}_{q'u}}{\partial{x}}
+            \dfrac{\partial \lambda^{p't}_{s't}}{\partial{y}}
+        \end{array}
+    \end{equation}
+    Here we have defined the following matrix
+    \begin{equation}
+        \theta_{p'q'}
+        \equiv
+        \left\{
+            \begin{array}{cc}
+                (
+                    \gamma_{p'}
+                    +
+                    \gamma_{q'}
+                    -
+                    1
+                )^{-1}
+                &
+                \text{%
+                    if
+                    \(p,q\in \mathrm{occ}\)
+                }
+                \\
+                &
+                \text{%
+                    or
+                    \(p,q\in \mathrm{vir}\)
+                }
+                \\
+                0
+                &
+                \text{otherwise}
+            \end{array}
+        \right.
+    \end{equation}
+    where \(\gamma_{p'}\) denotes an eigenvalue of the one-body density matrix
+    (i.e.\ an occupation number).
+    Substituting \cref{eq:one-body-n-rep-gradient,eq:one-body-n-rep-hessian}
+    into the two-body energy Hessian in \cref{eq:odc12-hessian-initial-form} and
+    simplifying  allows us to determine the intermediates in
+    \cref{eq:a22_odc12}.
+    In the NSO basis they are given by
+    \begin{equation}
+        \label{eq:fancy-f-intermediate}
+        \mathcal{F}_{p'}^{q'}
+        \equiv
+        \theta_{p'q'}
+        f_{p'}^{q'}
+    \end{equation}
+    \begin{equation}
+        \label{eq:fancy-g-intermediate}
+        \mathcal{G}_{p'r'}^{q's'}
+        \equiv
+        \theta_{p'q'}
+        \theta_{r's'}
+        (
+            \overline{g}_{p'r'}^{q's'}
+            -
+            \mathcal{F}_{p'}^{s'}
+            \delta_{r'}^{q'}
+            -
+            \mathcal{F}_{r'}^{q'}
+            \delta_{p'}^{s'}
+        )
+    \end{equation}
+    but note that these quantities must be back-transformed to the variatonal
+    orbital basis to be compatible with the other quantities in
+    \cref{eq:odc12-hessian-initial-form}.
+
+    \section{Working equations for LR-ODC-12}
+    \subsection{Blocks of the Energy Hessian}
+
+    \begin{equation}
+        \label{eq:a11-odc12-formula}
+        \begin{array}{r@{\,}l}
+            (\mathbf{A}_{11})_{ia,jb}
+            =
+            &
+            h_j^i
+            \gamma_a^b
+            +
+            h_a^b
+            \gamma_j^i
+            -
+            (\bar{\mathbf{F}})_j^i
+            \delta_a^b
+            -
+            (\bar{\mathbf{F}})_a^b
+            \delta_j^i
+            +
+            \overline{g}_{nj}^{mi}
+            \gamma_{ma}^{nb}
+            +
+            \overline{g}_{ma}^{nb}
+            \gamma_{nj}^{mi}
+            +
+            \overline{g}_{jf}^{ie}
+            \gamma_{ae}^{bf}
+            +
+            \overline{g}_{ae}^{bf}
+            \gamma_{jf}^{ie}
+            \\[5pt]
+            &
+            +
+            \overline{g}_{me}^{ib}
+            \gamma_{ja}^{me}
+            +
+            \overline{g}_{ja}^{me}
+            \gamma_{me}^{ib}
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \bar{\mathbf{F}}
+        \equiv
+        \tfrac{1}{2}
+        (\mathbf{F} + \mathbf{F}^\dagger)
+        \qquad
+        (\mathbf{F})_p^q
+        \equiv
+        h_p^t
+        \gamma_t^q
+        +
+        \tfrac{1}{2}
+        \overline{g}_{pt}^{uv}
+        \gamma_{uv}^{qt}
+    \end{equation}
+
+    \begin{equation}
+        \label{eq:b11-odc12-formula}
+        \begin{array}{r@{\,}l}
+            (\mathbf{B}_{11})_{ia,jb}
+            =
+            &
+            \overline{g}_{be}^{im}
+            \gamma_{ma}^{je}
+            +
+            \overline{g}_{ma}^{je}
+            \gamma_{be}^{im}
+            +
+            \overline{g}_{mb}^{ie}
+            \gamma_{ae}^{jm}
+            +
+            \overline{g}_{ae}^{jm}
+            \gamma_{mb}^{ie}
+            +
+            \tfrac{1}{2}
+            \overline{g}_{mn}^{ij}
+            \gamma_{ab}^{mn}
+            +
+            \tfrac{1}{2}
+            \overline{g}_{ab}^{mn}
+            \gamma_{mn}^{ij}
+            \\[5pt]
+            &
+            +
+            \tfrac{1}{2}
+            \overline{g}_{ef}^{ij}
+            \gamma_{ab}^{ef}
+            +
+            \tfrac{1}{2}
+            \overline{g}_{ab}^{ef}
+            \gamma_{ef}^{ij}
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \label{eq:a22-odc12-formula}
+        \begin{array}{r@{\,}l}
+            (\mathbf{A}_{22})_{ijab,klcd}
+            =
+            &
+            -
+            P_{(a/b|k/l)}^{(c/d)}
+            \mathcal{F}_a^c
+            \delta_b^d
+            \delta_k^i
+            \delta_l^j
+            -
+            P_{(k/l)}^{(i/j|c/d)}
+            \mathcal{F}_k^i
+            \delta_l^j
+            \delta_a^c
+            \delta_b^d
+            +
+            P_{(k/l)}
+            \overline{g}_{ab}^{cd}
+            \delta_k^i
+            \delta_l^j
+            +
+            P^{(c/d)}
+            \overline{g}_{kl}^{ij}
+            \delta_a^c
+            \delta_b^d
+            \\[5pt]
+            &
+            -
+            P_{(a/b|k/l)}^{(i/j|c/d)}
+            \overline{g}_{la}^{jc}
+            \delta_b^d
+            \delta_k^i
+            +
+            P_{(a/b)}^{(c/d)}
+            \mathcal{G}_{af}^{ec}
+            t_{eb}^{ij}
+            t_{kl}^{fd*}
+            +
+            P_{(a/b|k/l)}
+            \mathcal{G}_{ka}^{me}
+            t_{eb}^{ij}
+            t_{ml}^{cd*}
+            \\[5pt]
+            &
+            +
+            P^{(i/j|c/d)}
+            \mathcal{G}_{me}^{ic}
+            t_{ab}^{mj}
+            t_{kl}^{ed*}
+            +
+            P_{(k/l)}^{(i/j)}
+            \mathcal{G}_{mk}^{in}
+            t_{ab}^{mj}
+            t_{nl}^{cd*}
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \mathcal{F}_{p'}^{q'}
+        \equiv
+        \theta_{p'q'}
+        f_{p'}^{q'}
+        \qquad
+        \mathcal{G}_{p'r'}^{q's'}
+        \equiv
+        \theta_{p'q'}
+        \theta_{r's'}
+        (
+            \overline{g}_{p'r'}^{q's'}
+            -
+            \mathcal{F}_{p'}^{s'}
+            \delta_{r'}^{q'}
+            -
+            \mathcal{F}_{r'}^{q'}
+            \delta_{p'}^{s'}
+        )
+    \end{equation}
+
+    \begin{equation}
+        \theta_{p'q'}
+        \equiv
+        \left\{
+            \begin{array}{cc}
+                (
+                    \gamma_{p'}
+                    +
+                    \gamma_{q'}
+                    -
+                    1
+                )^{-1}
+                &
+                \text{%
+                    if
+                    \(p,q\in \mathrm{occ}\)
+                }
+                \\
+                &
+                \text{%
+                    or
+                    \(p,q\in \mathrm{vir}\)
+                }
+                \\
+                0
+                &
+                \text{otherwise}
+            \end{array}
+        \right.
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{B}_{22})_{ijab,klcd}
+            =
+            &
+            P_{(a/b|c/d)}
+            \mathcal{G}_{ac}^{ef}
+            t_{eb}^{ij}
+            t_{fd}^{kl}
+            +
+            P_{(a/b)}^{(k/l)}
+            \mathcal{G}_{na}^{ke}
+            t_{eb}^{ij}
+            t_{cd}^{nl}
+            +
+            P_{(c/d)}^{(i/j)}
+            \mathcal{G}_{mc}^{if}
+            t_{ab}^{mj}
+            t_{fd}^{kl}
+            \\[5pt]
+            &
+            +
+            P^{(i/j|k/l)}
+            \mathcal{G}_{mn}^{ik}
+            t_{ab}^{mj}
+            t_{cd}^{nl}
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{A}_{12})_{ia,klcd}
+            =
+            &
+            P_{(k/l)}
+            \overline{g}_{la}^{cd}
+            \delta_k^i
+            +
+            P^{(c/d)}
+            \overline{g}_{kl}^{id}
+            \delta_a^c
+            +
+            P_{(k/l)}
+            (\mathcal{I}_a^i)_k^m
+            t_{ml}^{cd*}
+            +
+            P^{(c/d)}
+            (\mathcal{I}_a^i)_e^c
+            t_{kl}^{ed*}
+            \\[5pt]
+            &
+            +
+            P_{(k/l)}^{(c/d)}
+            \overline{g}_{ae}^{mc}
+            t_{ml}^{ed*}
+            \delta_k^i
+            +
+            P_{(k/l)}^{(c/d)}
+            \overline{g}_{ke}^{im}
+            t_{ml}^{ed*}
+            \delta_a^c
+            +
+            \tfrac{1}{2}
+            P_{(k/l)}
+            \overline{g}_{la}^{mn}
+            t_{mn}^{cd*}
+            \delta_k^i
+            +
+            \tfrac{1}{2}
+            P^{(c/d)}
+            \overline{g}_{ef}^{id}
+            t_{kl}^{ef*}
+            \delta_a^c
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{B}_{12})_{ia,klcd}
+            =
+            &
+            P^{(k/l)}
+            (\mathcal{I}_a^i)_m^k
+            t_{cd}^{ml}
+            +
+            P_{(c/d)}
+            (\mathcal{I}_a^i)_c^e
+            t_{ed}^{kl}
+            +
+            P_{(c/d)}^{(k/l)}
+            \overline{g}_{ad}^{le}
+            t_{ce}^{ki}
+            +
+            P_{(c/d)}^{(k/l)}
+            \overline{g}_{md}^{il}
+            t_{ca}^{km}
+            +
+            \overline{g}_{ma}^{kl}
+            t_{cd}^{im}
+            \\[5pt]
+            &
+            +
+            \overline{g}_{cd}^{ie}
+            t_{ae}^{kl}
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        (\mathcal{I}_a^i)_{k'}^{l'}
+        \equiv
+        \theta_{k'l'}
+        (I_a^i)_{k'}^{l'}
+        \qquad
+        (I_a^i)_k^l
+        \equiv
+        +
+        f_a^l
+        \delta_k^i
+        -
+        \overline{g}_{ka}^{ml}
+        \gamma_m^i
+        +
+        \overline{g}_{ke}^{il}
+        \gamma_a^e
+    \end{equation}
+
+    \begin{equation}
+        (\mathcal{I}_a^i)_{c'}^{d'}
+        \equiv
+        \theta_{c'd'}
+        (I_a^i)_{c'}^{d'}
+        \qquad
+        (I_a^i)_c^d
+        \equiv
+        -
+        f_c^i
+        \delta_a^d
+        +
+        \overline{g}_{ac}^{md}
+        \gamma_m^i
+        -
+        \overline{g}_{ec}^{id}
+        \gamma_a^e
+    \end{equation}
+
+    \subsection{Blocks of the Metric Matrix}
+
+    \begin{equation}
+        \label{eq:s11-odc12}
+        \begin{array}{r@{\,}l}
+            (\mathbf{S}_{11})_{ia,jb}
+            &=
+            (
+                \delta^b_a
+                \gamma^i_j
+                -
+                \delta^i_j
+                \gamma^b_a
+            )
+        \end{array}
+    \end{equation}
+
+    \subsection{Blocks of the Property Gradient Vector}
+
+    \begin{equation}
+        \label{eq:p1-odc12}
+        (\mathbf{p}_1)_{ia}
+        =
+        v_a^k
+        \gamma_k^i
+        -
+        v_c^i
+        \gamma_a^c
+    \end{equation}
+
+    \begin{equation}
+        v_p^q
+        \equiv
+        \langle \psi_p|\hat{V}|\psi_q\rangle
+    \end{equation}
+
+    \begin{equation}
+        (\mathbf{p}_2)_{ijab}
+        =
+        -
+        P_{(a/b)}
+        \mathcal{V}_a^e
+        t_{eb}^{ij}
+        -
+        P^{(i/j)}
+        \mathcal{V}_m^i
+        t_{ab}^{mj}
+    \end{equation}
+
+    \begin{equation}
+        \mathcal{V}_{p'}^{q'}
+        \equiv
+        \theta_{p'q'}
+        v_{p'}^{q'}
+    \end{equation}
+
+    \section{Working Equations for LR-OLCCD}
+
+    \subsection{Blocks of the Energy Hessian}
+
+    \begin{equation}
+        (\mathbf{A}_{11})_{ia,jb}
+        =
+        \text{%
+            \Cref{eq:a11-odc12-formula} with OLCCD density matrices.
+        }
+    \end{equation}
+
+    \begin{equation}
+        (\mathbf{B}_{11})_{ia,jb}
+        =
+        \text{%
+            \Cref{eq:b11-odc12-formula} with OLCCD density matrices.
+        }
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{A}_{22})_{ijab,klcd}
+            =
+            &
+            P_{(a/b|k/l)}^{(c/d)}
+            (\mathbf{f}_0)_a^c
+            \delta_b^d
+            \delta_k^i
+            \delta_l^j
+            -
+            P_{(k/l)}^{(i/j|c/d)}
+            (\mathbf{f}_0)_k^i
+            \delta_l^j
+            \delta_a^c
+            \delta_b^d
+            +
+            P_{(k/l)}
+            \overline{g}_{ab}^{cd}
+            \delta_k^i
+            \delta_l^j
+            \\[5pt]
+            &
+            +
+            P^{(c/d)}
+            \overline{g}_{kl}^{ij}
+            \delta_a^c
+            \delta_b^d
+            -
+            P_{(a/b|k/l)}^{(i/j|c/d)}
+            \overline{g}_{la}^{jc}
+            \delta_b^d
+            \delta_k^i
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        (\mathbf{f}_0)_p^q
+        =
+        h_p^q
+        +
+        \overline{g}_{pi}^{qi}
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{B}_{22})_{ijab,klcd}
+            =
+            0
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{A}_{12})_{ia,klcd}
+            =
+            &
+            P_{(k/l)}
+            \overline{g}_{la}^{cd}
+            \delta_k^i
+            +
+            P^{(c/d)}
+            \overline{g}_{kl}^{id}
+            \delta_a^c
+            +
+            P_{(k/l)}
+            (I_a^i)_k^m
+            t_{ml}^{cd*}
+            -
+            P^{(c/d)}
+            (I_a^i)_e^c
+            t_{kl}^{ed*}
+            \\[5pt]
+            &
+            +
+            P_{(k/l)}^{(c/d)}
+            \overline{g}_{ae}^{mc}
+            t_{ml}^{ed*}
+            \delta_k^i
+            +
+            P_{(k/l)}^{(c/d)}
+            \overline{g}_{ke}^{im}
+            t_{ml}^{ed*}
+            \delta_a^c
+            +
+            \tfrac{1}{2}
+            P_{(k/l)}
+            \overline{g}_{la}^{mn}
+            t_{mn}^{cd*}
+            \delta_k^i
+            +
+            \tfrac{1}{2}
+            P^{(c/d)}
+            \overline{g}_{ef}^{id}
+            t_{kl}^{ef*}
+            \delta_a^c
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        (I_a^i)_k^l
+        \equiv
+        +
+        f_a^l
+        \delta_k^i
+        -
+        \overline{g}_{ka}^{il}
+        \qquad
+        (I_a^i)_c^d
+        \equiv
+        -
+        f_c^i
+        \delta_a^d
+        +
+        \overline{g}_{ac}^{id}
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{B}_{12})_{ia,klcd}
+            =
+            &
+            P^{(k/l)}
+            (I_a^i)_m^k
+            t_{cd}^{ml}
+            -
+            P_{(c/d)}
+            (I_a^i)_c^e
+            t_{ed}^{kl}
+            +
+            P_{(c/d)}^{(k/l)}
+            \overline{g}_{ad}^{le}
+            t_{ce}^{ki}
+            +
+            P_{(c/d)}^{(k/l)}
+            \overline{g}_{md}^{il}
+            t_{ca}^{km}
+            +
+            \overline{g}_{ma}^{kl}
+            t_{cd}^{im}
+            \\[5pt]
+            &
+            +
+            \overline{g}_{cd}^{ie}
+            t_{ae}^{kl}
+        \end{array}
+    \end{equation}
+
+    \subsection{Blocks of the Metric Matrix}
+
+    \begin{equation}
+        (\mathbf{S}_{11})_{ia,jb}
+        =
+        \text{%
+            \Cref{eq:s11-odc12} with OLCCD density matrices.
+        }
+    \end{equation}
+
+    \subsection{Blocks of the Property Gradient Vector}
+
+    \begin{equation}
+        (\mathbf{p}_1)_{ia}
+        =
+        \text{%
+            \Cref{eq:p1-odc12} with OLCCD density matrices.
+        }
+    \end{equation}
+
+    \begin{equation}
+        (\mathbf{p}_2)_{ijab}
+        =
+        P_{(a/b)}
+        v_a^e
+        t_{eb}^{ij}
+        -
+        P^{(i/j)}
+        v_m^i
+        t_{ab}^{mj}
+    \end{equation}
+\end{subappendices}
