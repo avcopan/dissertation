@@ -21,10 +21,10 @@
 \end{figure}
 
 We have implemented the LR-ODC-12 method using a multi-root Davidson algorithm,
-which solves the generalized eigenvalue problem
-\eqref{eq:linear-response-energy-eigenvalue-equation} by progressively growing
-an expansion space for the \(n_\mathrm{root}\) lowest generalized eigenvectors
-of \(\mathbf{E}\) and \(\mathbf{M}\). The general procedure looks as follows:
+which solves the linear-response generalized eigenvalue problem by progressively
+growing an expansion space for the \(n_\mathrm{root}\) lowest generalized
+eigenvectors of \(\mathbf{E}\) and \(\mathbf{M}\).
+The general procedure looks as follows:
 \begin{enumerate}
     \item
         \label{item:davidson-initialization}
