@@ -76,9 +76,6 @@ Both EOM-CC and LR-CC are based on non-Hermitian eigenvalue problems,
 complicating the computation of molecular properties (e.g., transition dipoles)
 by requiring evaluation of left and right eigenvectors.
 \cite{Stanton:1993p8840,Stanton:1994p4695,Stanton:1994p8938,Levchenko:2005p224106}
-% may result in an incorrect description of potential energy surfaces in the
-% vicinity of conical intersections where complex excitation energies may be
-% obtained.  \cite{Hattig:2005p37,Kohn:2007p044105,Kjonstad:2017p164105}
 Several Hermitian alternatives to EOM-CC and LR-CC have been
 proposed to avoid these problems, such as  
 algebraic diagrammatic construction
@@ -135,7 +132,6 @@ states simultaneously.
 We begin with a brief overview of DCT (\cref{sec:dct}) and linear response
 theory (\cref{sec:lr}). We then discuss the derivation of linear-response
 theory for the ODC-12 method (LR-ODC-12, \cref{sec:lr_odc12}).
-% and the details of its implementation (\cref{sec:implementation}). 
 In section \cref{sec:olccd}, 
 we derive equations for the linear-response orbital-optimized linearized
 coupled cluster theory with double excitations (LR-OLCCD), which we obtain by
@@ -147,4 +143,714 @@ energies are size-intensive (\cref{sec:size_intensivity}), test the performance
 of LR-ODC-12 for the dissociation of \ce{H2} (\cref{sec:two_electron}), and
 benchmark the accuracy of LR-ODC-12 for vertical
 excitation energies of small molecules (\cref{sec:vert_excit}).
-Finally, we present our conclusions in section \cref{sec:conclusions}. 
+Finally, we present our conclusions in section \cref{sec:conclusions}.
+
+
+\section{Theory}
+
+\subsection{Overview of Density Cumulant Theory}
+\label{sec:dct}
+We begin with a brief overview of DCT for a single electronic state.
+Our starting point is to express the electronic energy as a trace of the one-
+and antisymmetrized two-electron integrals (\( h_p^q \) and
+\(\overline{g}_{pq}^{rs}\)) with the reduced one- and two-body density matrices
+(\(\gamma^p_q\) and \(\gamma^{pq}_{rs}\)):
+\begin{equation}
+    \label{eq:energy-expression}
+    E
+    =
+    h_p^q
+    \gamma^p_q
+    +
+    \tfrac{1}{4}
+    \overline{g}_{pq}^{rs}
+    \gamma^{pq}_{rs}
+\end{equation}
+where summation over the repeated indices is implied.
+In DCT, the two-body density matrix \(\gamma^{pq}_{rs}\) is expanded in terms of
+its connected part, the two-body density cumulant ($\lambda^{pq}_{rs}$), and its
+disconnected part, which is given by an antisymmetrized product of one-body
+density matrices:\cite{Kutzelnigg:2006p171101}
+\begin{equation}
+    \label{eq:two-body-n-rep}
+    \gamma^{pq}_{rs}
+    =
+    \langle\Psi|
+    a^{pq}_{rs}
+    |\Psi\rangle
+    =
+    \lambda^{pq}_{rs}
+    +
+    P_{(r/s)}
+    \gamma^p_r
+    \gamma^q_s
+\end{equation}
+where \(P_{(r/s)}v_{rs} = v_{rs} - v_{sr}\) denotes antisymmetrization and
+\mbox{$a^{pq}_{rs}=a^{\dag}_{p}a^{\dag}_{q}a^{}_{s}a^{}_{r}$} is the two-body operator in second quantization.
+The one-body density matrix \(\gamma^p_q\) is determined from its non-linear
+relationship to the cumulant's partial trace:\cite{Sokolov:2013p024107}
+\begin{equation}
+    \label{eq:one-body-n-rep}
+    \gamma^p_q
+    =
+    \gamma^p_r
+    \gamma^r_q
+    -
+    \lambda^{pr}_{qr}
+\end{equation}
+This reduces \cref{eq:energy-expression} to a functional of the two-body
+cumulant and the basis of spin-orbitals, thereby defining the DCT energy
+functional.
+The density cumulant is parametrized by choosing a specific Ansatz for the
+wavefunction \(|\Psi\rangle\) such that\cite{Sokolov:2014p074111}
+\begin{equation}
+    \label{eq:cumulant-parametrization}
+    \lambda^{pq}_{rs}
+    =
+    \langle\Psi|
+    a^{pq}_{rs}
+    |\Psi\rangle_\mathrm{c}
+\end{equation}
+where $\mathrm{c}$ indicates that only fully connected terms are included in the
+parametrization.
+\cref{eq:cumulant-parametrization} can be considered as a set of
+\(n\)-representability conditions that ensure that the resulting one- and
+two-electron density matrices represent a physical \(n\)-electron wavefunction.
+To compute the DCT energy, the functional \eqref{eq:energy-expression} is made
+stationary with respect to all of its parameters.
+Importantly, due to the connected nature of \cref{eq:cumulant-parametrization},
+DCT is both size-consistent and size-extensive for any parametrization of
+\(|\Psi\rangle\), and is exact in the limit of a complete
+parametrization.\cite{Sokolov:2014p074111}
+
+In this work, we consider the ODC-12
+method,\cite{Sokolov:2013p024107,Sokolov:2013p204110} which parametrizes the
+cumulant through a unitary treatment of single excitations and a linear
+expansion of double excitations.
+\begin{equation}
+    \label{eq:odc12-wavefunction}
+    |\Psi\rangle
+    =
+    e^{T_1-T_1^\dagger}
+    (1 + \hat{T}_2)
+    |\Phi\rangle
+\end{equation}
+\begin{equation}
+    T_1
+    =
+    \mathbf{t}_1\cdot\mathbf{a}_1
+    =
+    t_a^i
+    a^a_i
+\end{equation}
+\begin{equation}
+    T_2
+    =
+    \mathbf{t}_2\cdot\mathbf{a}_2
+    =
+    \tfrac{1}{4}
+    t_{ab}^{ij}
+    a^{ab}_{ij}
+\end{equation}
+{\color{red}(missing hats for the operators in many places. I generally prefer to keep hats in the equations)}
+The exponential singles operator \(e^{T_1-T_1^\dagger}\) has the effect of a
+unitary transformation of the spin-orbital basis and is incorportated in our
+implementation of the ODC-12 method by optimizing the
+orbitals.\cite{Sokolov:2013p204110}
+The \(\mathbf{t}_1\) and \(\mathbf{t}_2\) parameters are obtained from the
+stationarity conditions
+\begin{equation}
+    \label{eq:stationarity_conditions}
+    \dfrac{\partial E}{\partial \mathbf{t}_1^\dagger}
+    \overset{!}{=}
+    0 \ ,
+    \qquad
+    \dfrac{\partial E}{\partial \mathbf{t}_2^\dagger}
+    \overset{!}{=}
+    0
+\end{equation}
+and are used to compute the ODC-12 energy.
+Explicit equations for the stationarity conditions are given in Refs.\@
+\citenum{Sokolov:2013p024107} and \citenum{Sokolov:2013p204110}.
+Although in ODC-12 the wavefunction parametrization is linear with respect
+to double excitations (\cref{eq:odc12-wavefunction}), the ODC-12 energy
+stationarity conditions are non-linear in $\mathbf{t}_2$ due to the non-linear
+relationship between the one-particle density matrix and the density cumulant
+(\cref{eq:one-body-n-rep}).\cite{Sokolov:2013p024107} Neglecting the non-linear
+$\mathbf{t}_2$ terms in \cref{eq:stationarity_conditions} results in the
+equations that define the linearized orbital-optimized  coupled cluster doubles
+method (OLCCD).
+This method is equivalent to the orbital-optimized coupled electron pair
+approximation zero (OCEPA$_0$).\cite{Bozkaya:2013p054104}
+
+\subsection{Linear Response Theory}
+\label{sec:lr}
+We now briefly review linear response theory in the quasi-energy
+formulation.\cite{Norman:2011p20519}
+The quasi-energy of a system perturbed by a time-dependent interaction
+\(\hat{V}f(t)\) is defined as
+\begin{equation}
+    Q(t)
+    =
+    \langle\Psi(t)|
+    \hat{H} + \hat{V} f(t) - i\tfrac{\partial}{\partial t}
+    |\Psi(t)\rangle
+\end{equation}
+where \(\Psi(t)\) is the phase-isolated wavefunction, from which the usual
+Schr\"odinger wavefunction can be recovered as
+\(
+    e^{-i\int_0^t dt' Q(t')}
+    \Psi(t)
+\).
+Assuming that the perturbation is periodic
+\begin{equation}
+    f(t)
+    =
+    \sum_\omega f(\omega) e^{-i\omega t}
+\end{equation}
+the time average of the quasi-energy over a period of oscillation, denoted as 
+\(
+    \{Q(t)\}
+\),
+is variational with respect to the exact dynamic state.\cite{Helgaker:2012p543}
+The independent parameters \(\mathbf{u}(t)\) that define such a state can be
+written using a Fourier expansion
+\begin{equation}
+    \label{eq:parameter-fourier-expansion}
+    \mathbf{u}(t)
+    =
+    \sum_{n=0}^\infty
+    \sum_{\omega_1\cdots \omega_n}
+    \mathbf{u}(\omega_1,\ldots, \omega_n)
+    e^{-i(\omega_1+\cdots+\omega_n)t}
+\end{equation}
+where the outer sum runs over polynomial orders in \(f(t)\).
+The stationarity of the time-averaged quasi-energy then implies the following
+relationship\cite{Kristensen:2009p044112}
+\begin{equation}
+    \label{eq:linear-response-equation}
+    \begin{array}{l}
+        0
+        =
+        \left.
+            \dfrac{d}{df(\omega)}
+            \dfrac{%
+                \partial \{Q(t)\}
+            }{%
+                \partial \mathbf{u}^\dagger(\omega)
+            }
+        \right|_{f=0}
+        =
+        \\[20pt]
+        \left.
+            \dfrac{%
+                \partial^2 \{Q(t)\}
+            }{%
+                \partial \mathbf{u}^\dagger(\omega)
+                \partial \mathbf{u}(\omega)
+            }
+            \dfrac{\partial \mathbf{u}(\omega)}{\partial f(\omega)}
+        \right|_{f=0}
+            +
+        \left.
+            \dfrac{%
+                \partial^2 \{Q(t)\}
+            }{%
+                \partial \mathbf{u}^\dagger(\omega)
+                \partial f(\omega)
+            }
+        \right|_{f=0}
+    \end{array}
+\end{equation}
+which constitutes a linear equation for the first-order response of the system
+to the perturbation. 
+When the frequency $\omega$ is in resonance with an excitation energy of the
+system, \cref{eq:linear-response-equation} will result in an infinite
+first-order response
+\(
+    \dfrac{\partial \mathbf{u}(\omega)}{\partial f(\omega)}
+\).
+From \cref{eq:linear-response-equation}, we find that these poles occur when the
+Hessian matrix of the quasi-energy with respect to the wavefunction parameters
+\(\mathbf{u}(\omega)\) becomes singular.
+We can express this Hessian matrix in the form
+\begin{equation}
+    \label{eq:quasi-energy-hessian}
+    \left.
+        \frac{\partial^2\{Q(t)\}}{%
+            \partial \mathbf{u}^\dagger(\omega)
+            \partial \mathbf{u}(\omega)
+        }
+    \right|_{f=0}
+    \equiv
+    \mathbf{E}
+    -
+    \omega\,
+    \mathbf{M}
+\end{equation}
+where \(\mathbf{E}\) is the Hessian of the time-averaged electronic energy
+\(\{\langle\Psi(t)|\hat{H}|\Psi(t)\rangle\}\) and \(\omega\mathbf{M}\) is the
+Hessian of the time-derivative overlap
+\(\{\langle\Psi(t)|i\dot{\Psi}(t)\rangle\}\).
+The excitation energies of the system $\omega_k$ can therefore be determined by
+solving the following generalized eigenvalue equation:
+\begin{equation}
+    \label{eq:linear-response-energy-eigenvalue-equation}
+    \mathbf{E}\mathbf{z}_k
+    =
+    \omega_k
+    \mathbf{M}\mathbf{z}_k
+\end{equation}
+where \(\mathbf{M}\) serves as the metric matrix.
+\cref{eq:linear-response-energy-eigenvalue-equation} allows the determination of
+excitation energies for an arbitrary parametrization of $|\Psi(t)\rangle$.
+
+The generalized eigenvectors \(\mathbf{z}_k\) can be used to
+compute transition properties for excited states.
+In particular, in the exact linear response theory\cite{Olsen:1985p3235} the transition strength
+of the perturbing interaction,
+\(
+    |\langle\Psi|\hat{V}|\Psi_k\rangle|^2
+\),
+is equal to the complex residue of the following quantity at
+\(\omega\rightarrow\omega_k\):
+\begin{equation}
+    \langle\!\langle \hat{V}; \hat{V} \rangle\!\rangle_\omega
+    \equiv
+    \left.
+    \mathbf{v}'^\dagger
+    \cdot
+    \frac{\partial \mathbf{u}(\omega)}{\partial f(\omega)}
+    \right|_{f=0}
+\end{equation}
+This quantity is known as the linear response function and
+\(
+    \mathbf{v}'
+\)
+is termed the property gradient vector,\cite{Sauer:2011} which is defined as
+follows:
+\begin{equation}
+    \label{eq:property-gradient-vector}
+    \mathbf{v}'
+    \equiv
+    \left.
+    \frac{%
+        \partial^2 \{Q(t)\}
+    }{%
+        \partial \mathbf{u}^\dagger(\omega)
+        \partial f(\omega)
+    }
+    \right|_{f=0}
+\end{equation}
+Substituting \cref{eq:property-gradient-vector,eq:quasi-energy-hessian} into
+\cref{eq:linear-response-equation} and decomposing the quasi-energy Hessian as
+\begin{equation}
+    \mathbf{E} - \omega\mathbf{M}
+    =
+    (\mathbf{Z}^\dagger)^{-1}
+    (\mathbf{Z}^\dagger \mathbf{M} \mathbf{Z})
+    (\boldsymbol\Omega - \omega\mathbf{1})
+    (\mathbf{Z})^{-1}
+\end{equation}
+where \(\boldsymbol\Omega\) is a diagonal matrix of generalized eigenvalues and
+\(\mathbf{Z}\) is a matrix of generalized eigenvectors that simulataneously
+diagonalizes \(\mathbf{E}\) and \(\mathbf{M}\), we obtain the
+general formula for the transition strengths:
+\begin{equation}
+    \lim_{\omega\rightarrow \omega_k}
+    (\omega-\omega_k)
+    \langle\!\langle \hat{V}; \hat{V} \rangle\!\rangle_\omega
+    =
+    \frac{%
+        |\mathbf{z}_k^\dagger \mathbf{v}'|^2
+    }{%
+        \mathbf{z}_k^\dagger \mathbf{M}\mathbf{z}_k
+    }
+\end{equation}
+In \cref{sec:lr_odc12}, we will use the quasi-energy formalism to derive
+equations for the linear-response ODC-12 method (LR-ODC-12).
+
+
+\subsection{Linear-Response ODC-12}
+\label{sec:lr_odc12}
+In the ODC-12 method, the electronic energy Hessian can be written in the following
+form
+\begin{equation}
+    \label{eq:lr-odc12-hessian-blocks}
+    \mathbf{E}
+    =
+    \begin{pmatrix}
+        \mathbf{A}_{11} & \mathbf{A}_{12} & \mathbf{B}_{11} & \mathbf{B}_{12} \\
+        \mathbf{A}_{21} & \mathbf{A}_{22} & \mathbf{B}_{21} & \mathbf{B}_{22} \\
+        \mathbf{B}_{11}^* & \mathbf{B}_{12}^* & \mathbf{A}_{11}^* & \mathbf{A}_{12}^* \\
+        \mathbf{B}_{21}^* & \mathbf{B}_{22}^* & \mathbf{A}_{21}^* & \mathbf{A}_{22}^* \\
+    \end{pmatrix}
+\end{equation}
+where the submatrices are defined in general as
+\begin{equation}
+    \label{eq:hessian-blocks}
+    \mathbf{A}_{nm}
+    =
+    \left.
+    \frac{\partial^2 E}{%
+        \partial \mathbf{t}_n^\dagger
+        \partial \mathbf{t}_m
+    }
+    \right|_{f=0}
+    ,\ 
+    \mathbf{B}_{nm}
+    =
+    \left.
+    \frac{\partial^2 E}{%
+        \partial \mathbf{t}_n^\dagger
+        \partial \mathbf{t}_m^*
+    }
+    \right|_{f=0}.
+\end{equation}
+These complex derivatives relate to the second derivatives of the
+electronic energy with respect to variations of the orbitals ($\mathbf{A}_{11}$, $\mathbf{B}_{11}$) and
+cumulant parameters ($\mathbf{A}_{22}$, $\mathbf{B}_{22}$).
+Similarly, the mixed second derivatives couple variations in the orbitals
+and cumulant parameters ($\mathbf{A}_{12}$, $\mathbf{B}_{12}$). 
+The metric matrix \(\mathbf{M}\) has a block-diagonal structure, as a
+consequence of the linear parametrization of the wavefunction in
+\cref{eq:odc12-wavefunction}:
+\begin{equation}
+    \label{eq:lr-odc12-metric-blocks}
+    \mathbf{M}
+    =
+    \begin{pmatrix}
+        \mathbf{S}_{11} & \mathbf{0} & \mathbf{0} & \mathbf{0} \\
+        \mathbf{0} & \mathbf{1}_2 & \mathbf{0} & \mathbf{0} \\
+        \mathbf{0} & \mathbf{0} & -\mathbf{S}_{11}^* & \mathbf{0} \\
+        \mathbf{0} & \mathbf{0} & \mathbf{0} & -\mathbf{1}_2 \\
+    \end{pmatrix}
+\end{equation}
+where
+\(
+    \mathbf{1}_2
+    =
+    \langle\Phi|\mathbf{a}_2^\dagger \mathbf{a}_2|\Phi\rangle
+\)
+is an identity matrix over the space of unique two-body excitations and the
+orbital metric is defined as follows:
+\begin{equation}
+    \label{eq:metric-blocks}
+    \omega\mathbf{S}_{11}
+    =
+    \left.
+        \frac{\partial^2 \{\langle\Psi(t)|i\dot\Psi(t)\rangle\}}{%
+            \partial \mathbf{t}_1^\dagger(\omega)
+            \partial \mathbf{t}_1(\omega)
+        }
+    \right|_{f=0}
+\end{equation}
+Equations for all blocks of $\mathbf{E}$, $\mathbf{M}$, and the property gradient
+vector $\mathbf{v}'$ are shown explicitly in the Supporting Information.
+We note that, due to the Hermitian nature of the DCT energy functional
+\eqref{eq:energy-expression}, the ODC-12 energy Hessian $\mathbf{E}$ is always
+symmetric.
+As a result, in the absence of instabilities (i.e., as long as the Hessian is
+positive semi-definite), the LR-ODC-12 excitation energies are guaranteed to
+have real values.
+
+To illustrate the derivation of the LR-ODC-12 energy Hessian, let us consider
+the diagonal two-body block of \(\mathbf{E}\).
+Expressing the energy \eqref{eq:energy-expression} using the cumulant expansion
+\eqref{eq:two-body-n-rep} and differentiating with respect to $\mathbf{t}_2$, we
+obtain:
+\begin{equation}
+    \label{eq:odc12-hessian-initial-form}
+    \begin{array}{r@{\,}l}
+        \mathbf{A}_{22}
+        =
+        \dfrac{\partial^2 E}{%
+            \partial\mathbf{t}_2^\dagger
+            \partial\mathbf{t}_2
+        }
+        =
+        &
+        f_p^q
+        \dfrac{\partial^2 \gamma^p_q}{%
+            \partial\mathbf{t}_2^\dagger
+            \partial\mathbf{t}_2
+        }
+        +
+        \overline{g}_{pr}^{qs}
+        \dfrac{\partial \gamma^p_q}{\partial\mathbf{t}_2^\dagger}
+        \dfrac{\partial \gamma^r_s}{\partial\mathbf{t}_2}
+        \\[15pt]
+        &
+        +
+        \tfrac{1}{4}
+        \overline{g}_{pq}^{rs}
+        \dfrac{\partial^2 \lambda^{pq}_{rs}}{%
+            \partial\mathbf{t}_2^\dagger
+            \partial\mathbf{t}_2
+        }
+    \end{array}
+\end{equation}
+where we have introduced the generalized Fock matrix
+\(
+    f_p^q
+    \equiv
+    h_p^q
+    +
+    \overline{g}_{pr}^{qs}
+    \gamma^r_s
+\).
+The derivatives of the one-body density matrix can be expressed in terms of the derivatives of the density cumulant
+\begin{equation}
+    \begin{array}{r@{\,}l}
+    \label{eq:a22_odc12}
+	\mathbf{A}_{22}
+        =
+        &
+        \mathcal{F}_p^q
+        \dfrac{\partial^2 \lambda^{pt}_{qt}}{%
+            \partial\mathbf{t}_2^\dagger
+            \partial\mathbf{t}_2
+        }
+        +
+        \mathcal{G}_{pr}^{qs}
+        \dfrac{\partial \lambda^{pt}_{qt}}{\partial\mathbf{t}_2^\dagger}
+        \dfrac{\partial \lambda^{ru}_{su}}{\partial\mathbf{t}_2}
+        \\[15pt]
+        &
+        +
+        \tfrac{1}{4}
+        \overline{g}_{pq}^{rs}
+        \dfrac{\partial^2 \lambda^{pq}_{rs}}{%
+            \partial\mathbf{t}_2^\dagger
+            \partial\mathbf{t}_2
+        }
+    \end{array}
+\end{equation}
+where the intermediates $\mathcal{F}_p^q$ and $\mathcal{G}_{pr}^{qs}$ can be computed using a transformation of the one- and two-electron integrals to the natural spin-orbital basis (see \cref{sec:appendix} for details).
+These cumulant derivatives are straightforward to evaluate from \cref{eq:odc12-wavefunction,eq:cumulant-parametrization} using either algebraic or diagrammatic techniques.
+
+Next, let us outline the derivation of the one-body metric.
+Substituting \cref{eq:odc12-wavefunction} into \cref{eq:metric-blocks} gives
+\begin{equation}
+    \label{eq:odc12-s11-metric}
+    \begin{array}{r@{\,}l}
+        \omega
+        \mathbf{S}_{11}
+        =
+        &
+        \left.
+            \dfrac{1}{2}
+            \dfrac{%
+                \partial^2
+                \{\langle\Psi|
+                    [i\dot{T}_1^\dagger(t), T_1(t)]
+                |\Psi\rangle\}
+            }{%
+                \partial \mathbf{t}_1^\dagger(\omega)
+                \partial \mathbf{t}_1(\omega)
+            }
+        \right|_{f=0}
+        \\[20pt]
+        &
+        -
+        \left.
+            \dfrac{1}{2}
+            \dfrac{%
+                \partial^2
+                \{\langle\Psi|[T_1^\dagger(t), i\dot{T}_1(t)]|\Psi\rangle\}
+            }{%
+                \partial \mathbf{t}_1^\dagger(\omega)
+                \partial \mathbf{t}_1(\omega)
+            }
+        \right|_{f=0}
+    \end{array}
+\end{equation}
+where we have assumed that we are working in the variational orbital basis so that
+\(
+    T_1(t)|_{f=0}
+    =
+    0
+\),
+and
+\(
+    \Psi
+    =
+    \Psi(t)|_{f=0}
+\)
+denotes the ground state wavefunction.
+Using the Fourier expansion of the $\mathbf{t}_1(t)$ parameters
+(\cref{eq:parameter-fourier-expansion}), the gradients of the time derivatives
+can be evaluated as:
+\begin{equation}
+    \label{eq:time_deriv_1}
+    \left.
+    \frac{%
+        \partial i \dot{T}_1^\dagger(t)
+    }{%
+        \partial \mathbf{t}_1^\dagger(\omega)
+    }
+    \right|_{f=0}
+    =
+    -
+    \omega
+    \mathbf{a}_1^\dagger
+    e^{+i\omega t}
+\end{equation}
+\begin{equation}
+    \label{eq:time_deriv_2}
+    \left.
+    \frac{%
+        \partial i \dot{T}_1(t)
+    }{%
+        \partial \mathbf{t}_1(\omega)
+    }
+    \right|_{f=0}
+    =
+    +
+    \omega
+    \mathbf{a}_1
+    e^{-i\omega t}
+\end{equation}
+Substituting \cref{eq:time_deriv_1,eq:time_deriv_2} into \cref{eq:odc12-s11-metric} and evaluating the gradients
+of \(T_1\) and \(T_1^\dagger\) similarly gives the final working equation for
+the one-body metric:
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        \omega
+        (\mathbf{S}_{11})_{ia,jb}
+        &=
+        \omega
+        \langle\Psi|
+        [a_a^i, a_j^b]
+        |\Psi\rangle
+        \\[10pt]
+        &=
+        \omega
+        (
+            \delta^b_a
+            \gamma^i_j
+            -
+            \delta^i_j
+            \gamma^b_a
+        )
+    \end{array}
+\end{equation}
+
+
+\subsection{Linear-Response OLCCD}
+\label{sec:olccd}
+As we discussed in \cref{sec:dct}, the orbital-optimized linearized coupled cluster doubles method (OLCCD) can be considered as an approximation to the ODC-12 method where all of the non-linear $\mathbf{t}_2$ terms are neglected. Similarly, we can formulate the linear-response OLCCD method (LR-OLCCD) by linearizing the LR-ODC-12 equations. This simplifies the expressions for the electronic Hessian blocks that involve the second derivatives with respect to $\mathbf{t}_2$. For example, for the $\mathbf{A}_{22}$ block, we obtain:
+\begin{equation}
+    \label{eq:a22_olccd}
+    \mathbf{A}_{22}
+    =
+    (f_0)_i^j
+    \dfrac{\partial^2 \lambda^{ir}_{jr}}{%
+        \partial\mathbf{t}_2^\dagger
+        \partial\mathbf{t}_2
+    }
+    -
+    (f_0)_a^b
+    \dfrac{\partial^2 \lambda^{ar}_{br}}{%
+        \partial\mathbf{t}_2^\dagger
+        \partial\mathbf{t}_2
+    }
+    +
+    \tfrac{1}{4}
+    \overline{g}_{pq}^{rs}
+    \dfrac{\partial^2 \lambda^{pq}_{rs}}{%
+        \partial\mathbf{t}_2^\dagger
+        \partial\mathbf{t}_2
+    }
+\end{equation}
+where
+\(
+    (f_0)_p^q
+    =
+    h_p^q
+    +
+    \overline{g}_{pi}^{qi}
+\)
+is the usual (mean-field) Fock operator.
+Comparing \cref{eq:a22_olccd} with \cref{eq:a22_odc12} from the LR-ODC-12
+method, we observe that the former equation can be obtained from the latter by
+replacing the $\mathcal{F}_p^q$ intermediates with the mean-field Fock matrix
+elements and ignoring the term that depends on $\mathcal{G}_{pr}^{qs}$.
+These simplifications arise from the fact that the $\mathcal{F}_p^q$ and
+$\mathcal{G}_{pr}^{qs}$ intermediates contain high-order $\mathbf{t}_2$
+contributions that are not included in the linearized LR-OLCCD formulation (see
+\cref{sec:appendix} and Ref.\@ \citenum{Sokolov:2013p024107} for details).
+For the $\mathbf{B}_{22}$ block, we find that all of the Hessian elements are
+zero.
+A complete set of working equations for LR-OLCCD is given in the Supporting
+Information.
+
+
+\section{Computational Details}
+\label{sec:comp_details}
+The LR-ODC-12 and LR-OLCCD methods were implemented as a standalone Python
+program, which was interfaced with \textsc{Psi4}\cite{Parrish:2017p3185} and
+\textsc{Pyscf}\cite{Sun:2018pe1340} to obtain the one- and two-electron
+integrals.
+To compute excitation energies, our implementation utilizes the multi-root
+Davidson algorithm,\cite{Davidson:1975p87,Liu:1978p49} which solves the
+generalized eigenvalue problem
+\eqref{eq:linear-response-energy-eigenvalue-equation} by progressively growing
+an expansion space for the \(n_\mathrm{root}\) lowest generalized eigenvectors
+of the electronic Hessian and the metric matrix.
+A key feature of this algorithm is that it avoids storing the Hessian and metric
+matrices, significantly reducing the amount of memory required by the
+computations.
+Our implementation of the energy Hessian was validated by computing the static
+response function for a dipole perturbation (i.e., the dipole polarizability):
+\begin{equation}
+    \langle\!\langle\hat{V}; \hat{V}\rangle\!\rangle_0
+    =
+    -
+    \mathbf{v}'^\dagger
+    \mathbf{E}^{-1}
+    \mathbf{v}'
+\end{equation}
+This quantity can also be evaluated numerically as a derivative of the ground state energy
+\begin{equation}
+    \langle\!\langle\hat{V}; \hat{V}\rangle\!\rangle_0
+    =
+    \left.
+    \frac{%
+        d^2 E
+    }{%
+        df^2
+    }
+    \right|_{f=0}
+\end{equation}
+by perturbing the one-electron integrals
+\(
+    h_p^q
+    \leftarrow
+    h_p^q
+    +
+    f\langle \psi_p|\hat{V}|\psi_q\rangle
+\)
+and solving the ODC-12 equations for different values of \(f\).
+
+
+We used \textsc{Q-Chem} 4.4\cite{QChem} to obtain results from
+equation-of-motion coupled cluster theory with single and double excitations
+(EOM-CCSD) and EOM-CCSD with triple excitations in the EOM part [EOM-CC(2,3)].
+The \textsc{MRCC} program\cite{MRCC} was used to obtain results for
+equation-of-motion coupled cluster theory with up to full triple excitations
+(EOM-CCSDT).
+All electrons were correlated in all computations.
+We used tight convergence parameters in all ground-state ($10^{-8}$ \hartree)
+and excited-state computations ($10^{-5}$ \hartree).
+In \cref{sec:two_electron,sec:vert_excit}, the augmented aug-cc-pVTZ and
+d-aug-cc-pVTZ basis sets of Dunning and co-workers were
+employed.\cite{Kendall:1992p6796}
+For alkenes (\cref{sec:alkenes}), the ANO-L-pVXZ (X = D, T) basis
+sets\cite{Widmark:1990p291} were used as in Ref.~\citenum{Daday:2012p4441}.
+To compute vertical excitation energies in \cref{sec:vert_excit}, geometries of
+molecules were optimized using ODC-12 (for LR-ODC-12), OLCCD (for LR-OLCCD), or
+CCSD [for EOM-CCSD, EOM-CC(2,3), and EOM-CCSDT].
+For alkenes in \cref{sec:alkenes}, the frozen-core MP2/cc-pVQZ geometries were
+used as in Refs.~\citenum{Daday:2012p4441} and \citenum{Zimmerman:2017p4712}.
+
