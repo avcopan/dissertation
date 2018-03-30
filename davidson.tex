@@ -8,6 +8,82 @@
 \label{ch:davidson}
 
 
+\section{Abstract}
+
+Abstract.
+
+
+\section{Introduction}
+
+\begin{enumerate}
+    \item
+        Linear response calculations involve large matrix equations, which
+        require
+        \(
+            n_\mathrm{dim}^2
+        \)
+        storage, rapidly consuming memory requirements
+    \item
+        Direct alorithms like the multi-root Davidson
+        algorithm\cite{Davidson:1975p87,Liu:1978p49} avoid this problem by
+        expanding the linear transformations in a reduced basis
+        (requiring \(n_\mathrm{red} \times n_\mathrm{dim}\) storage) and
+        progressively growing this expansion space to span the
+        \(n_\mathrm{root}\) lowest solution vectors to some threshold of
+        accuracy.
+    \item
+        An efficient algorithm satisfies
+        \(
+            n_\mathrm{root} < n_\mathrm{red} \ll n_\mathrm{dim}
+        \)
+\end{enumerate}
+
+
+\section{Theory}
+
+\begin{equation}
+    \mathbf{E}(\mathbf{Z})
+    =
+    \mathbf{M}(\mathbf{Z})
+    \boldsymbol{\Omega}
+\end{equation}
+Need not be square
+
+\begin{equation}
+    \mathbf{Z}
+    =
+    \begin{pmatrix}
+        \mathbf{X}_1 \\
+        \mathbf{X}_2 \\
+        \mathbf{Y}_1 \\
+        \mathbf{Y}_2
+    \end{pmatrix}
+\end{equation}
+
+\begin{equation}
+    \mathbf{E}(\mathbf{Z})
+    =
+    \begin{pmatrix}
+        \mathbf{A}_{11}(\mathbf{X}_1) +
+        \mathbf{A}_{12}(\mathbf{X}_2) +
+        \mathbf{B}_{11}(\mathbf{Y}_1) +
+        \mathbf{B}_{12}(\mathbf{Y}_2) \\
+        \mathbf{A}_{21}(\mathbf{X}_1) +
+        \mathbf{A}_{22}(\mathbf{X}_2) +
+        \mathbf{B}_{21}(\mathbf{Y}_1) +
+        \mathbf{B}_{22}(\mathbf{Y}_2) \\
+        \mathbf{B}^*_{11}(\mathbf{X}_1) +
+        \mathbf{B}^*_{12}(\mathbf{X}_2) +
+        \mathbf{A}^*_{11}(\mathbf{Y}_1) +
+        \mathbf{A}^*_{12}(\mathbf{Y}_2) \\
+        \mathbf{B}^*_{21}(\mathbf{X}_1) +
+        \mathbf{B}^*_{22}(\mathbf{X}_2) +
+        \mathbf{A}^*_{21}(\mathbf{Y}_1) +
+        \mathbf{A}^*_{22}(\mathbf{Y}_2) \\
+    \end{pmatrix}
+\end{equation}
+
+
 \begin{figure}[h!]
     \centering
     \caption{%
@@ -157,6 +233,18 @@ the following.
 These can also be used to construct the initial expansion space in
 step~\ref{item:davidson-initialization}, namely by including unit vectors for
 the \(n_\mathrm{guess}\) smallest positive entries in \(\tilde{\mathbf{E}}\).
+
+
+\section{Computational Details}
+
+For alkenes (\cref{sec:alkenes}), the ANO-L-pVXZ (X = D, T) basis
+sets\cite{Widmark:1990p291} were used as in Ref.~\citenum{Daday:2012p4441}.
+For alkenes in \cref{sec:alkenes}, the frozen-core MP2/cc-pVQZ geometries were
+used as in Refs.~\citenum{Daday:2012p4441} and \citenum{Zimmerman:2017p4712}.
+
+
+
+\section{Results}
 
 
 \subsection{Ethylene, Butadiene, and Hexatriene}

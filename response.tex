@@ -792,15 +792,6 @@ The LR-ODC-12 and LR-OLCCD methods were implemented as a standalone Python
 program, which was interfaced with \textsc{Psi4}\cite{Parrish:2017p3185} and
 \textsc{Pyscf}\cite{Sun:2018pe1340} to obtain the one- and two-electron
 integrals.
-To compute excitation energies, our implementation utilizes the multi-root
-Davidson algorithm,\cite{Davidson:1975p87,Liu:1978p49} which solves the
-generalized eigenvalue problem
-\eqref{eq:linear-response-energy-eigenvalue-equation} by progressively growing
-an expansion space for the \(n_\mathrm{root}\) lowest generalized eigenvectors
-of the electronic Hessian and the metric matrix.
-A key feature of this algorithm is that it avoids storing the Hessian and metric
-matrices, significantly reducing the amount of memory required by the
-computations.
 Our implementation of the energy Hessian was validated by computing the static
 response function for a dipole perturbation (i.e., the dipole polarizability):
 \begin{equation}
@@ -851,14 +842,9 @@ and excited-state computations ($10^{-5}$ \hartree).
 In \cref{sec:two_electron,sec:vert_excit}, the augmented aug-cc-pVTZ and
 d-aug-cc-pVTZ basis sets of Dunning and co-workers were
 employed.\cite{Kendall:1992p6796}
-For alkenes (\cref{sec:alkenes}), the ANO-L-pVXZ (X = D, T) basis
-sets\cite{Widmark:1990p291} were used as in Ref.~\citenum{Daday:2012p4441}.
 To compute vertical excitation energies in \cref{sec:vert_excit}, geometries of
 molecules were optimized using ODC-12 (for LR-ODC-12), OLCCD (for LR-OLCCD), or
 CCSD [for EOM-CCSD, EOM-CC(2,3), and EOM-CCSDT].
-For alkenes in \cref{sec:alkenes}, the frozen-core MP2/cc-pVQZ geometries were
-used as in Refs.~\citenum{Daday:2012p4441} and \citenum{Zimmerman:2017p4712}.
-
 
 \section{Results}
 \label{sec:results}
