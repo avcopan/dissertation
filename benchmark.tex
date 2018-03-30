@@ -289,133 +289,146 @@ geometry optimizations.
 
 \afterpage{%
     \clearpage
+    \centering
     \begin{landscape}
-        \begin{center}
-            \captionof{table}{%
-                \label{a24-t}
-                Errors in interaction energies (\kcal) for 24 noncovalently
-                bound molecular dimers comprising the A24
-                database\cite{Rezac:2013p2151} computed using seven methods with
-                the aug-cc-pVTZ basis set.
-                The errors are relative to CCSD(T) reference values (\kcal)
-                shown in the rightmost column.
-                For each method the mean absolute deviations from CCSD(T) (\mae,
-                \kcal) and the standard deviations from the mean signed error
-                (\std, \kcal) are also shown.
-            }
-            \small
-            \renewcommand\arraystretch{0.6}
-            \begin{tabular}{c@{}rrrrrrrr}
-                \hline
-                \hline
-                Complex (Sym.) &
-                $\Delta$CEPA$_0$ &  $\Delta$DC-06 & $\Delta$DC-12 &
-                $\Delta$CCSD & $\Delta$OCEPA$_0$ & $\Delta$ODC-06 &
-                $\Delta$ODC-12 &
-                CCSD(T)
-                \\
-                \hline
-                \ce{H2O\bond{...}NH3} (\termsymbol{C_{s}}) &
-                0.26 & 0.24 & 0.22 &  0.36 & 0.19 & 0.20 & 0.18 & 
-                -7.18\\
-                \ce{H2O\bond{...}H2O} (\termsymbol{C_{s}}) &
-                0.19 & 0.18 & 0.16 &  0.25 & 0.13 & 0.14 & 0.12 & 
-                -5.71\\
-                \ce{HCN\bond{...}HCN} (\termsymbol{C_{s}}) &
-                0.21 & 0.27 & 0.16 &  0.15 & 0.18 & 0.26 & 0.14 & 
-                -7.12\\
-                \ce{HF\bond{...}HF} (\termsymbol{C_{s}}) &
-                0.14 & 0.13 & 0.11  & 0.16 & 0.08 & 0.09 & 0.07 & 
-                -5.20\\
-                \ce{NH3\bond{...}NH3} (\termsymbol{C_{2h}}) &
-                0.15 & 0.13 & 0.14 &  0.26 & 0.12 & 0.12 & 0.12 & 
-                -3.43\\
-                \ce{HF\bond{...}CH4} (\termsymbol{C_{3v}}) &
-                0.17 & 0.16 & 0.20 &  0.23 & 0.12 & 0.12 & 0.16 & 
-                -2.30\\
-                \ce{NH3\bond{...}CH4} (\termsymbol{C_{3v}}) &
-                0.07 & 0.05 & 0.05 &  0.13 & 0.05 & 0.05 & 0.04 & 
-                -1.08\\
-                \ce{H2O\bond{...}CH4} (\termsymbol{C_{s}}) &
-                0.06 & 0.05 & 0.04 &  0.11 & 0.05 & 0.05 & 0.04 & 
-                -1.03\\
-                \ce{CH2O\bond{...}CH2O} (\termsymbol{C_{s}}) &
-                0.89 & 0.99 & 0.65 &  0.46 & 0.62 & 0.87 & 0.46 & 
-                -5.23\\
-                \ce{H2O\bond{...}C2H4} (\termsymbol{C_{s}}) &
-                0.15 & 0.16 & 0.15 &  0.31 & 0.20 & 0.26 & 0.21 & 
-                -3.33\\
-                \ce{CH2O\bond{...}C2H4} (\termsymbol{C_{s}}) &
-                0.21 & 0.18 & 0.14 &  0.27 & 0.19 & 0.24 & 0.16 & 
-                -2.24\\
-                \ce{HCCH\bond{...}HCCH} (\termsymbol{C_{2v}}) &
-                0.07 & 0.05 & 0.05 &  0.20 & 0.10 & 0.12 & 0.10 & 
-                -2.57\\
-                \hline
-                \hline
-            \end{tabular}
-            \vspace*{\fill}
-            \newpage
-            \vspace*{\fill}
-            \begin{tabular}{c@{}rrrrrrrr}
-                \hline
-                \hline
-                Complex (Sym.) &
-                $\Delta$CEPA$_0$ &  $\Delta$DC-06 & $\Delta$DC-12 &
-                $\Delta$CCSD & $\Delta$OCEPA$_0$ & $\Delta$ODC-06 &
-                $\Delta$ODC-12 &
-                CCSD(T)
-                \\
-                \hline
-                \ce{NH3\bond{...}C2H4} (\termsymbol{C_{s}}) &
-                0.09 & 0.06 & 0.08 &  0.24 & 0.12 & 0.15 & 0.13 & 
-                -2.07\\
-                \ce{C2H4\bond{...}C2H4} (\termsymbol{C_{2v}}) &
-                0.10 & 0.02 & 0.07 &  0.33 & 0.14 & 0.13 & 0.15 & 
-                -1.81\\
-                \ce{CH4\bond{...}C2H4} (\termsymbol{C_{s}}) &
-                0.02 & -0.02 & 0.01 &  0.14 & 0.05 & 0.04 & 0.06 & 
-                -0.92\\
-                \ce{BH3\bond{...}CH4} (\termsymbol{C_{s}}) &
-                0.23 & 0.18 & 0.24 &  0.37 & 0.18 & 0.16 & 0.22 & 
-                -2.52\\
-                \ce{CH4\bond{...}C2H4} (\termsymbol{C_{s}}) &
-                0.13 & 0.09 & 0.13 &  0.23 & 0.10 & 0.09 & 0.09 & 
-                -1.37\\
-                \ce{CH4\bond{...}C2H6} (\termsymbol{C_{s}}) &
-                0.09 & 0.06 & 0.09 &  0.17 & 0.07 & 0.06 & 0.09 & 
-                -1.14\\
-                \ce{CH4\bond{...}CH4} (\termsymbol{D_{3d}}) &
-                0.08 & 0.06 & 0.08 &  0.14 & 0.06 & 0.05 & 0.08 & 
-                -0.93\\
-                \ce{Ar\bond{...}CH4} (\termsymbol{C_{3v}}) &
-                0.07 & 0.05 & 0.07 &  0.10 & 0.05 & 0.05 & 0.06 & 
-                -0.78\\
-                \ce{Ar\bond{...}C2H4} (\termsymbol{C_{2v}}) &
-                0.03 & -0.01 & 0.02 &  0.11 & 0.05 & 0.03 & 0.05 & 
-                -0.63\\
-                \ce{C2H4\bond{...}HCCH} (\termsymbol{C_{2v}}) &
-                -0.02 & -0.19 & -0.01 &  0.38 & 0.07 & -0.06 & 0.11 & 
-                0.43\\
-                \ce{C2H4\bond{...}C2H4} (\termsymbol{D_{2h}}) &
-                -0.05 & -0.30 & -0.03 &  0.43 & 0.04 & -0.16 & 0.11 & 
-                0.41\\
-                \ce{HCCH\bond{...}HCCH} (\termsymbol{D_{2h}}) &
-                0.01 & -0.09 & 0.02 &  0.34 & 0.10 & 0.02 & 0.12 & 
-                0.91\\
-                \hline
-                \mae: &
-                0.14 & 0.16 & 0.12 & 0.25 & 0.13 & 0.15 & 0.13 &
-                \\
-                \std: &
-                0.18 & 0.23 & 0.13 & 0.11 & 0.12 & 0.18 & 0.09 &
-                \\
-                \hline
-                \hline
-            \end{tabular}
-            \vspace*{\fill}
-        \end{center}
+        \vspace*{\fill}
+        \captionof{table}{%
+            \label{a24-t}
+            Errors in interaction energies (\kcal) for 24 noncovalently
+            bound molecular dimers comprising the A24
+            database\cite{Rezac:2013p2151} computed using seven methods with
+            the aug-cc-pVTZ basis set.
+            The errors are relative to CCSD(T) reference values (\kcal)
+            shown in the rightmost column.
+            For each method the mean absolute deviations from CCSD(T) (\mae,
+            \kcal) and the standard deviations from the mean signed error
+            (\std, \kcal) are also shown.
+        }
+        \small
+        \renewcommand\arraystretch{0.6}
+        \begin{tabular}{c@{}rrrrrrrr}
+            \hline
+            \hline
+            Complex (Sym.) &
+            $\Delta$CEPA$_0$ &  $\Delta$DC-06 & $\Delta$DC-12 &
+            $\Delta$CCSD & $\Delta$OCEPA$_0$ & $\Delta$ODC-06 &
+            $\Delta$ODC-12 &
+            CCSD(T)
+            \\
+            \hline
+            \ce{H2O\bond{...}NH3} (\termsymbol{C_{s}}) &
+            0.26 & 0.24 & 0.22 &  0.36 & 0.19 & 0.20 & 0.18 & 
+            -7.18\\
+            \ce{H2O\bond{...}H2O} (\termsymbol{C_{s}}) &
+            0.19 & 0.18 & 0.16 &  0.25 & 0.13 & 0.14 & 0.12 & 
+            -5.71\\
+            \ce{HCN\bond{...}HCN} (\termsymbol{C_{s}}) &
+            0.21 & 0.27 & 0.16 &  0.15 & 0.18 & 0.26 & 0.14 & 
+            -7.12\\
+            \ce{HF\bond{...}HF} (\termsymbol{C_{s}}) &
+            0.14 & 0.13 & 0.11  & 0.16 & 0.08 & 0.09 & 0.07 & 
+            -5.20\\
+            \ce{NH3\bond{...}NH3} (\termsymbol{C_{2h}}) &
+            0.15 & 0.13 & 0.14 &  0.26 & 0.12 & 0.12 & 0.12 & 
+            -3.43\\
+            \ce{HF\bond{...}CH4} (\termsymbol{C_{3v}}) &
+            0.17 & 0.16 & 0.20 &  0.23 & 0.12 & 0.12 & 0.16 & 
+            -2.30\\
+            \ce{NH3\bond{...}CH4} (\termsymbol{C_{3v}}) &
+            0.07 & 0.05 & 0.05 &  0.13 & 0.05 & 0.05 & 0.04 & 
+            -1.08\\
+            \ce{H2O\bond{...}CH4} (\termsymbol{C_{s}}) &
+            0.06 & 0.05 & 0.04 &  0.11 & 0.05 & 0.05 & 0.04 & 
+            -1.03\\
+            \ce{CH2O\bond{...}CH2O} (\termsymbol{C_{s}}) &
+            0.89 & 0.99 & 0.65 &  0.46 & 0.62 & 0.87 & 0.46 & 
+            -5.23\\
+            \ce{H2O\bond{...}C2H4} (\termsymbol{C_{s}}) &
+            0.15 & 0.16 & 0.15 &  0.31 & 0.20 & 0.26 & 0.21 & 
+            -3.33\\
+            \ce{CH2O\bond{...}C2H4} (\termsymbol{C_{s}}) &
+            0.21 & 0.18 & 0.14 &  0.27 & 0.19 & 0.24 & 0.16 & 
+            -2.24\\
+            \ce{HCCH\bond{...}HCCH} (\termsymbol{C_{2v}}) &
+            0.07 & 0.05 & 0.05 &  0.20 & 0.10 & 0.12 & 0.10 & 
+            -2.57\\
+            \hline
+            \hline
+        \end{tabular}
+        \vspace*{\fill}
+        \newpage
+        \vspace*{\fill}
+        \begin{tabular}{c@{}rrrrrrrr}
+            \hline
+            \hline
+            Complex (Sym.) &
+            $\Delta$CEPA$_0$ &  $\Delta$DC-06 & $\Delta$DC-12 &
+            $\Delta$CCSD & $\Delta$OCEPA$_0$ & $\Delta$ODC-06 &
+            $\Delta$ODC-12 &
+            CCSD(T)
+            \\
+            \hline
+            \ce{NH3\bond{...}C2H4} (\termsymbol{C_{s}}) &
+            0.09 & 0.06 & 0.08 &  0.24 & 0.12 & 0.15 & 0.13 & 
+            -2.07\\
+            \ce{C2H4\bond{...}C2H4} (\termsymbol{C_{2v}}) &
+            0.10 & 0.02 & 0.07 &  0.33 & 0.14 & 0.13 & 0.15 & 
+            -1.81\\
+            \ce{CH4\bond{...}C2H4} (\termsymbol{C_{s}}) &
+            0.02 & -0.02 & 0.01 &  0.14 & 0.05 & 0.04 & 0.06 & 
+            -0.92\\
+            \ce{BH3\bond{...}CH4} (\termsymbol{C_{s}}) &
+            0.23 & 0.18 & 0.24 &  0.37 & 0.18 & 0.16 & 0.22 & 
+            -2.52\\
+            \ce{CH4\bond{...}C2H4} (\termsymbol{C_{s}}) &
+            0.13 & 0.09 & 0.13 &  0.23 & 0.10 & 0.09 & 0.09 & 
+            -1.37\\
+            \ce{CH4\bond{...}C2H6} (\termsymbol{C_{s}}) &
+            0.09 & 0.06 & 0.09 &  0.17 & 0.07 & 0.06 & 0.09 & 
+            -1.14\\
+            \ce{CH4\bond{...}CH4} (\termsymbol{D_{3d}}) &
+            0.08 & 0.06 & 0.08 &  0.14 & 0.06 & 0.05 & 0.08 & 
+            -0.93\\
+            \ce{Ar\bond{...}CH4} (\termsymbol{C_{3v}}) &
+            0.07 & 0.05 & 0.07 &  0.10 & 0.05 & 0.05 & 0.06 & 
+            -0.78\\
+            \ce{Ar\bond{...}C2H4} (\termsymbol{C_{2v}}) &
+            0.03 & -0.01 & 0.02 &  0.11 & 0.05 & 0.03 & 0.05 & 
+            -0.63\\
+            \ce{C2H4\bond{...}HCCH} (\termsymbol{C_{2v}}) &
+            -0.02 & -0.19 & -0.01 &  0.38 & 0.07 & -0.06 & 0.11 & 
+            0.43\\
+            \ce{C2H4\bond{...}C2H4} (\termsymbol{D_{2h}}) &
+            -0.05 & -0.30 & -0.03 &  0.43 & 0.04 & -0.16 & 0.11 & 
+            0.41\\
+            \ce{HCCH\bond{...}HCCH} (\termsymbol{D_{2h}}) &
+            0.01 & -0.09 & 0.02 &  0.34 & 0.10 & 0.02 & 0.12 & 
+            0.91\\
+            \hline
+            \mae: &
+            0.14 & 0.16 & 0.12 & 0.25 & 0.13 & 0.15 & 0.13 &
+            \\
+            \std: &
+            0.18 & 0.23 & 0.13 & 0.11 & 0.12 & 0.18 & 0.09 &
+            \\
+            \hline
+            \hline
+        \end{tabular}
+        \vspace*{\fill}
     \end{landscape}
+    \newpage
+    \includegraphics[width=0.8\textwidth]{figures/a24.pdf}
+    \captionof{figure}{%
+        \label{a24-f}
+        Mean absolute deviations (\mae, \kcal) and the standard deviations
+        from the mean signed error (\std, \kcal) of the interaction energies
+        for 24 noncovalently bound molecular dimers (A24 database) computed
+        using seven methods with the aug-cc-pVTZ basis set.
+        The errors are relative to CCSD(T)/aug-cc-pVTZ reference values.
+        The \mae value is represented as a height of each colored box, while
+        the \std value is depicted as a radius of the black vertical bar.
+        See \cref{a24-t} for data on individual database members.
+    }
 }
 
 
@@ -450,22 +463,6 @@ more consistent performance than their non-orbital-optimized analogues, with
 CCSD also exhibits a relatively small \std value ($0.11$~\kcal), possibly due to
 its inclusion of single excitations which partly account for orbital relaxation.
 
-\begin{figure}[h]
-	\centering
-	\includegraphics[width=0.8\textwidth]{figures/a24.pdf}
-	\caption{%
-        \label{a24-f}
-        Mean absolute deviations (\mae, \kcal) and the standard deviations from
-        the mean signed error (\std, \kcal) of the interaction energies for 24
-        noncovalently bound molecular dimers (A24 database) computed using seven
-        methods with the aug-cc-pVTZ basis set. The errors are relative to
-        CCSD(T)/aug-cc-pVTZ reference values. The \mae value is represented as a
-        height of each colored box, while the \std value is depicted as a radius
-        of the black vertical bar. See \cref{a24-t} for data on individual
-        database members.
-	}
-\end{figure}
-
 Errors in interaction energy and CCSD(T) reference values for each molecular
 complex are shown in \cref{a24-t}.
 The largest deviations from CCSD(T) were obtained for the formaldehyde dimer
@@ -481,147 +478,161 @@ Here CEPA$_0$, DC-12, and their orbital-optimized variants offer much better
 agreement with CCSD(T), with errors ranging from 0.01 to 0.15 \kcal.
 
 
+\subsection{Hydrogen-Transfer Reaction Barrier Heights}
+
 \afterpage{%
     \clearpage
+    \centering
     \begin{landscape}
-        \begin{center}
-            \captionof{table}{%
-                \label{htbh-t}
-                Errors in barrier heights (\kcal) for 18 hydrogen-transfer
-                reactions (\ce{R1 + R2H $\rightarrow$ R1H + R2}) comprising the
-                HTBH38 database\cite{MN-Database} computed using five methods
-                with the aug-cc-pVTZ basis set.
-                The errors are relative to CCSD(T) reference values (\kcal)
-                shown in the rightmost column.
-                Each reaction includes barrier heights in the forward (\ce{R1 +
-                R2H $\rightarrow$ [R1R2H]^*}) and reverse (\ce{[R1R2H]^*
-                $\leftarrow$ R1H + R2}) directions, respectively, except in the
-                case of \(\ce{R1} = \ce{R2} = H\) where they are the same.
-                The mean absolute (\mae, \kcal) and the mean percent (\rel, \%)
-                errors with respect to CCSD(T), as well as the standard
-                deviations from the mean signed error (\std, \kcal) are also
-                shown.
-            }
-            \vspace{1em}
-            \renewcommand\arraystretch{0.6}
-            \begin{tabular}{lcrrrrrr}
-                \hline
-                \hline
-                &
-                Reaction Barrier &
-                $\Delta$CEPA$_0$ &  $\Delta$DC-12 &   $\Delta$CCSD &
-                $\Delta$OCEPA$_0$ & $\Delta$ODC-12 &
-                CCSD(T)
-                \\
-                \hline
-                1 & \ce{H + HCl  $\rightarrow$ [HHCl]^*} &
-                0.74 & 0.49 & 0.09 & -0.41 & -0.28 & 5.22 \\
-                2 &\ce{OH + H2  $\rightarrow$ [OHH2]^*} &
-                3.77 & 3.38 & 1.82 & 0.88 & 1.24 & 4.99 \\
-                3 &\ce{CH3 + H2  $\rightarrow$ [CH3H2]^*} &
-                1.60 & 1.46 & 1.37 & 0.46 & 0.70 & 11.29 \\
-                4 &\ce{OH + CH4  $\rightarrow$ [OHCH4]^*} &
-                4.26 & 3.85 & 2.61 & 1.22 & 1.65 & 5.64 \\
-                5 &\ce{H + H2  $\rightarrow$ [HH2]^*} &
-                0.80 & 0.69 & 0.30 & -0.27 & -0.05 & 9.77 \\
-                6 &\ce{OH + NH3  $\rightarrow$ [OHNH3]^*} &
-                6.02 & 5.25 & 3.54 & 1.18 & 1.82 & 3.17 \\
-                7 &\ce{HCl + CH3  $\rightarrow$ [HClCH3]^*} &
-                1.93 & 1.78 & 1.79 & 0.68 & 0.92 & 0.10 \\
-                8 &\ce{OH + C2H6  $\rightarrow$ [OHC2H6]^*}
-                & 4.66 & 4.21 & 2.69 & 1.28 & 1.72 & 2.69 \\
-                9 &\ce{F + H2  $\rightarrow$ [FH2]^*} &
-                3.40 & 3.14 & 1.20 & 0.52 & 0.78 & 1.13 \\
-                10 &\ce{O + CH4  $\rightarrow$ [OHCH3]^*} &
-                3.40 & 3.12 & 2.37 & 0.70 & 1.20 & 13.62 \\
-                11 &\ce{H + PH3  $\rightarrow$ [HPH3]^*} &
-                0.93 & 0.86 & 0.59 & -0.16 & 0.10 & 2.29 \\
-                12 &\ce{H + HO  $\rightarrow$ [OHH]^*} &
-                2.03 & 1.59 & 0.44 & -0.61 & -0.26 & 10.25 \\
-                13 &\ce{H + H2S  $\rightarrow$ [HH2S]^*} &
-                1.01 & 0.92 & 0.65 & -0.11 & 0.14 & 3.17 \\
-                14 &\ce{O + HCl  $\rightarrow$ [OHCl]^*} &
-                6.33 & 6.01 & 3.58 & 0.79 & 1.51 & 9.74 \\
-                15 &\ce{NH2 + CH3  $\rightarrow$ [CH3NH2]^*} &
-                2.48 & 2.22 & 1.99 & 0.49 & 0.86 & 7.66 \\
-                16 &\ce{NH2 + C2H5  $\rightarrow$ [NH2C2H5]^*} &
-                2.48 & 2.22 & 2.09 & 0.55 & 0.92 & 8.21 \\
-                17 &\ce{C2H6 + NH2  $\rightarrow$ [C2H6NH2]^*} &
-                3.30 & 3.00 & 2.73 & 1.23 & 1.62 & 10.39 \\
-                18 &\ce{NH2 + CH4  $\rightarrow$ [NH2CH4]^*} &
-                2.98 & 2.72 & 2.55 & 1.11 & 1.48 & 13.23 \\
-                \hline
-            \end{tabular}
-            \vspace*{\fill}
-            \newpage
-            \vspace*{\fill}
-            \begin{tabular}{lcrrrrrr}
-                \hline
-                \hline
-                &
-                Reaction Barrier &
-                $\Delta$CEPA$_0$ &  $\Delta$DC-12 &   $\Delta$CCSD &
-                $\Delta$OCEPA$_0$ & $\Delta$ODC-12 &
-                CCSD(T)
-                \\
-                \hline
-                1 & \ce{[HHCl]^* $\leftarrow$  H2 + Cl} &
-                1.44 & 1.31 & 1.61 & 0.53 & 0.77 & 7.39 \\
-                2 &\ce{[OHH2]^* $\leftarrow$  H + H2O} &
-                2.09 & 1.66 & 0.09 & -0.91 & -0.58 & 21.07 \\
-                3 &\ce{[CH3H2]^* $\leftarrow$  H + CH4} &
-                0.95 & 0.80 & 0.38 & -0.38 & -0.11 & 14.91 \\
-                4 &\ce{[OHCH4]^* $\leftarrow$  CH3 + H2O} &
-                3.23 & 2.80 & 1.87 & 0.27 & 0.65 & 18.09 \\
-                6 &\ce{[OHNH3]^* $\leftarrow$  H2O + NH2} &
-                5.46 & 4.62 & 3.14 & 0.79 & 1.33 & 13.17 \\
-                7 &\ce{[HClCH3]^* $\leftarrow$  Cl + CH4} &
-                1.97 & 1.94 & 2.31 & 0.78 & 1.16 & 5.89 \\
-                8 &\ce{[OHC2H6]^* $\leftarrow$  H2O + C2H5} &
-                3.34 & 2.89 & 1.85 & 0.28 & 0.64 & 18.49 \\
-                9 &\ce{[FH2]^* $\leftarrow$  HF + H} &
-                1.27 & 0.88 & -0.78 & -1.47 & -1.33 & 32.95 \\
-                10 &\ce{[OHCH3]^* $\leftarrow$  OH + CH3} &
-                2.62 & 2.29 & 1.82 & 0.32 & 0.68 & 7.43 \\
-                11 &\ce{[HPH3]^* $\leftarrow$  PH2 + H2} &
-                1.14 & 1.11 & 1.37 & 0.39 & 0.63 & 23.21 \\
-                12 &\ce{[OHH]^* $\leftarrow$  H2 + O} &
-                3.47 & 3.08 & 1.99 & 0.62 & 1.07 & 12.81 \\
-                13 &\ce{[HH2S]^* $\leftarrow$  H2 + HS} &
-                1.51 & 1.51 & 1.88 & 0.65 & 0.97 & 16.41 \\
-                14 &\ce{[OHCl]^* $\leftarrow$  OH + Cl} &
-                5.59 & 5.35 & 3.55 & 0.51 & 1.24 & 9.35 \\
-                15 &\ce{[CH3NH2]^* $\leftarrow$  CH4 + NH} &
-                2.77 & 2.49 & 2.26 & 0.73 & 1.12 & 21.32 \\
-                16 &\ce{[NH2C2H5]^* $\leftarrow$  C2H6 + NH} &
-                3.06 & 2.75 & 2.46 & 0.85 & 1.26 & 18.52 \\
-                17 &\ce{[C2H6NH2]^* $\leftarrow$  NH3 + C2H5} &
-                2.54 & 2.30 & 2.30 & 0.63 & 1.02 & 16.20 \\
-                18 &\ce{[NH2CH4]^* $\leftarrow$  CH3 + NH3} &
-                2.51 & 2.29 & 2.21 & 0.56 & 0.96 & 15.69
-                \\
-                \hline
-                &
-                \mae: &
-                2.77 & 2.49 & 1.84 & 0.67 & 0.94 &
-                \\
-                &
-                \std: &
-                1.51 & 1.39 & 1.06 & 0.62 & 0.71 &
-                \\
-                &
-                \rel \%: &
-                99 & 90 & 77 & 29 & 40
-                \\
-                \hline
-                \hline
-            \end{tabular}
-            \vspace*{\fill}
-        \end{center}
+        \vspace*{\fill}
+        \captionof{table}{%
+            \label{htbh-t}
+            Errors in barrier heights (\kcal) for 18 hydrogen-transfer
+            reactions (\ce{R1 + R2H $\rightarrow$ R1H + R2}) comprising the
+            HTBH38 database\cite{MN-Database} computed using five methods
+            with the aug-cc-pVTZ basis set.
+            The errors are relative to CCSD(T) reference values (\kcal)
+            shown in the rightmost column.
+            Each reaction includes barrier heights in the forward (\ce{R1 +
+            R2H $\rightarrow$ [R1R2H]^*}) and reverse (\ce{[R1R2H]^*
+            $\leftarrow$ R1H + R2}) directions, respectively, except in the
+            case of \(\ce{R1} = \ce{R2} = H\) where they are the same.
+            The mean absolute (\mae, \kcal) and the mean percent (\rel, \%)
+            errors with respect to CCSD(T), as well as the standard
+            deviations from the mean signed error (\std, \kcal) are also
+            shown.
+        }
+        \vspace{1em}
+        \renewcommand\arraystretch{0.6}
+        \begin{tabular}{lcrrrrrr}
+            \hline
+            \hline
+            &
+            Reaction Barrier &
+            $\Delta$CEPA$_0$ &  $\Delta$DC-12 &   $\Delta$CCSD &
+            $\Delta$OCEPA$_0$ & $\Delta$ODC-12 &
+            CCSD(T)
+            \\
+            \hline
+            1 & \ce{H + HCl  $\rightarrow$ [HHCl]^*} &
+            0.74 & 0.49 & 0.09 & -0.41 & -0.28 & 5.22 \\
+            2 &\ce{OH + H2  $\rightarrow$ [OHH2]^*} &
+            3.77 & 3.38 & 1.82 & 0.88 & 1.24 & 4.99 \\
+            3 &\ce{CH3 + H2  $\rightarrow$ [CH3H2]^*} &
+            1.60 & 1.46 & 1.37 & 0.46 & 0.70 & 11.29 \\
+            4 &\ce{OH + CH4  $\rightarrow$ [OHCH4]^*} &
+            4.26 & 3.85 & 2.61 & 1.22 & 1.65 & 5.64 \\
+            5 &\ce{H + H2  $\rightarrow$ [HH2]^*} &
+            0.80 & 0.69 & 0.30 & -0.27 & -0.05 & 9.77 \\
+            6 &\ce{OH + NH3  $\rightarrow$ [OHNH3]^*} &
+            6.02 & 5.25 & 3.54 & 1.18 & 1.82 & 3.17 \\
+            7 &\ce{HCl + CH3  $\rightarrow$ [HClCH3]^*} &
+            1.93 & 1.78 & 1.79 & 0.68 & 0.92 & 0.10 \\
+            8 &\ce{OH + C2H6  $\rightarrow$ [OHC2H6]^*}
+            & 4.66 & 4.21 & 2.69 & 1.28 & 1.72 & 2.69 \\
+            9 &\ce{F + H2  $\rightarrow$ [FH2]^*} &
+            3.40 & 3.14 & 1.20 & 0.52 & 0.78 & 1.13 \\
+            10 &\ce{O + CH4  $\rightarrow$ [OHCH3]^*} &
+            3.40 & 3.12 & 2.37 & 0.70 & 1.20 & 13.62 \\
+            11 &\ce{H + PH3  $\rightarrow$ [HPH3]^*} &
+            0.93 & 0.86 & 0.59 & -0.16 & 0.10 & 2.29 \\
+            12 &\ce{H + HO  $\rightarrow$ [OHH]^*} &
+            2.03 & 1.59 & 0.44 & -0.61 & -0.26 & 10.25 \\
+            13 &\ce{H + H2S  $\rightarrow$ [HH2S]^*} &
+            1.01 & 0.92 & 0.65 & -0.11 & 0.14 & 3.17 \\
+            14 &\ce{O + HCl  $\rightarrow$ [OHCl]^*} &
+            6.33 & 6.01 & 3.58 & 0.79 & 1.51 & 9.74 \\
+            15 &\ce{NH2 + CH3  $\rightarrow$ [CH3NH2]^*} &
+            2.48 & 2.22 & 1.99 & 0.49 & 0.86 & 7.66 \\
+            16 &\ce{NH2 + C2H5  $\rightarrow$ [NH2C2H5]^*} &
+            2.48 & 2.22 & 2.09 & 0.55 & 0.92 & 8.21 \\
+            17 &\ce{C2H6 + NH2  $\rightarrow$ [C2H6NH2]^*} &
+            3.30 & 3.00 & 2.73 & 1.23 & 1.62 & 10.39 \\
+            18 &\ce{NH2 + CH4  $\rightarrow$ [NH2CH4]^*} &
+            2.98 & 2.72 & 2.55 & 1.11 & 1.48 & 13.23 \\
+            \hline
+        \end{tabular}
+        \vspace*{\fill}
+        \newpage
+        \vspace*{\fill}
+        \begin{tabular}{lcrrrrrr}
+            \hline
+            \hline
+            &
+            Reaction Barrier &
+            $\Delta$CEPA$_0$ &  $\Delta$DC-12 &   $\Delta$CCSD &
+            $\Delta$OCEPA$_0$ & $\Delta$ODC-12 &
+            CCSD(T)
+            \\
+            \hline
+            1 & \ce{[HHCl]^* $\leftarrow$  H2 + Cl} &
+            1.44 & 1.31 & 1.61 & 0.53 & 0.77 & 7.39 \\
+            2 &\ce{[OHH2]^* $\leftarrow$  H + H2O} &
+            2.09 & 1.66 & 0.09 & -0.91 & -0.58 & 21.07 \\
+            3 &\ce{[CH3H2]^* $\leftarrow$  H + CH4} &
+            0.95 & 0.80 & 0.38 & -0.38 & -0.11 & 14.91 \\
+            4 &\ce{[OHCH4]^* $\leftarrow$  CH3 + H2O} &
+            3.23 & 2.80 & 1.87 & 0.27 & 0.65 & 18.09 \\
+            6 &\ce{[OHNH3]^* $\leftarrow$  H2O + NH2} &
+            5.46 & 4.62 & 3.14 & 0.79 & 1.33 & 13.17 \\
+            7 &\ce{[HClCH3]^* $\leftarrow$  Cl + CH4} &
+            1.97 & 1.94 & 2.31 & 0.78 & 1.16 & 5.89 \\
+            8 &\ce{[OHC2H6]^* $\leftarrow$  H2O + C2H5} &
+            3.34 & 2.89 & 1.85 & 0.28 & 0.64 & 18.49 \\
+            9 &\ce{[FH2]^* $\leftarrow$  HF + H} &
+            1.27 & 0.88 & -0.78 & -1.47 & -1.33 & 32.95 \\
+            10 &\ce{[OHCH3]^* $\leftarrow$  OH + CH3} &
+            2.62 & 2.29 & 1.82 & 0.32 & 0.68 & 7.43 \\
+            11 &\ce{[HPH3]^* $\leftarrow$  PH2 + H2} &
+            1.14 & 1.11 & 1.37 & 0.39 & 0.63 & 23.21 \\
+            12 &\ce{[OHH]^* $\leftarrow$  H2 + O} &
+            3.47 & 3.08 & 1.99 & 0.62 & 1.07 & 12.81 \\
+            13 &\ce{[HH2S]^* $\leftarrow$  H2 + HS} &
+            1.51 & 1.51 & 1.88 & 0.65 & 0.97 & 16.41 \\
+            14 &\ce{[OHCl]^* $\leftarrow$  OH + Cl} &
+            5.59 & 5.35 & 3.55 & 0.51 & 1.24 & 9.35 \\
+            15 &\ce{[CH3NH2]^* $\leftarrow$  CH4 + NH} &
+            2.77 & 2.49 & 2.26 & 0.73 & 1.12 & 21.32 \\
+            16 &\ce{[NH2C2H5]^* $\leftarrow$  C2H6 + NH} &
+            3.06 & 2.75 & 2.46 & 0.85 & 1.26 & 18.52 \\
+            17 &\ce{[C2H6NH2]^* $\leftarrow$  NH3 + C2H5} &
+            2.54 & 2.30 & 2.30 & 0.63 & 1.02 & 16.20 \\
+            18 &\ce{[NH2CH4]^* $\leftarrow$  CH3 + NH3} &
+            2.51 & 2.29 & 2.21 & 0.56 & 0.96 & 15.69
+            \\
+            \hline
+            &
+            \mae: &
+            2.77 & 2.49 & 1.84 & 0.67 & 0.94 &
+            \\
+            &
+            \std: &
+            1.51 & 1.39 & 1.06 & 0.62 & 0.71 &
+            \\
+            &
+            \rel \%: &
+            99 & 90 & 77 & 29 & 40
+            \\
+            \hline
+            \hline
+        \end{tabular}
+        \vspace*{\fill}
     \end{landscape}
+    \newpage
+    \includegraphics[width=0.8\textwidth]{figures/htbh.pdf}
+    \captionof{figure}{%
+        \label{htbh-f}
+        Mean absolute deviations (\mae, \kcal) and the standard deviations
+        from the mean signed error (\std, \kcal) of barrier heights for 18
+        hydrogen-transfer reactions (\ce{R1 + R2H $\rightarrow$ R1H + R2},
+        HTBH38 database) computed using five methods with the aug-cc-pVTZ
+        basis set.
+        The errors are relative to CCSD(T)/aug-cc-pVTZ reference values.
+        The \mae value is represented as a height of each colored box, while
+        the \std value is depicted as a radius of the black vertical bar.
+        See \cref{htbh-t} for data on individual database members.
+    }
 }
-
-\subsection{Hydrogen-Transfer Reaction Barrier Heights}
 
 We continue by assessing the performance of DCFT methods in predicting barrier
 heights for 18 hydrogen-transfer reactions from the HTBH38
@@ -658,23 +669,6 @@ values, which are commonly used to benchmark performance for reaction kinetics.
 The smallest \rel values are 29\% and 40\% for OCEPA$_0$ and ODC-12,
 respectively.
 
-\begin{figure}[hb!]
-	\centering
-	\caption{%
-        \label{htbh-f}
-        Mean absolute deviations (\mae, \kcal) and the standard deviations from
-        the mean signed error (\std, \kcal) of barrier heights for 18
-        hydrogen-transfer reactions (\ce{R1 + R2H $\rightarrow$ R1H + R2},
-        HTBH38 database) computed using five methods with the aug-cc-pVTZ basis
-        set.
-        The errors are relative to CCSD(T)/aug-cc-pVTZ reference values.
-        The \mae value is represented as a height of each colored box, while the
-        \std value is depicted as a radius of the black vertical bar.
-        See \cref{htbh-t} for data on individual database members.
-	}
-	\includegraphics[width=0.8\textwidth]{figures/htbh.pdf}
-\end{figure}
-
 Turning to barrier heights for individual hydrogen-transfer reactions
 (\cref{htbh-t}), the largest errors are observed for reactions 6 and 14, both
 involving the OH radical, for which CEPA$_0$ and DC-12 give errors of $\sim$
@@ -684,166 +678,183 @@ ranging from 0.51 to 1.18~\kcal.
 The ODC-12 method tends to predict larger barrier heights than OCEPA$_0$,
 yielding smaller errors only when OCEPA$_0$ underestimates the barrier heights.
 
-\afterpage{%
-    \clearpage
-    \begin{landscape}
-        \begin{center}
-            \captionof{table}{%
-                \label{rse-t}
-                Errors in radical stabilization energies (RSEs, \kcal) for 30
-                open-shell doublet species (\ce{{}^.R}) comprising the RSE30
-                database \cite{Soydas:2013p1452} computed using six methods with
-                the cc-pCVTZ basis set.
-                The errors are relative to CCSD(T) with an added quadruples
-                correction ($\delta Q = E_\mathrm{CCSDT(Q)}-E_\mathrm{CCSD(T)}$)
-                shown in the rightmost column in \kcal.
-                The $\delta$Q correction was computed using the cc-pCVDZ basis
-                set.  RSE is defined as the reaction enthalpy for the
-                homodesmotic reaction \ce{{}^.CH3 + RH $\rightarrow$ CH4 +
-                {}^.R}.
-                To indicate the degree of spin-contamination in the UHF
-                reference, the spin expectation values
-                ($\langle\hat{\mathsf{S}}^2\rangle_{\text{SCF}}$) are also shown
-                in units of $\hbar^2$.
-                For each method the mean absolute deviations from
-                CCSD(T)${+}\delta$Q (\mae, \kcal) and the standard deviations
-                from the mean signed error (\std, \kcal) are also presented.
-            }
-            \vspace{1em}
-            \renewcommand\arraystretch{0.6}
-            \small
-            \begin{tabular}{llrrrrrrrr}
-                \hline
-                \hline
-                \ce{{}^.R} & \(\langle\hat{S}^2\rangle_\mathrm{SCF}\) &
-                \(\Delta\)CEPA$_0$ & \(\Delta\)DC-12 & \(\Delta\)CCSD &
-                \(\Delta\)OCEPA$_0$ & \(\Delta\)ODC-12 & \(\Delta\)CCSD(T) &
-                CCSD(T){+}\(\delta\)Q
-                \\
-                \hline
-                \ce{{}^.CH2NO2} &
-                0.78  & 1.24 & 0.95 & 0.66 & 0.16 & 0.27 & 0.32 &
-                -3.50 \\ 
-                \ce{{}^.CH2OCHO} &
-                0.76  & 1.16 & 1.12 & 0.63 & 0.40 & 0.48 & 0.10 &
-                -4.84 \\
-                \ce{{}^.CH2SCH3} &
-                0.76  & 1.89 & 1.70 & 0.81 & 0.63 & 0.72 & 0.15 &
-                -11.01 \\
-                \ce{{}^.CF\bond{2}CH2} &
-                0.94  & 6.12 & 3.71 & 0.96 & 0.42 & 0.64 & 0.46 &
-                6.26 \\
-                \ce{{}^.CH2CH2F} &
-                0.76  & 0.30 & 0.27 & 0.13 & 0.08 & 0.10 & 0.04 &
-                -1.53 \\
-                \ce{{}^.CH2CHO} &
-                0.93  & 5.01 & 2.86 & 0.32 & -0.16 & 0.02 & 0.46 &
-                -10.11\\
-                \ce{{}^.CH2CN} &
-                0.94  & 6.36 & 3.52 & 0.65 & -0.02 & 0.21 & 0.46 &
-                -8.66 \\
-                \ce{{}^.CH2F} &
-                0.76  & 1.03 & 1.00 & 0.52 & 0.55 & 0.57 & 0.06 &
-                -4.22 \\
-                \ce{{}^.CH2NH2} &
-                0.76  & 1.28 & 1.18 & 0.59 & 0.50 & 0.52 & 0.06 &
-                -12.06\\
-                \ce{{}^.CH2NH3+} &
-                0.76  & 0.16 & 0.10 & 0.08 & 0.06 & 0.03 & 0.02 &
-                4.58 \\
-                \ce{{}^.CH2NHOH} &
-                0.77  & 1.76 & 1.57 & 0.78 & 0.58 & 0.64 & 0.15 &
-                -8.81 \\
-                \ce{{}^.CH2OH} &
-                0.76  & 1.29 & 1.23 & 0.62 & 0.57 & 0.60 & 0.07 &
-                -9.27 \\
-                \ce{{}^.CH2PH3+} &
-                0.76 & 0.21 & 0.14 & 0.01 & 0.01 & -0.02 & 0.05 &
-                0.49 \\
-                \ce{{}^.CH2SH2+} &
-                0.77 & 0.41 & 0.30 & 0.12 & 0.11 & 0.08 & 0.06 &
-                2.29 \\
-                \ce{{}^.CH2SH} &
-                0.76 & 1.60 & 1.43 & 0.68 & 0.57 & 0.63 & 0.12 &
-                -9.68 \\
-                \hline
-            \end{tabular}
-            \vspace*{\fill}
-            \newpage
-            \vspace*{\fill}
-            \begin{tabular}{lllrrrrrrr}
-                \hline
-                \hline
-                \ce{{}^.R} & \(\langle\hat{S}^2\rangle_\mathrm{SCF}\) &
-                \(\Delta\)CEPA$_0$ & \(\Delta\)DC-12 & \(\Delta\)CCSD &
-                \(\Delta\)OCEPA$_0$ & \(\Delta\)ODC-12 & \(\Delta\)CCSD(T) &
-                CCSD(T){+}\(\delta\)Q
-                \\
-                \hline
-                \ce{{}^.CH2C\bond{3}CH} &
-                1.00  & 6.23 & 3.47 & 0.82 & -0.03 & 0.23 & 0.52 &
-                -13.17\\
-                \ce{{}^.CH2CH3} &
-                0.76  & 0.30 & 0.26 & 0.11 & 0.08 & 0.10 & 0.03 &
-                -3.36 \\
-                \ce{{}^.CH2Cl} &
-                0.77 & 1.13 & 1.02 & 0.50 & 0.48 & 0.51 & 0.09 &
-                -5.67 \\
-                \ce{{}^.CH2BH2} &
-                0.76 & 0.17 & 0.17 & 0.05 & 0.03 & 0.04 & 0.05 &
-                -11.66\\
-                \ce{{}^.CHO} &
-                0.77  & 2.26 & 2.24 & 1.48 & 1.55 & 1.56 & 0.20 &
-                -17.61\\
-                \ce{{}^.CH2PH2} &
-                0.76 & 1.17 & 1.02 & 0.39 & 0.36 & 0.39 & 0.12 &
-                -6.50 \\
-                \ce{{}^.CHClF} &
-                0.76  & 1.61 & 1.52 & 0.76 & 0.78 & 0.81 & 0.13 &
-                -6.61 \\
-                \ce{{}^.CHFCH3} &
-                0.76 & 1.07 & 1.01 & 0.50 & 0.51 & 0.53 & 0.08 &
-                -5.87 \\
-                \ce{{}^.CH(OH)2} &
-                0.76 & 1.30 & 1.22 & 0.60 & 0.60 & 0.61 & 0.08 &
-                -6.67 \\
-                \ce{{}^.CHCl2} &
-                0.77 & 1.78 & 1.57 & 0.72 & 0.72 & 0.75 & 0.15 &
-                -9.56 \\
-                \ce{{}^.CHF2} &
-                0.76 & 1.50 & 1.48 & 0.78 & 0.83 & 0.85 & 0.10 &
-                -4.07 \\
-                \ce{CH2\bond{2}C^.\bond{1}CN} &
-                1.39 & 19.10 & 11.50 & 2.36 & -0.31 & 0.29 & 1.80 &
-                1.98 \\
-                \ce{{}^.C\bond{3}CH} &
-                1.15 & 11.20 & 6.51 & 0.77 & -0.78 & -0.07 & 0.82 &
-                26.25 \\
-                \ce{{}^.CH\bond{2}CH2} &
-                0.94 & 5.42 & 3.01 & 0.58 & 0.11 & 0.31 & 0.40 &
-                5.49 \\
-                \ce{{}^.CH2\bond{1}CH\bond{2}CH2} &
-                0.97 & 4.98 & 3.17 & 0.51 & 0.11 & 0.31 & 0.48 &
-                -17.53 \\
-                \hline
-                &&
-                \mae: &
-                2.97 & 2.01 & 0.62 & 0.40 & 0.43 & 0.25	&
-                \\
-                &&
-                \std: &
-                3.97 & 2.27 & 0.45 & 0.43 & 0.35 & 0.35	&
-                \\
-                \hline
-                \hline
-            \end{tabular}
-            \vspace*{\fill}
-        \end{center}
-    \end{landscape}
-}
-
 \subsection{Radical Stabilization Energies}
 
+\afterpage{%
+    \clearpage
+    \centering
+    \begin{landscape}
+        \vspace*{\fill}
+        \captionof{table}{%
+            \label{rse-t}
+            Errors in radical stabilization energies (RSEs, \kcal) for 30
+            open-shell doublet species (\ce{{}^.R}) comprising the RSE30
+            database \cite{Soydas:2013p1452} computed using six methods with
+            the cc-pCVTZ basis set.
+            The errors are relative to CCSD(T) with an added quadruples
+            correction ($\delta Q = E_\mathrm{CCSDT(Q)}-E_\mathrm{CCSD(T)}$)
+            shown in the rightmost column in \kcal.
+            The $\delta$Q correction was computed using the cc-pCVDZ basis
+            set.  RSE is defined as the reaction enthalpy for the
+            homodesmotic reaction \ce{{}^.CH3 + RH $\rightarrow$ CH4 +
+            {}^.R}.
+            To indicate the degree of spin-contamination in the UHF
+            reference, the spin expectation values
+            ($\langle\hat{\mathsf{S}}^2\rangle_{\text{SCF}}$) are also shown
+            in units of $\hbar^2$.
+            For each method the mean absolute deviations from
+            CCSD(T)${+}\delta$Q (\mae, \kcal) and the standard deviations
+            from the mean signed error (\std, \kcal) are also presented.
+        }
+        \vspace{1em}
+        \renewcommand\arraystretch{0.6}
+        \small
+        \begin{tabular}{llrrrrrrrr}
+            \hline
+            \hline
+            \ce{{}^.R} & \(\langle\hat{S}^2\rangle_\mathrm{SCF}\) &
+            \(\Delta\)CEPA$_0$ & \(\Delta\)DC-12 & \(\Delta\)CCSD &
+            \(\Delta\)OCEPA$_0$ & \(\Delta\)ODC-12 & \(\Delta\)CCSD(T) &
+            CCSD(T){+}\(\delta\)Q
+            \\
+            \hline
+            \ce{{}^.CH2NO2} &
+            0.78  & 1.24 & 0.95 & 0.66 & 0.16 & 0.27 & 0.32 &
+            -3.50 \\ 
+            \ce{{}^.CH2OCHO} &
+            0.76  & 1.16 & 1.12 & 0.63 & 0.40 & 0.48 & 0.10 &
+            -4.84 \\
+            \ce{{}^.CH2SCH3} &
+            0.76  & 1.89 & 1.70 & 0.81 & 0.63 & 0.72 & 0.15 &
+            -11.01 \\
+            \ce{{}^.CF\bond{2}CH2} &
+            0.94  & 6.12 & 3.71 & 0.96 & 0.42 & 0.64 & 0.46 &
+            6.26 \\
+            \ce{{}^.CH2CH2F} &
+            0.76  & 0.30 & 0.27 & 0.13 & 0.08 & 0.10 & 0.04 &
+            -1.53 \\
+            \ce{{}^.CH2CHO} &
+            0.93  & 5.01 & 2.86 & 0.32 & -0.16 & 0.02 & 0.46 &
+            -10.11\\
+            \ce{{}^.CH2CN} &
+            0.94  & 6.36 & 3.52 & 0.65 & -0.02 & 0.21 & 0.46 &
+            -8.66 \\
+            \ce{{}^.CH2F} &
+            0.76  & 1.03 & 1.00 & 0.52 & 0.55 & 0.57 & 0.06 &
+            -4.22 \\
+            \ce{{}^.CH2NH2} &
+            0.76  & 1.28 & 1.18 & 0.59 & 0.50 & 0.52 & 0.06 &
+            -12.06\\
+            \ce{{}^.CH2NH3+} &
+            0.76  & 0.16 & 0.10 & 0.08 & 0.06 & 0.03 & 0.02 &
+            4.58 \\
+            \ce{{}^.CH2NHOH} &
+            0.77  & 1.76 & 1.57 & 0.78 & 0.58 & 0.64 & 0.15 &
+            -8.81 \\
+            \ce{{}^.CH2OH} &
+            0.76  & 1.29 & 1.23 & 0.62 & 0.57 & 0.60 & 0.07 &
+            -9.27 \\
+            \ce{{}^.CH2PH3+} &
+            0.76 & 0.21 & 0.14 & 0.01 & 0.01 & -0.02 & 0.05 &
+            0.49 \\
+            \ce{{}^.CH2SH2+} &
+            0.77 & 0.41 & 0.30 & 0.12 & 0.11 & 0.08 & 0.06 &
+            2.29 \\
+            \ce{{}^.CH2SH} &
+            0.76 & 1.60 & 1.43 & 0.68 & 0.57 & 0.63 & 0.12 &
+            -9.68 \\
+            \hline
+        \end{tabular}
+        \vspace*{\fill}
+        \newpage
+        \vspace*{\fill}
+        \begin{tabular}{lllrrrrrrr}
+            \hline
+            \hline
+            \ce{{}^.R} & \(\langle\hat{S}^2\rangle_\mathrm{SCF}\) &
+            \(\Delta\)CEPA$_0$ & \(\Delta\)DC-12 & \(\Delta\)CCSD &
+            \(\Delta\)OCEPA$_0$ & \(\Delta\)ODC-12 & \(\Delta\)CCSD(T) &
+            CCSD(T){+}\(\delta\)Q
+            \\
+            \hline
+            \ce{{}^.CH2C\bond{3}CH} &
+            1.00  & 6.23 & 3.47 & 0.82 & -0.03 & 0.23 & 0.52 &
+            -13.17\\
+            \ce{{}^.CH2CH3} &
+            0.76  & 0.30 & 0.26 & 0.11 & 0.08 & 0.10 & 0.03 &
+            -3.36 \\
+            \ce{{}^.CH2Cl} &
+            0.77 & 1.13 & 1.02 & 0.50 & 0.48 & 0.51 & 0.09 &
+            -5.67 \\
+            \ce{{}^.CH2BH2} &
+            0.76 & 0.17 & 0.17 & 0.05 & 0.03 & 0.04 & 0.05 &
+            -11.66\\
+            \ce{{}^.CHO} &
+            0.77  & 2.26 & 2.24 & 1.48 & 1.55 & 1.56 & 0.20 &
+            -17.61\\
+            \ce{{}^.CH2PH2} &
+            0.76 & 1.17 & 1.02 & 0.39 & 0.36 & 0.39 & 0.12 &
+            -6.50 \\
+            \ce{{}^.CHClF} &
+            0.76  & 1.61 & 1.52 & 0.76 & 0.78 & 0.81 & 0.13 &
+            -6.61 \\
+            \ce{{}^.CHFCH3} &
+            0.76 & 1.07 & 1.01 & 0.50 & 0.51 & 0.53 & 0.08 &
+            -5.87 \\
+            \ce{{}^.CH(OH)2} &
+            0.76 & 1.30 & 1.22 & 0.60 & 0.60 & 0.61 & 0.08 &
+            -6.67 \\
+            \ce{{}^.CHCl2} &
+            0.77 & 1.78 & 1.57 & 0.72 & 0.72 & 0.75 & 0.15 &
+            -9.56 \\
+            \ce{{}^.CHF2} &
+            0.76 & 1.50 & 1.48 & 0.78 & 0.83 & 0.85 & 0.10 &
+            -4.07 \\
+            \ce{CH2\bond{2}C^.\bond{1}CN} &
+            1.39 & 19.10 & 11.50 & 2.36 & -0.31 & 0.29 & 1.80 &
+            1.98 \\
+            \ce{{}^.C\bond{3}CH} &
+            1.15 & 11.20 & 6.51 & 0.77 & -0.78 & -0.07 & 0.82 &
+            26.25 \\
+            \ce{{}^.CH\bond{2}CH2} &
+            0.94 & 5.42 & 3.01 & 0.58 & 0.11 & 0.31 & 0.40 &
+            5.49 \\
+            \ce{{}^.CH2\bond{1}CH\bond{2}CH2} &
+            0.97 & 4.98 & 3.17 & 0.51 & 0.11 & 0.31 & 0.48 &
+            -17.53 \\
+            \hline
+            &&
+            \mae: &
+            2.97 & 2.01 & 0.62 & 0.40 & 0.43 & 0.25	&
+            \\
+            &&
+            \std: &
+            3.97 & 2.27 & 0.45 & 0.43 & 0.35 & 0.35	&
+            \\
+            \hline
+            \hline
+        \end{tabular}
+        \vspace*{\fill}
+    \end{landscape}
+    \newpage
+    \includegraphics[width=0.8\textwidth]{figures/rse.pdf}
+    \captionof{figure}{%
+        \label{rse-f}
+        Mean absolute deviations (\mae, \kcal) and the standard deviations
+        from the mean signed error (\std, \kcal) of the radical
+        stabilization energies (RSEs) for 30 open-shell doublet species
+        (RSE30 database) computed using six methods with the cc-pCVTZ basis
+        set.
+        The errors are relative to CCSD(T) with an added quadruples
+        correction ($\delta$Q  $= E_\mathrm{CCSDT(Q)}-E_\mathrm{CCSD(T)}$).
+        The $\delta$Q correction was computed using the cc-pCVDZ basis set.
+        RSE is defined as the reaction enthalpy for the homodesmotic
+        reaction \ce{{}^.CH3 + RH $\rightarrow$ CH4 + {}^.R}.
+        The \mae value is represented as a height of each colored box, while
+        the \std value is depicted as a radius of the black vertical bar.
+        See \cref{rse-t} for data on individual database members.
+    }
+}
 
 In this section we study the performance of DCFT methods for predicting radical
 stabilization energies (RSEs). An R-group's RSE is defined as the enthalpy of a
@@ -890,26 +901,6 @@ For OCEPA$_0$, the standard deviation (0.43~\kcal) is similar to that of CCSD
 (0.45~\kcal). ODC-12 and CCSD(T) exhibit the most consistent performance with
 the same \std value of 0.35~\kcal.
 
-\begin{figure}
-	\centering
-	\caption{%
-        \label{rse-f}
-        Mean absolute deviations (\mae, \kcal) and the standard deviations from
-        the mean signed error (\std, \kcal) of the radical stabilization
-        energies (RSEs) for 30 open-shell doublet species (RSE30 database)
-        computed using six methods with the cc-pCVTZ basis set.
-        The errors are relative to CCSD(T) with an added quadruples correction
-        ($\delta$Q  $= E_\mathrm{CCSDT(Q)}-E_\mathrm{CCSD(T)}$).
-        The $\delta$Q correction was computed using the cc-pCVDZ basis set.
-        RSE is defined as the reaction enthalpy for the homodesmotic reaction
-        \ce{{}^.CH3 + RH $\rightarrow$ CH4 + {}^.R}.
-        The \mae value is represented as a height of each colored box, while the
-        \std value is depicted as a radius of the black vertical bar.
-        See \cref{rse-t} for data on individual database members.
-	}
-	\includegraphics[width=0.8\textwidth]{figures/rse.pdf}
-\end{figure}
-
 Deviations from CCSD(T){+}\(\delta\)Q for individual RSEs predicted by each
 method are tabulated in \cref{rse-t}.
 In addition, \cref{rse-t} includes expectation values of the square-norm spin
@@ -931,26 +922,28 @@ average errors of 0.24~\kcal and 0.26~\kcal.
 
 \afterpage{%
     \clearpage
+    \centering
     \begin{landscape}
-        \begin{center}
-            \captionof{table}{%
-                \label{ip-t}
-                Errors in adiabatic ionization energies (AIEs, \eV) for 10 di-
-                and triatomic molecules computed using six methods with the
-                cc-pCVQZ basis set.
-                The errors are relative to experimental values
-                (\(\mathrm{IE}_\mathrm{ref}\), \eV) from
-                Ref.~\citenum{Lias:1988p1}, unless noted otherwise.
-                For all AIEs the harmonic zero-point vibrational energy
-                corrections were included.
-                For each method the mean absolute deviations from
-                \(\mathrm{IE}_\mathrm{ref}\) (\mae, \eV) and the standard
-                deviations from the mean signed error (\std, \eV) are also
-                shown.
-            }
-            \vspace{1em}
-            \renewcommand\arraystretch{0.6}
-            \small
+        \vspace*{\fill}
+        \captionof{table}{%
+            \label{ip-t}
+            Errors in adiabatic ionization energies (AIEs, \eV) for 10 di-
+            and triatomic molecules computed using six methods with the
+            cc-pCVQZ basis set.
+            The errors are relative to experimental values
+            (\(\mathrm{IE}_\mathrm{ref}\), \eV) from
+            Ref.~\citenum{Lias:1988p1}, unless noted otherwise.
+            For all AIEs the harmonic zero-point vibrational energy
+            corrections were included.
+            For each method the mean absolute deviations from
+            \(\mathrm{IE}_\mathrm{ref}\) (\mae, \eV) and the standard
+            deviations from the mean signed error (\std, \eV) are also
+            shown.
+        }
+        \vspace{1em}
+        \renewcommand\arraystretch{0.6}
+        \small
+        \begin{threeparttable}
             \begin{tabular}{ccrrrrrrc}
                 \hline
                 \hline
@@ -967,7 +960,7 @@ average errors of 0.24~\kcal and 0.26~\kcal.
                 \ce{N2} &
                 \(\termsymbol{{}^1\Sigma_g^+}\rightarrow\termsymbol{{}^2\Sigma_g^+}\) &
                 0.08 & 0.17 & 0.12 &-0.05 & 0.07 &-0.03 &
-                15.581  $\pm$ 0.008 $^a$ \\
+                15.581  $\pm$ 0.008 \tnote{a} \\
                 \ce{O2} &
                 \(\termsymbol{{}^3\Sigma_g^-}\rightarrow\termsymbol{{}^2\Pi_g}\) &
                 -0.11 &-0.03 & 0.04 &-0.09 &-0.02 &-0.04 &
@@ -983,11 +976,11 @@ average errors of 0.24~\kcal and 0.26~\kcal.
                 \ce{OF} &
                 \(\termsymbol{{}^2\Pi}\rightarrow\termsymbol{{}^3\Sigma^-}\) &
                 0.11 & 0.12 &-0.10 &-0.03 &-0.02 &-0.11	&
-                12.77 $\pm$ 0.01 $^b$ \\
+                12.77 $\pm$ 0.01 \tnote{b} \\
                 \ce{HNC} &
                 \(\termsymbol{{}^1\Sigma_g^+}\rightarrow\termsymbol{{}^2\Sigma^+}\) &
                 0.27 & 0.14 &-0.12 &-0.14 &-0.08 &-0.04	&
-                12.04 $\pm$ 0.01 $^c$ \\
+                12.04 $\pm$ 0.01 \tnote{c} \\
                 \ce{HOF} &
                 \(\termsymbol{{}^1A'}\rightarrow\termsymbol{{}^2A''}\) &
                 0.20 & 0.17 &-0.10 &-0.03 &-0.04 &-0.07	&
@@ -1010,11 +1003,31 @@ average errors of 0.24~\kcal and 0.26~\kcal.
                 \hline
                 \hline
             \end{tabular}
-        \end{center}
-        $^a$ Reference \citenum{Trickl:1989p6006}. \\
-        $^b$ Reference \citenum{Zhang:1994p377}. \\
-        $^c$ Reference \citenum{Hansel:1998p1748}.
+            \begin{tablenotes}
+                \item[a]
+                    Reference \citenum{Trickl:1989p6006}.
+                \item[b]
+                    Reference \citenum{Zhang:1994p377}.
+                \item[c]
+                    Reference \citenum{Hansel:1998p1748}.
+            \end{tablenotes}
+        \end{threeparttable}
+        \vspace*{\fill}
     \end{landscape}
+    \newpage
+	\includegraphics[width=0.8\textwidth]{figures/ip.pdf}
+    \captionof{figure}{%
+        \label{ip-f}
+        Mean absolute deviations (\mae, \eV) and the standard deviations from
+        the mean signed error (\std, \eV) of adiabatic ionization energies for
+        10 di- and triatomic molecules computed using six methods with the
+        cc-pCVQZ basis set.
+        The errors are relative to experimental
+        values.\cite{Lias:1988p1,Trickl:1989p6006,Zhang:1994p377,Hansel:1998p1748}
+        The \mae value is represented as a height of each colored box, while the
+        \std value is depicted as a radius of the black vertical bar.
+        See \cref{ip-t} for data on individual molecules.
+	}
 }
 
 \subsection{Adiabatic Ionization Energies in Electron-Dense Molecules}
@@ -1042,23 +1055,6 @@ and 0.06~\eV, respectively).
 The \std for ODC-12 matches that of CCSD(T) (0.04~\eV).
 For the other methods, the \std values decrease in the order CEPA$_0$ (0.22~\eV)
 $>$ DC-12 (0.12) $>$ CCSD (0.08) $>$ OCEPA$_0$ (0.06).
-
-\begin{figure}
-	\centering
-	\caption{%
-        \label{ip-f}
-        Mean absolute deviations (\mae, \eV) and the standard deviations from
-        the mean signed error (\std, \eV) of adiabatic ionization energies for
-        10 di- and triatomic molecules computed using six methods with the
-        cc-pCVQZ basis set.
-        The errors are relative to experimental
-        values.\cite{Lias:1988p1,Trickl:1989p6006,Zhang:1994p377,Hansel:1998p1748}
-        The \mae value is represented as a height of each colored box, while the
-        \std value is depicted as a radius of the black vertical bar.
-        See \cref{ip-t} for data on individual molecules.
-	}
-	\includegraphics[width=0.8\textwidth]{figures/ip.pdf}
-\end{figure}
 
 Individual errors for each system are shown in \cref{ip-t}.
 Both DC-12 and CEPA$_0$ exhibit large deviations for $\mathrm{F_2O}$ (0.49 and
