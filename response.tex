@@ -811,7 +811,8 @@ response function for a dipole perturbation (i.e., the dipole polarizability):
     \mathbf{E}^{-1}
     \mathbf{v}'
 \end{equation}
-This quantity can also be evaluated numerically as a derivative of the ground state energy
+This quantity can be evaluated numerically as a derivative of the ground state
+energy
 \begin{equation}
     \langle\!\langle\hat{V}; \hat{V}\rangle\!\rangle_0
     =
@@ -829,9 +830,13 @@ by perturbing the one-electron integrals
     \leftarrow
     h_p^q
     +
-    f\langle \psi_p|\hat{V}|\psi_q\rangle
+    f
+    v_p^q
 \)
-and solving the ODC-12 equations for different values of \(f\).
+with the integrals of the perturbing dipole operator, \(v_p^q\), and solving the
+ODC-12 or OLCCD equations for different values of \(f\).
+In this way, we have matched our response calculation to \(10^{-9}\ \au\) for
+the electric dipole polarizability along the \(C_2\) symmetry axis of water.
 
 
 We used \textsc{Q-Chem} 4.4\cite{QChem} to obtain results from
@@ -862,6 +867,7 @@ used as in Refs.~\citenum{Daday:2012p4441} and \citenum{Zimmerman:2017p4712}.
 \label{sec:size_intensivity}
 
 \begin{table*}[h!]
+    \centering
     \caption{%
         \label{tab:size_int}
         Ground-state energies (in \hartree) and vertical excitation energies (in
@@ -912,6 +918,7 @@ are size-intensive.
 \label{sec:two_electron}
 
 \begin{figure*}[h!]
+    \centering
     \subfloat[]{\label{fig:H2_diss_odc}\includegraphics[width=0.45\textwidth]{figures/H2_odc.pdf}} \qquad
     \subfloat[]{\label{fig:H2_diss_olccd}\includegraphics[width=0.45\textwidth]{figures/H2_olccd.pdf}} \quad
     \captionsetup{justification=raggedright,singlelinecheck=false}
@@ -981,173 +988,175 @@ distances when the electron correlation effects become particularly strong.
 
 \afterpage{%
     \clearpage
-    \begin{table*}[h!]
-        \caption{%
-            \label{tab:vertical_singlet}
-            Errors in vertical excitation energies (eV) for singlet states
-            computed using LR-OLCCD, LR-ODC-12, and EOM-CCSD, relative to
-            EOM-CCSDT (aug-cc-pVTZ basis set).
-            All electrons were correlated in all computations.
-            Also shown are mean absolute errors (\mae) and standard deviations
-            (\std) computed for each method.
-        }
-        \begin{threeparttable}
-            \begin{tabular}{clcccc}
-                \hline
-                \hline
-                &&
-                \(\Delta\)EOM-CCSD & \(\Delta\)LR-OLCCD & \(\Delta\)LR-ODC-12 & 
-                EOM-CCSDT \\
-                \hline
-                \ce{N2}
-                & \({}^1\Pi_g\)        &
-                \( \)0.18 & \( \)0.08 & \( \)0.20 &  9.29 \\
-                & \({}^1\Sigma_u^-\)   &
-                \( \)0.23 & \( \)0.15 & \( \)0.09 &  9.84 \\
-                & \({}^1\Delta_u\)     &
-                \( \)0.26 & \( \)0.14 & \( \)0.10 & 10.26 \\
-                \ce{CO}                            
-                & \({}^1\Pi\)          &
-                \( \)0.16 & \( \)0.09 & \( \)0.17 &  8.46 \\
-                & \({}^1\Sigma^-\)     &
-                \( \)0.19 & \(-\)0.10 & \(-\)0.01 &  9.89 \\
-                & \({}^1\Delta\)       &
-                \( \)0.19 & \(-\)0.22 & \(-\)0.05 & 10.03 \\
-                \ce{HCN}                           
-                & \({}^1\Sigma^-\)     &
-                \( \)0.16 & \( \)0.05 & \( \)0.00 & 8.25 \\
-                & \({}^1\Delta\)       &
-                \( \)0.17 & \( \)0.04 & \( \)0.01 & 8.61 \\
-                & \({}^1\Pi\)          &
-                \( \)0.17 & \( \)0.05 & \( \)0.20 & 9.12 \\
-                \ce{HNC}                           
-                & \({}^1\Pi\)          &
-                \( \)0.15 & \(-\)0.01 & \( \)0.10 & 8.13 \\
-                & \({}^1\Sigma^+\)     &
-                \( \)0.24 & \( \)0.05 & \( \)0.12 & 8.46 \\
-                & \({}^1\Sigma^-\)     &
-                \( \)0.15 & \(-\)0.09 & \( \)0.04 & 8.67 \\
-                & \({}^1\Delta\)       &
-                \( \)0.15 & \(-\)0.18 & \(-\)0.03 & 8.84 \\
-                \ce{H2C2}                          
-                & \({}^1\Sigma_u^-\)   &
-                \( \)0.12 & \( \)0.06 & \( \)0.02 & 7.11 \\
-                & \({}^1\Delta_u\)     &
-                \( \)0.10 & \( \)0.07 & \( \)0.03 & 7.45 \\
-                \ce{H2CO}                                                 
-                & \({}^1\mathrm{A_2}\) &
-                \( \)0.10 & \(-\)0.07 & \( \)0.02 & 3.95 \\
-                \hline
-                \mae & & 0.09 & 0.08 & 0.17 &  \\		
-                \std & & 0.11 & 0.08 & 0.05 &  \\ 		
-                \hline
-                \hline
-            \end{tabular}
-        \end{threeparttable}
-    \end{table*}
+    \centering
+    \vspace*{\fill}
+    \captionof{table}{%
+        \label{tab:vertical_singlet}
+        Errors in vertical excitation energies (eV) for singlet states
+        computed using LR-OLCCD, LR-ODC-12, and EOM-CCSD, relative to
+        EOM-CCSDT (aug-cc-pVTZ basis set).
+        All electrons were correlated in all computations.
+        Also shown are mean absolute errors (\mae) and standard deviations
+        (\std) computed for each method.
+    }
+    \begin{threeparttable}
+        \small
+        \renewcommand\arraystretch{0.6}
+        \begin{tabular}{clcccc}
+            \hline
+            \hline
+            &&
+            \(\Delta\)EOM-CCSD & \(\Delta\)LR-OLCCD & \(\Delta\)LR-ODC-12 & 
+            EOM-CCSDT \\
+            \hline
+            \ce{N2}
+            & \({}^1\Pi_g\)        &
+            \( \)0.18 & \( \)0.08 & \( \)0.20 &  9.29 \\
+            & \({}^1\Sigma_u^-\)   &
+            \( \)0.23 & \( \)0.15 & \( \)0.09 &  9.84 \\
+            & \({}^1\Delta_u\)     &
+            \( \)0.26 & \( \)0.14 & \( \)0.10 & 10.26 \\
+            \ce{CO}                            
+            & \({}^1\Pi\)          &
+            \( \)0.16 & \( \)0.09 & \( \)0.17 &  8.46 \\
+            & \({}^1\Sigma^-\)     &
+            \( \)0.19 & \(-\)0.10 & \(-\)0.01 &  9.89 \\
+            & \({}^1\Delta\)       &
+            \( \)0.19 & \(-\)0.22 & \(-\)0.05 & 10.03 \\
+            \ce{HCN}                           
+            & \({}^1\Sigma^-\)     &
+            \( \)0.16 & \( \)0.05 & \( \)0.00 & 8.25 \\
+            & \({}^1\Delta\)       &
+            \( \)0.17 & \( \)0.04 & \( \)0.01 & 8.61 \\
+            & \({}^1\Pi\)          &
+            \( \)0.17 & \( \)0.05 & \( \)0.20 & 9.12 \\
+            \ce{HNC}                           
+            & \({}^1\Pi\)          &
+            \( \)0.15 & \(-\)0.01 & \( \)0.10 & 8.13 \\
+            & \({}^1\Sigma^+\)     &
+            \( \)0.24 & \( \)0.05 & \( \)0.12 & 8.46 \\
+            & \({}^1\Sigma^-\)     &
+            \( \)0.15 & \(-\)0.09 & \( \)0.04 & 8.67 \\
+            & \({}^1\Delta\)       &
+            \( \)0.15 & \(-\)0.18 & \(-\)0.03 & 8.84 \\
+            \ce{H2C2}                          
+            & \({}^1\Sigma_u^-\)   &
+            \( \)0.12 & \( \)0.06 & \( \)0.02 & 7.11 \\
+            & \({}^1\Delta_u\)     &
+            \( \)0.10 & \( \)0.07 & \( \)0.03 & 7.45 \\
+            \ce{H2CO}                                                 
+            & \({}^1\mathrm{A_2}\) &
+            \( \)0.10 & \(-\)0.07 & \( \)0.02 & 3.95 \\
+            \hline
+            \mae & & 0.09 & 0.08 & 0.17 &  \\		
+            \std & & 0.11 & 0.08 & 0.05 &  \\ 		
+            \hline
+            \hline
+        \end{tabular}
+    \end{threeparttable}
+    \vspace*{\fill}
     \newpage
-    \begin{table*}[h!]
-        \caption{%
-            \label{tab:vertical_triplet}
-            Errors in vertical excitation energies (eV) for triplet states
-            computed using LR-OLCCD, LR-ODC-12, and EOM-CCSD, relative to
-            EOM-CCSDT (aug-cc-pVTZ basis set).
-            All electrons were correlated in all computations.
-            Also shown are mean absolute errors (\mae) and standard deviations
-            (\std) computed for each method.
-        }
-        \begin{threeparttable}
-            \begin{tabular}{clcccc}
-                \hline
-                \hline
-                &&
-                \(\Delta\)EOM-CCSD & \(\Delta\)LR-OLCCD & \(\Delta\)LR-ODC-12 &
-                EOM-CCSDT \\
-                \hline
-                \ce{N2}
-                & \({}^3\Sigma_u^+\)   &
-                \( \)0.11 & \( \)0.04 & \(-\)0.02 &  7.63 \\\
-                & \({}^3\Pi_g\)        &
-                \( \)0.15 & \( \)0.06 & \( \)0.11 &  8.00 \\\
-                & \({}^3\Delta_u\)     &
-                \( \)0.17 & \( \)0.08 & \( \)0.03 &  8.82 \\\
-                & \({}^3\Sigma_u^-\)   &
-                \( \)0.28 & \( \)0.03 & \( \)0.01 &  9.63 \\\
-                & \({}^3\Pi_u\)        &
-                \( \)0.14 & \(-\)0.01 & \( \)0.10 & 11.18 \\\
-                \ce{CO}                            
-                & \({}^3\Pi\)          &
-                \( \)0.12 & \( \)0.06 & \( \)0.08 &  6.27 \\\
-                & \({}^3\Sigma^+\)     &
-                \( \)0.05 & \(-\)0.03 & \(-\)0.03 &  8.38 \\\
-                & \({}^3\Delta\)       &
-                \( \)0.11 & \(-\)0.07 & \(-\)0.03 &  9.21 \\\
-                & \({}^3\Sigma^-\)     &
-                \( \)0.19 & \(-\)0.18 & \(-\)0.06 &  9.72 \\\
-                \ce{HCN}                           
-                & \({}^3\Sigma^+\)     &
-                \( \)0.05 & \(-\)0.04 & \(-\)0.10 &  6.40 \\
-                & \({}^3\Delta\)       &
-                \( \)0.13 & \(-\)0.02 & \(-\)0.06 &  7.40 \\
-                & \({}^3\Pi\)          &
-                \( \)0.10 & \( \)0.08 & \( \)0.06 &  8.01 \\
-                & \({}^3\Sigma^-\)     &
-                \( \)0.16 & \(-\)0.10 & \(-\)0.05 &  8.15 \\
-                \ce{HNC}                                                      
-                & \({}^3\Pi\)          &
-                \( \)0.09 & \( \)0.00 & \( \)0.03 &  6.06 \\
-                & \({}^3\Sigma^+\)     &
-                \( \)0.04 & \(-\)0.09 & \(-\)0.11 &  7.20 \\
-                & \({}^3\Delta\)       &
-                \( \)0.10 & \(-\)0.14 & \(-\)0.11 &  8.02 \\
-                & \({}^3\Sigma^+\)     &
-                \( \)0.22 & \(-\)0.05 & \( \)0.04 &  8.38 \\
-                & \({}^3\Sigma^-\)     &
-                \( \)0.15 & \(-\)0.02 & \( \)0.11 &  8.56 \\
-                \ce{H2C2}                                                     
-                & \({}^3\Sigma_u^+\)   &
-                \( \)0.01 & \(-\)0.02 & \(-\)0.08 &  5.52 \\
-                & \({}^3\Delta_u\)     &
-                \( \)0.08 & \(-\)0.02 & \(-\)0.05 &  6.41 \\
-                & \({}^3\Sigma_u^-\)   &
-                \( \)0.10 & \(-\)0.03 & \(-\)0.05 &  7.10 \\
-                \ce{H2CO}                                                     
-                & \({}^3\mathrm{A_2}\) &
-                \( \)0.04 & \(-\)0.02 & \( \)0.01 &  3.56 \\
-                & \({}^3\mathrm{A_1}\) &
-                \( \)0.02 & \(-\)0.06 & \(-\)0.14 &  6.06 \\
-                \hline
-                \mae && 0.17 & 0.09 & 0.08 & \\		
-                \std && 0.05 & 0.11 & 0.08 & \\ 		
-                \hline
-                \hline
-            \end{tabular}
-            \begin{tablenotes}
-            \item[a]
-                For CO, HCN, HNC, and \ce{H2C2}, the ${}^3\Sigma^-$
-                (${}^3\Sigma_u^-$) excitation energies were obtained from
-                EOM-CC(2,3), which energies were shifted to reproduce the
-                EOM-CCSDT energy for the ${}^1\Sigma^-$ (${}^1\Sigma_u^-$)
-                state.
-            \end{tablenotes}    
-        \end{threeparttable}
-    \end{table*}
+    \vspace*{\fill}
+    \captionof{table}{%
+        \label{tab:vertical_triplet}
+        Errors in vertical excitation energies (eV) for triplet states
+        computed using LR-OLCCD, LR-ODC-12, and EOM-CCSD, relative to
+        EOM-CCSDT (aug-cc-pVTZ basis set).
+        All electrons were correlated in all computations.
+        Also shown are mean absolute errors (\mae) and standard deviations
+        (\std) computed for each method.
+    }
+    \begin{threeparttable}
+        \small
+        \renewcommand\arraystretch{0.6}
+        \begin{tabular}{clcccc}
+            \hline
+            \hline
+            &&
+            \(\Delta\)EOM-CCSD & \(\Delta\)LR-OLCCD & \(\Delta\)LR-ODC-12 &
+            EOM-CCSDT\tnote{a} \\
+            \hline
+            \ce{N2}
+            & \({}^3\Sigma_u^+\)   &
+            \( \)0.11 & \( \)0.04 & \(-\)0.02 &  7.63 \\\
+            & \({}^3\Pi_g\)        &
+            \( \)0.15 & \( \)0.06 & \( \)0.11 &  8.00 \\\
+            & \({}^3\Delta_u\)     &
+            \( \)0.17 & \( \)0.08 & \( \)0.03 &  8.82 \\\
+            & \({}^3\Sigma_u^-\)   &
+            \( \)0.28 & \( \)0.03 & \( \)0.01 &  9.63 \\\
+            & \({}^3\Pi_u\)        &
+            \( \)0.14 & \(-\)0.01 & \( \)0.10 & 11.18 \\\
+            \ce{CO}                            
+            & \({}^3\Pi\)          &
+            \( \)0.12 & \( \)0.06 & \( \)0.08 &  6.27 \\\
+            & \({}^3\Sigma^+\)     &
+            \( \)0.05 & \(-\)0.03 & \(-\)0.03 &  8.38 \\\
+            & \({}^3\Delta\)       &
+            \( \)0.11 & \(-\)0.07 & \(-\)0.03 &  9.21 \\\
+            & \({}^3\Sigma^-\)     &
+            \( \)0.19 & \(-\)0.18 & \(-\)0.06 &  9.72 \\\
+            \ce{HCN}                           
+            & \({}^3\Sigma^+\)     &
+            \( \)0.05 & \(-\)0.04 & \(-\)0.10 &  6.40 \\
+            & \({}^3\Delta\)       &
+            \( \)0.13 & \(-\)0.02 & \(-\)0.06 &  7.40 \\
+            & \({}^3\Pi\)          &
+            \( \)0.10 & \( \)0.08 & \( \)0.06 &  8.01 \\
+            & \({}^3\Sigma^-\)     &
+            \( \)0.16 & \(-\)0.10 & \(-\)0.05 &  8.15 \\
+            \ce{HNC}                                                      
+            & \({}^3\Pi\)          &
+            \( \)0.09 & \( \)0.00 & \( \)0.03 &  6.06 \\
+            & \({}^3\Sigma^+\)     &
+            \( \)0.04 & \(-\)0.09 & \(-\)0.11 &  7.20 \\
+            & \({}^3\Delta\)       &
+            \( \)0.10 & \(-\)0.14 & \(-\)0.11 &  8.02 \\
+            & \({}^3\Sigma^+\)     &
+            \( \)0.22 & \(-\)0.05 & \( \)0.04 &  8.38 \\
+            & \({}^3\Sigma^-\)     &
+            \( \)0.15 & \(-\)0.02 & \( \)0.11 &  8.56 \\
+            \ce{H2C2}                                                     
+            & \({}^3\Sigma_u^+\)   &
+            \( \)0.01 & \(-\)0.02 & \(-\)0.08 &  5.52 \\
+            & \({}^3\Delta_u\)     &
+            \( \)0.08 & \(-\)0.02 & \(-\)0.05 &  6.41 \\
+            & \({}^3\Sigma_u^-\)   &
+            \( \)0.10 & \(-\)0.03 & \(-\)0.05 &  7.10 \\
+            \ce{H2CO}                                                     
+            & \({}^3\mathrm{A_2}\) &
+            \( \)0.04 & \(-\)0.02 & \( \)0.01 &  3.56 \\
+            & \({}^3\mathrm{A_1}\) &
+            \( \)0.02 & \(-\)0.06 & \(-\)0.14 &  6.06 \\
+            \hline
+            \mae && 0.17 & 0.09 & 0.08 & \\		
+            \std && 0.05 & 0.11 & 0.08 & \\ 		
+            \hline
+            \hline
+        \end{tabular}
+        \begin{tablenotes}
+        \item[a]
+            For CO, HCN, HNC, and \ce{H2C2}, the ${}^3\Sigma^-$
+            (${}^3\Sigma_u^-$) excitation energies were obtained from
+            EOM-CC(2,3), which energies were shifted to reproduce the
+            EOM-CCSDT energy for the ${}^1\Sigma^-$ (${}^1\Sigma_u^-$)
+            state.
+        \end{tablenotes}    
+    \end{threeparttable}
+    \vspace*{\fill}
     \newpage
-    \begin{figure}
-        \centering
-        \caption{%
-            Mean absolute deviations (\mae) and standard deviations from the
-            mean signed error (\std) in vertical excitation energies for the
-            states in \cref{tab:vertical_singlet,tab:vertical_triplet} for
-            OLCCD, LR-ODC-12, and EOM-CCSD relative to EOM-CCSDT (aug-cc-pVTZ
-            basis set).
-            The height of each colored box represents the \mae value of the
-            method and the height of the black bar above each box represents its
-            \std value.
-        }
+    \includegraphics[width=0.8\textwidth]{figures/excitation-energies.pdf}
+    \captionof{figure}{%
         \label{fig:vertical_mae}
-        \includegraphics[width=0.8\textwidth]{figures/excitation-energies.pdf}
-    \end{figure}
+        Mean absolute deviations (\mae) and standard deviations from the
+        mean signed error (\std) in vertical excitation energies for the
+        states in \cref{tab:vertical_singlet,tab:vertical_triplet} for
+        OLCCD, LR-ODC-12, and EOM-CCSD relative to EOM-CCSDT (aug-cc-pVTZ
+        basis set).
+        The height of each colored box represents the \mae value of the
+        method and the height of the black bar above each box represents its
+        \std value.
+    }
 }
 
 
