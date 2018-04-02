@@ -21,6 +21,7 @@
 \usepackage{graphicx}
 \usepackage{algorithm}% http://ctan.org/pkg/algorithms
 \usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
+\usepackage{url}
 
 % Control header sizes
 \usepackage{titlesec}
@@ -67,23 +68,37 @@
 % Make the official abstract page
 \newpage
 \thispagestyle{empty}
-\vspace*{18pt}
+\vspace*{15pt}
+\begin{samepage}
 \begin{center}
-\textsc{\large{\dissertationtitle}}\\[18pt]
-by\\[18pt]
+\textsc{\large{\dissertationtitle}}\\[15pt]
+by\\[15pt]
 \textsc{\whoami}\\[12pt]
 (Under the Direction of Henry F. Schaefer III)\\[12pt]
 \textsc{Abstract}
 \end{center}
-Here is my abstract.
+Density cumulant theory (DCT) describes the state of an electronic system by
+variationally optimizing a parametrization of the two-particle density cumulant.
+The cumulant is a statistical descriptor of the electronic density distribution
+which naturally decouples independent subsystems, leading to desirable
+properties like size-extensivity which have given the coupled-cluster methods
+pride of place in electronic structure theory.
+We present benchmarks calculations demonstrating the superior performance of
+density cumulant theory relative to coupled-cluster theory for the description
+of ground-state properties.
+Next, we extend this method for the description of excited states using linear
+response theory.
+Finally, we develop algorithms for the new excited state model which enable us
+to study larger systems such as hexatriene with this new model.
 \thispagestyle{empty}
-
 \begin{list}{\textsc{Index words:\hfill}}{\labelwidth 1.2in\leftmargin 1.4in\labelsep 0.2in}
 \item 
 \begin{flushleft}\singlespacing
-    Electronic structure theory
+    Electronic structure theory, cumulants, density matrices, linear response
+    theory, excited states, coupled-cluster theory
 \end{flushleft}
 \end{list}
+\end{samepage}
 
 % Make the official title page
 \newpage

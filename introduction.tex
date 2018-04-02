@@ -1,3 +1,102 @@
-\chapter{Introduction}
+\chapter[%
+    Introduction
+]{%
+    Introduction\footnote{%
+        Adapted from my lecture notes at
+        \url{https://github.com/CCQC/chem-8950}.
+    }
+}
 
-Here is the introduction.
+The goal of electronic structure theory is to solve the time-independent
+Born-Oppenheimer Schr\"odinger equation with an optimal balance of accuracy and
+efficiency for the problem of interest.
+\begin{equation}
+    \label{eq:electronic-schrodinger-equation}
+    \hat{H}\Psi_k
+    =
+    E_k\Psi_k
+\end{equation}
+\begin{equation}
+    \hat{H}
+    =
+    V_{\mathrm{nuc}}
+    +
+    \hat{H}_e
+    =
+    \sum_{a<b}^{\text{nuc.}}
+    \frac{Z_aZ_b}{|\mathbf{R}_a-\mathbf{R}_b|}
+    -
+    \frac{1}{2}
+    \sum_i^{\text{elec.}}
+    \nabla_i^2
+    -
+    \sum_a^{\text{nuc.}}
+    \sum_i^{\text{elec.}}
+    \frac{Z_a}{|\mathbf{R}_a-\mathbf{r}_i|}
+    +
+    \sum_{i<j}^{\text{elec.}}
+    \frac{1}{|\mathbf{r}_i-\mathbf{r}_j|}
+\end{equation}
+The most accurate solution possible for a given one-particle basis set of
+spin-orbitals
+\(
+    \{\psi_p\}
+\)
+results from expanding the wavefunction as a linear combination of all
+antisymmetrized products of these one-particle states, which are known as Slater
+determinants
+\(
+    \{\Phi_\mu\}
+\).
+\begin{equation}
+    \label{eq:full-ci-wavefunction-expansion}
+    \Psi_k
+    =
+    \sum_\mu
+    \Phi_\mu
+    c_{\mu k}
+\end{equation}
+The expansion coefficients \((\mathbf{c})_k=c_{\mu k}\) are eigenvectors of the
+matrix \((\mathbf{H})_{\mu\nu}=\langle\Phi_\mu|\hat{H}|\Phi_\nu\rangle\), which
+is the matrix representation of the Hamiltonian in the determinant basis.
+This is called the {\itshape full configuration-interaction}\ (FCI) solution.
+
+Any one-electron basis spans the same ``function space'' as the AO basis set
+itself, and the full $n$-electron basis $\{\Phi_\mu\}$ spans the same space of
+$n$-electron functions regardless of how one forms spin orbitals from the AO
+basis set.
+As a result, one obtains the same FCI solution for any choice of spin-orbitals.
+In general, however, FCI solutions are completely unfeasible for basis sets of
+sufficient size to approach the complete basis set limit because the number of
+determinants grows exponentially with the dimension of the one-particle basis.
+The upshot is that we usually have to omit some Slater determinants in order to get an answer in a reasonable amount of time.
+As soon as we truncate our determinant expansion
+(\ref{eq:full-ci-wavefunction-expansion}), our choice of spin MOs makes a
+significant difference in the quality of our results.
+In particular, we need to choose our set of one-electron functions to minimize
+the number of Slater determinants it takes to ``get close to'' the exact
+wavefunction.
+One approach is to determine the best single-determinant approximation to the
+wavefunction by optimizing its energy expectation value with respect to
+variations in the orbitals
+\begin{align}
+    \frac{\delta\langle\Phi|\hat{H}_e|\Phi\rangle}{\delta\psi_i}
+    \overset{!}{=}
+    0
+    \qquad
+    \Phi(1,\ldots,n)
+    =
+    \frac{1}{\sqrt{n!}}
+    \left|
+    \begin{matrix}
+      \psi_1(1)&\psi_2(1)&\cdots&\psi_n(1)\\
+      \psi_1(2)&\psi_2(2)&\cdots&\psi_n(2)\\
+      \vdots    &\vdots    &\ddots&\vdots    \\
+      \psi_1(n)&\psi_2(n)&\cdots&\psi_n(n)
+    \end{matrix}
+    \right|
+\end{align}
+where the arguments \(1,\ldots,n\) are short hand for the spin,
+\(s_1,\ldots,s_n\), and spatial, \(\mathbf{r}_1,\ldots,\mathbf{r}_n\), degrees
+of freedom of individual electrons.
+
