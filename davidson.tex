@@ -10,36 +10,426 @@
 
 \section{Abstract}
 
-Abstract.
+\begin{enumerate}
+    \item
+        We have recently proposed the LR-ODC-12 model for electronic excited
+        states, a linear response extension of density cumulant theory with
+        linearized doubles and variationally optimized orbitals.
+    \item
+        Our benchmark calculations have shown that LR-ODC-12 is consistently
+        more accurate than its popular equation-of-motion coupled-cluster
+        counterpart, EOM-CCSD.
+    \item
+        Here we propose improved algorithms for solving the LR-ODC-12 equations
+        in order to extend its range of application to larger systems.
+    \item
+        We use the new implementation to study the valence spectra of ethylene,
+        butadiene, and hexatriene.
+    \item
+        The latter has 44 electrons and 124 spatial orbitals, a formidable
+        challenge for a spin-orbital code where this results in nearly 20
+        million unique wavefunction parameters.
+    \item
+        The advantages of LR-ODC-12 for the polyenes are even more stark than
+        for our previous benchmarks.
+    \item
+        Whereas EOM-CCSD overestimates the energy of the challenging
+        \termsymbol{2{}^1A_g} state of hexatriene and its gap with the
+        neighboring \termsymbol{1{}^1B_u} state by close to 1~\eV, LR-ODC-12
+        matches its energy to within 0.15~\eV and matches the energy gap to
+        within 0.01~\eV.
+\end{enumerate}
 
 
 \section{Introduction}
 
+Paragraph 1:
 \begin{enumerate}
     \item
-        Linear response calculations involve large matrix equations, which
-        require
-        \(
-            n_\mathrm{dim}^2
-        \)
-        storage, rapidly consuming memory requirements
+        The success of ground state coupled-cluster theory comes not from CCSD
+        itself, which has a relatively poor cost-accuracy ratio, but from the
+        non-iterative (T) correction to CCSD, which affords truly exceptional
+        accuracy relative to its cost.\cite{Stanton:1997p130}
     \item
-        Direct alorithms like the multi-root Davidson
-        algorithm\cite{Davidson:1975p87,Liu:1978p49} avoid this problem by
-        expanding the linear transformations in a reduced basis
-        (requiring \(n_\mathrm{red} \times n_\mathrm{dim}\) storage) and
-        progressively growing this expansion space to span the
-        \(n_\mathrm{root}\) lowest solution vectors to some threshold of
-        accuracy.
+        Coupled-cluster theory is also extremely popular for excited states
+        through its equation-of-motion (EOM-CC) extension\cite{Krylov:2008p433}
+        because it is relatively black-box compared to multi-reference methods
+        like CASPT2\cite{Andersson:1992p1218} which require artfully chosen
+        active spaces and empirical shift parameters.\cite{Zobel:2017p1482}
     \item
-        An efficient algorithm satisfies
-        \(
-            n_\mathrm{root} < n_\mathrm{red} \ll n_\mathrm{dim}
-        \)
+        Unfortunately, despite ongoing efforts to develop similar perturbative
+        corrections for EOM-CCSD excitation energies, none of these attempts
+        have been nearly as successful as CCSD(T).\cite{Matthews:2016p124102}
+    \item
+        As a result, one must resort to non-iterative triples methods like
+        EOM-CC3\cite{Koch:1998p1808} or EOM-CCSDT\cite{Hirata:2000p255} to
+        achieve quantitative (\(<0.1~\eV\)) accuracy, which are prohibitive even
+        for modest-sized systems and basis sets.
 \end{enumerate}
 
 
 \section{Theory}
+
+\begin{algorithm}
+    \caption{%
+        Canonical multiroot Davidson algorithm for a generalized non-symmetric
+        eigenvalue problem,
+        $\mathbf{L}\mathbf{v}_k=\lambda_k\mathbf{G}\mathbf{v}_k$, with periodic
+        subspace collapse.
+        Requires linear transformation functions and diagonal approximations
+        (indicated by tildes) for \(\mathbf{L}\) and \(\mathbf{G}\)
+        and solves for the lowest \(n\) eigenvalues and eigenvectors.
+    }
+    \label{algo:davidson}
+    \begin{algorithmic}[1]
+        \Procedure{Davidson}{%
+            $
+            \mathbf{L}(\cdot),
+            \mathbf{G}(\cdot),
+            \tilde{\mathbf{L}},
+            \tilde{\mathbf{G}},
+            \mathbf{U}^{(0)},
+            n,
+            d_\mathrm{max},
+            i_\mathrm{max},
+            r_\mathrm{tol}
+            $%
+        }
+        \State
+        Initialize the expansion space with a set of guess vectors,
+        \(\mathbf{U}\leftarrow\mathbf{U}^{(0)}\).
+        \For{$1\leq i\leq i_\mathrm{max}$}{}
+            \State
+            Construct subspace representations and get the lowest \(n\)
+            eigenvalues.
+            \[
+                \mathbf{L}^\mathrm{sub}
+                =
+                \mathbf{U}^\dagger
+                \mathbf{L}(\mathbf{U})
+            \]
+            \[
+                \mathbf{G}^\mathrm{sub}
+                =
+                \mathbf{U}^\dagger
+                \mathbf{G}(\mathbf{U})
+            \]
+            \[
+                \mathbf{L}^\mathrm{sub}
+                \mathbf{v}_k^\mathrm{sub}
+                =
+                \lambda_k
+                \mathbf{G}^\mathrm{sub}
+                \mathbf{v}_k^\mathrm{sub}
+            \]
+            \State
+            Calculate the eigenvector residuals in the full space.
+            \[
+                \mathbf{r}_k
+                =
+                (
+                    \mathbf{L}(\mathbf{U})
+                    -
+                    \lambda_k
+                    \mathbf{G}(\mathbf{U})
+                )
+                \mathbf{v}_k^\mathrm{sub}
+            \]
+            \If{$\max(\mathbf{r}_k) < r_\mathrm{tol}$ for all $k$}
+                \State
+                Set
+                \(\mathbf{v}_k\leftarrow\mathbf{U}\mathbf{v}_k^\mathrm{sub}\)
+                and quit the loop.  The eigenvectors are converged.
+            \EndIf
+            \State
+            Determine new direction vectors by a quasi-Newton-Raphson step.
+            \[
+                \mathbf{d}_k^{(i)}
+                =
+                -
+                (
+                    \tilde{\mathbf{L}}
+                    -
+                    \lambda_k
+                    \tilde{\mathbf{G}}
+                )^{-1}
+                \mathbf{r}_k
+            \]
+            \State
+            Project out the span of \(\mathbf{U}\) and orthogonalize via
+            SVD compression.
+            \[
+                \widehat{\mathbf{U}}^{(i)}
+                =
+                (\mathbf{1} - \mathbf{U}^\dagger \mathbf{U})
+                \mathbf{D}^{(i)}
+            \]
+            \[
+                \widehat{\mathbf{U}}^{(i)}
+                \approx
+                \mathbf{U}^{(i)}
+                \mathbf{\Sigma}^{(i)}
+                \mathbf{W}^{(i)\dagger}
+            \]
+            \If{%
+                $
+                \mathrm{rank}(\mathbf{U})
+                +
+                \mathrm{rank}(\mathbf{U}^{(i)})
+                <
+                d_\mathrm{max}
+                $%
+            }
+                \State
+                Extend the expansion space,
+                \(
+                    \mathbf{U}
+                    \leftarrow
+                    (\mathbf{U}\ \mathbf{U}^{(i)})
+                \)
+            \Else
+                \State
+                Collapse the expansion space,
+                \(
+                    \mathbf{U}
+                    \leftarrow
+                    (
+                        \mathbf{U}
+                        \mathbf{v}_1^\mathrm{sub}\ 
+                        \cdots\ 
+                        \mathbf{U}
+                        \mathbf{v}_n^\mathrm{sub}
+                    )
+                \).
+            \EndIf
+        \EndFor
+        \State
+        {\bfseries return}
+        \(
+            \lambda_k,
+            \mathbf{v}_k
+        \)
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
+The LR-ODC-12 eigenvalue equation has a two-by-two block structure which
+describes the independent variation of the state parameters and their complex
+conjugates.
+\begin{equation}
+    \label{eq:linear-response-eigenvalue-equation}
+    \mathbf{E}(\mathbf{z}_k)
+    =
+    \omega_k
+    \mathbf{M}(\mathbf{z}_k)
+    ,
+    \quad
+    \mathbf{E}
+    =
+    \begin{pmatrix}
+        \mathbf{A} & \mathbf{B} \\
+        \mathbf{B}^* & \mathbf{A}^*
+    \end{pmatrix}
+    ,
+    \quad
+    \mathbf{M}
+    =
+    \begin{pmatrix}
+        \mathbf{S} & \mathbf{0} \\
+        \mathbf{0} & -\mathbf{S}^*
+    \end{pmatrix}
+    ,
+    \quad
+    \mathbf{z}_k
+    =
+    \begin{pmatrix}
+        \mathbf{x}_k \\
+        \mathbf{y}_k
+    \end{pmatrix}
+\end{equation}
+This block symmetry leads to a paired system of eigenvalues,
+\(
+    \omega_{\pm k}
+    =
+    \pm\omega_k
+\).
+The submatrices in \cref{eq:linear-response-eigenvalue-equation} are further
+blocked according to whether they describe variations with respect to one-body
+(\(\mathbf{t}_1\)) or two-body (\(\mathbf{t}_2\)) parameters.
+\begin{equation}
+    \mathbf{A}
+    =
+    \begin{pmatrix}
+        \mathbf{A}_{11} & \mathbf{A}_{12} \\
+        \mathbf{A}_{12}^\dagger & \mathbf{A}_{22} \\
+    \end{pmatrix}
+    \quad
+    \mathbf{B}
+    =
+    \begin{pmatrix}
+        \mathbf{B}_{11} & \mathbf{B}_{12} \\
+        \mathbf{B}_{12}^\mathrm{T} & \mathbf{B}_{22} \\
+    \end{pmatrix}
+    \quad
+    \mathbf{S}
+    =
+    \begin{pmatrix}
+        \mathbf{S}_{11} & \mathbf{0} \\
+        \mathbf{0} & \mathbf{1}_2 \\
+    \end{pmatrix}
+    \quad
+    \mathbf{x}_k
+    =
+    \begin{pmatrix}
+        \mathbf{x}_{k,1} \\
+        \mathbf{x}_{k,2}
+    \end{pmatrix}
+\end{equation}
+The dimensions of the diagonal two-body blocks in these matrices scale as
+\((\mathrm{o}^2\mathrm{v}^2)^2\) with the number of occupied (\(\mathrm{o}\))
+and virtual (\(\mathrm{v}\)) orbitals, which rapidly overwhelms the available
+storage space on a computer as the number of electrons and basis functions
+increases.
+This problem can be mitigated through the use of direct matrix algorithms, which
+avoid the explicit representation of a matrix \(\mathbf{L}\) as an array of
+coefficients by instead defining a function \(\mathbf{L}(\mathbf{U})\) which
+returns the output of the linear transformation on an arbitrary set of vectors
+\(\mathbf{U}=(\mathbf{u}_1\ \cdots\ \mathbf{u}_m)\).
+The most common direct algorithm for eigenvalues of large, diagonally-dominant
+matrices is the Davidson algorithm, which is given in its most general form in
+\Cref{algo:davidson}.
+
+The full set of linear transformation formulas for LR-ODC-12 is given in the
+appendix (\cref{sec:linear-transformation-formulas}), but let us consider the
+diagonal two-body Hessian as an example.
+The image of an arbitrary two-body vector
+\(
+    \mathbf{u}_{\mu,2}
+    =
+    [u_{\mu,ab}^{ij}]
+\)
+under this transformation is given by
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        (\mathbf{A}_{22}(\mathbf{u}_{\mu,2}))_{ijab}
+        =
+        &
+        -
+        P_{(a/b)}
+        \mathcal{F}_a^c
+        u_{\mu,cb}^{ij}
+        -
+        P^{(i/j)}
+        \mathcal{F}_k^i
+        u_{\mu,ab}^{kj}
+        +
+        \tfrac{1}{2}
+        \overline{g}_{ab}^{cd}
+        u_{\mu,cd}^{ij}
+        +
+        \tfrac{1}{2}
+        \overline{g}_{kl}^{ij}
+        u_{\mu,ab}^{kl}
+        \\[5pt]
+        &
+        -
+        P_{(a/b)}^{(i/j)}
+        \overline{g}_{la}^{jc}
+        u_{\mu,cb}^{il}
+        +
+        \tfrac{1}{2}
+        P_{(a/b)}
+        \mathcal{G}_{af}^{ec}
+        t_{eb}^{ij}
+        t_{kl}^{fd*}
+        u_{\mu,cd}^{kl}
+        +
+        \tfrac{1}{2}
+        P_{(a/b)}
+        \mathcal{G}_{ka}^{me}
+        t_{eb}^{ij}
+        t_{ml}^{cd*}
+        u_{\mu,cd}^{kl}
+        \\[5pt]
+        &
+        +
+        \tfrac{1}{2}
+        P^{(i/j)}
+        \mathcal{G}_{me}^{ic}
+        t_{ab}^{mj}
+        t_{kl}^{ed*}
+        u_{\mu,cd}^{kl}
+        +
+        \tfrac{1}{2}
+        P^{(i/j)}
+        \mathcal{G}_{mk}^{in}
+        t_{ab}^{mj}
+        t_{nl}^{cd*}
+        u_{\mu,cd}^{kl}
+    \end{array}
+\end{equation}
+where the \(i,j,k,l,\ldots\) run over occupied spin-orbitals, \(a,b,c,d,\ldots\)
+run over virtual (un-occupied) spin-orbitals, and summation over repeated
+indices is implied.
+The important thing to note is that we need only two \(\mathrm{v}^4\)
+intermediates (\(\overline{g}_{ab}^{cd}\) and \(\mathcal{G}_{ab}^{cd}\)) to
+define our linear transformations and the image of the two-body Hessian only
+\(\mathcal{O}(d_\mu\mathrm{o}^2\mathrm{v}^2)\) elements where \(d_\mu\) is the
+dimension of the \(\mu\) index.
+In general the Davidson algorithm requires no more than 10-20 subspace vectors
+per root, and often one can get away with as few as 2 or 3, so that even for
+small systems it is easy to satisfy
+\(
+    d_\mu \ll \mathrm{o}^2\mathrm{v}^2
+\),
+resulting in substantial memory savings.
+This transformation contains the timing bottleneck for the LR-ODC-12 method,
+namely the third term which scales as
+\(\mathcal{O}(d_\mu\mathrm{o}^2\mathrm{v}^4)\)
+in the number of floating point operations.
+This term is the bottleneck in EOM-CCSD as well.
+
+
+\paragraph{Strategy 1}
+The Davidson algorithm cannot be directly applied to
+\cref{eq:linear-response-eigenvalue-equation}.
+\begin{equation}
+    \mathbf{M}(\mathbf{z}_k)
+    =
+    \omega_k^{-1}
+    \mathbf{E}(\mathbf{z}_k)
+\end{equation}
+
+
+\paragraph{Strategy 2}
+Assuming real matrices
+\begin{equation}
+    (\mathbf{A} \pm \mathbf{B})
+    (\mathbf{x}_k  \pm \mathbf{y}_k)
+    =
+    \omega_k
+    \mathbf{S}
+    (\mathbf{x}_k \mp \mathbf{y}_k)
+\end{equation}
+which leads to
+\begin{equation}
+    \overline{\mathbf{E}}
+    (\mathbf{x}_k - \mathbf{y}_k)
+    =
+    \omega_k^2
+    (\mathbf{x}_k - \mathbf{y}_k)
+    ,
+    \quad
+    \overline{\mathbf{E}}
+    \equiv
+    \mathbf{S}^{-1}
+    (\mathbf{A} + \mathbf{B})
+    \mathbf{S}^{-1}
+    (\mathbf{A} - \mathbf{B})
+\end{equation}
+
+Analytic inverse of \(\mathbf{S}_{11}\)
+
 
 \begin{equation}
     \mathbf{E}(\mathbf{Z})
@@ -235,6 +625,9 @@ step~\ref{item:davidson-initialization}, namely by including unit vectors for
 the \(n_\mathrm{guess}\) smallest positive entries in \(\tilde{\mathbf{E}}\).
 
 
+\section{Algorithms}
+
+
 \section{Computational Details}
 
 For alkenes (\cref{sec:alkenes}), the ANO-L-pVXZ (X = D, T) basis
@@ -383,3 +776,407 @@ the LR-OLCCD errors are larger than the LR-ODC-12 errors by $\sim$ 0.15 eV.
 For the $2{}^1\mathrm{A_{g}}$ doubly-excited state, linearizing the equations in
 LR-OLCCD increases the error by 0.33 and {\color{red} XXX} eV for butadiene and
 hexatriene, respectively. 
+
+
+
+\begin{subappendices}
+    \section{LR-ODC-12 Linear Transformation Formulas}
+    \label{sec:linear-transformation-formulas}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{A}_{11}(\mathbf{u}_{\mu,1}))_{ia}
+            =
+            &
+            h_j^i
+            \gamma_a^b
+            u_{\mu,b}^j
+            +
+            h_a^b
+            \gamma_j^i
+            u_{\mu,b}^j
+            -
+            (\bar{\mathbf{F}})_j^i
+            u_{\mu,a}^j
+            -
+            (\bar{\mathbf{F}})_a^b
+            u_{\mu,b}^i
+            +
+            \overline{g}_{nj}^{mi}
+            \gamma_{ma}^{nb}
+            u_{\mu,b}^j
+            \\[5pt]
+            &
+            +
+            \overline{g}_{ma}^{nb}
+            \gamma_{nj}^{mi}
+            u_{\mu,b}^j
+            +
+            \overline{g}_{jf}^{ie}
+            \gamma_{ae}^{bf}
+            u_{\mu,b}^j
+            +
+            \overline{g}_{ae}^{bf}
+            \gamma_{jf}^{ie}
+            u_{\mu,b}^j
+            +
+            \overline{g}_{me}^{ib}
+            \gamma_{ja}^{me}
+            u_{\mu,b}^j
+            \\[5pt]
+            &
+            +
+            \overline{g}_{ja}^{me}
+            \gamma_{me}^{ib}
+            u_{\mu,b}^j
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{B}_{11}(\mathbf{u}_{\mu,1}))_{ia}
+            =
+            &
+            \overline{g}_{be}^{im}
+            \gamma_{ma}^{je}
+            u_{\mu,j}^b
+            +
+            \overline{g}_{ma}^{je}
+            \gamma_{be}^{im}
+            u_{\mu,j}^b
+            +
+            \overline{g}_{mb}^{ie}
+            \gamma_{ae}^{jm}
+            u_{\mu,j}^b
+            +
+            \overline{g}_{ae}^{jm}
+            \gamma_{mb}^{ie}
+            u_{\mu,j}^b
+            \\[5pt]
+            &
+            +
+            \tfrac{1}{2}
+            \overline{g}_{mn}^{ij}
+            \gamma_{ab}^{mn}
+            u_{\mu,j}^b
+            +
+            \tfrac{1}{2}
+            \overline{g}_{ab}^{mn}
+            \gamma_{mn}^{ij}
+            u_{\mu,j}^b
+            +
+            \tfrac{1}{2}
+            \overline{g}_{ef}^{ij}
+            \gamma_{ab}^{ef}
+            u_{\mu,j}^b
+            +
+            \tfrac{1}{2}
+            \overline{g}_{ab}^{ef}
+            \gamma_{ef}^{ij}
+            u_{\mu,j}^b
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{A}_{22}(\mathbf{u}_{\mu,2}))_{ijab}
+            =
+            &
+            -
+            P_{(a/b)}
+            \mathcal{F}_a^c
+            u_{\mu,cb}^{ij}
+            -
+            P^{(i/j)}
+            \mathcal{F}_k^i
+            u_{\mu,ab}^{kj}
+            +
+            \tfrac{1}{2}
+            \overline{g}_{ab}^{cd}
+            u_{\mu,cd}^{ij}
+            +
+            \tfrac{1}{2}
+            \overline{g}_{kl}^{ij}
+            u_{\mu,ab}^{kl}
+            \\[5pt]
+            &
+            -
+            P_{(a/b)}^{(i/j)}
+            \overline{g}_{la}^{jc}
+            u_{\mu,cb}^{il}
+            +
+            \tfrac{1}{2}
+            P_{(a/b)}
+            \mathcal{G}_{af}^{ec}
+            t_{eb}^{ij}
+            t_{kl}^{fd*}
+            u_{\mu,cd}^{kl}
+            +
+            \tfrac{1}{2}
+            P_{(a/b)}
+            \mathcal{G}_{ka}^{me}
+            t_{eb}^{ij}
+            t_{ml}^{cd*}
+            u_{\mu,cd}^{kl}
+            \\[5pt]
+            &
+            +
+            \tfrac{1}{2}
+            P^{(i/j)}
+            \mathcal{G}_{me}^{ic}
+            t_{ab}^{mj}
+            t_{kl}^{ed*}
+            u_{\mu,cd}^{kl}
+            +
+            \tfrac{1}{2}
+            P^{(i/j)}
+            \mathcal{G}_{mk}^{in}
+            t_{ab}^{mj}
+            t_{nl}^{cd*}
+            u_{\mu,cd}^{kl}
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{B}_{22}(\mathbf{u}_{\mu,2}))_{ijab}
+            =
+            &
+            \tfrac{1}{2}
+            P_{(a/b)}
+            \mathcal{G}_{ac}^{ef}
+            t_{eb}^{ij}
+            t_{fd}^{kl}
+            u_{\mu,kl}^{cd}
+            +
+            \tfrac{1}{2}
+            P_{(a/b)}
+            \mathcal{G}_{na}^{ke}
+            t_{eb}^{ij}
+            t_{cd}^{nl}
+            u_{\mu,kl}^{cd}
+            \\[5pt]
+            &
+            +
+            \tfrac{1}{2}
+            P^{(i/j)}
+            \mathcal{G}_{mc}^{if}
+            t_{ab}^{mj}
+            t_{fd}^{kl}
+            u_{\mu,kl}^{cd}
+            +
+            \tfrac{1}{2}
+            P^{(i/j)}
+            \mathcal{G}_{mn}^{ik}
+            t_{ab}^{mj}
+            t_{cd}^{nl}
+            u_{\mu,kl}^{cd}
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{A}_{12}(\mathbf{u}_{\mu,2}))_{ia}
+            =
+            &
+            \tfrac{1}{2}
+            \overline{g}_{la}^{cd}
+            u_{\mu,cd}^{il}
+            +
+            \tfrac{1}{2}
+            \overline{g}_{kl}^{id}
+            u_{\mu,ad}^{kl}
+            +
+            \tfrac{1}{2}
+            (\mathcal{I}_a^i)_k^m
+            t_{ml}^{cd*}
+            u_{\mu,cd}^{kl}
+            +
+            \tfrac{1}{2}
+            (\mathcal{I}_a^i)_e^c
+            t_{kl}^{ed*}
+            u_{\mu,cd}^{kl}
+            \\[5pt]
+            &
+            +
+            \overline{g}_{ae}^{mc}
+            t_{ml}^{ed*}
+            u_{\mu,cd}^{il}
+            +
+            \overline{g}_{ke}^{im}
+            t_{ml}^{ed*}
+            u_{\mu,ad}^{kl}
+            +
+            \tfrac{1}{4}
+            \overline{g}_{la}^{mn}
+            t_{mn}^{cd*}
+            u_{\mu,cd}^{il}
+            \\[5pt]
+            &
+            +
+            \tfrac{1}{4}
+            \overline{g}_{ef}^{id}
+            t_{kl}^{ef*}
+            u_{\mu,ad}^{kl}
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{B}_{12}(\mathbf{u}_{\mu,2}))_{ia}
+            =
+            &
+            \tfrac{1}{2}
+            (\mathcal{I}_a^i)_m^k
+            t_{cd}^{ml}
+            u_{\mu,kl}^{cd}
+            +
+            \tfrac{1}{2}
+            (\mathcal{I}_a^i)_c^e
+            t_{ed}^{kl}
+            u_{\mu,kl}^{cd}
+            +
+            \overline{g}_{ad}^{le}
+            t_{ce}^{ki}
+            u_{\mu,kl}^{cd}
+            +
+            \overline{g}_{md}^{il}
+            t_{ca}^{km}
+            u_{\mu,kl}^{cd}
+            \\[5pt]
+            &
+            +
+            \tfrac{1}{4}
+            \overline{g}_{ma}^{kl}
+            t_{cd}^{im}
+            u_{\mu,kl}^{cd}
+            +
+            \tfrac{1}{4}
+            \overline{g}_{cd}^{ie}
+            t_{ae}^{kl}
+            u_{\mu,kl}^{cd}
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{A}_{21}(\mathbf{u}_{\mu,1}))_{ijab}
+            =
+            &
+            P^{(i/j)}
+            \overline{g}_{ab}^{jc}
+            u_{\mu,c}^i
+            +
+            P_{(a/b)}
+            \overline{g}_{kb}^{ij}
+            u_{\mu,a}^k
+            +
+            P^{(i/j)}
+            (\mathcal{I}_k^c)_m^i
+            t_{ab}^{mj}
+            u_{\mu,c}^k
+            \\[5pt]
+            &
+            +
+            P_{(a/b)}
+            (\mathcal{I}_k^c)_a^e
+            t_{eb}^{ij}
+            u_{\mu,c}^k
+            +
+            P_{(a/b)}^{(i/j)}
+            \overline{g}_{ma}^{ce}
+            t_{eb}^{mj}
+            u_{\mu,c}^i
+            +
+            P_{(a/b)}^{(i/j)}
+            \overline{g}_{km}^{ie}
+            t_{eb}^{mj}
+            u_{\mu,a}^k
+            \\[5pt]
+            &
+            +
+            \tfrac{1}{2}
+            P^{(i/j)}
+            \overline{g}_{mn}^{jc}
+            t_{ab}^{mn}
+            u_{\mu,c}^i
+            +
+            \tfrac{1}{2}
+            P_{(a/b)}
+            \overline{g}_{kb}^{ef}
+            t_{ef}^{ij}
+            u_{\mu,a}^k
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        \begin{array}{r@{\,}l}
+            (\mathbf{B}_{21}(\mathbf{u}_{\mu,1}))_{ijab}
+            =
+            &
+            P^{(i/j)}
+            (\mathcal{I}_c^k)_m^i
+            t_{ab}^{mj}
+            u_{\mu,k}^c
+            +
+            P_{(a/b)}
+            (\mathcal{I}_c^k)_a^e
+            t_{eb}^{ij}
+            u_{\mu,k}^c
+            +
+            P_{(a/b)}^{(i/j)}
+            \overline{g}_{cb}^{je}
+            t_{ae}^{ik}
+            u_{\mu,k}^c
+            \\[5pt]
+            &
+            +
+            P_{(a/b)}^{(i/j)}
+            \overline{g}_{kj}^{mb}
+            t_{ac}^{im}
+            u_{\mu,k}^c
+            +
+            \overline{g}_{mc}^{ij}
+            t_{ab}^{km}
+            u_{\mu,k}^c
+            +
+            \overline{g}_{ab}^{ke}
+            t_{ce}^{ij}
+            u_{\mu,k}^c
+        \end{array}
+    \end{equation}
+
+    \begin{equation}
+        (\mathbf{S}_{11}(\mathbf{u}_{\mu,1}))_{ia}
+        =
+        \gamma^i_j
+        u_{\mu,a}^j
+        -
+        \gamma^b_a
+        u_{\mu,b}^i
+    \end{equation}
+
+    \begin{equation}
+        (\mathbf{S}_{11}^{-1}(\mathbf{u}_{\mu,1}))_{ia}
+        =
+        \frac{%
+            (\mathbf{Y}^\dagger)_{j'}^i
+            (\mathbf{Y})_a^{b'}
+        }{%
+            \gamma_{j'}-\gamma_{b'}
+        }
+        (\mathbf{Y}^\dagger)_{b'}^b
+        (\mathbf{Y})_j^{j'}
+        u_{\mu,b}^j
+    \end{equation}
+
+    \begin{equation}
+        (\mathbf{Y}^\dagger)_{q'}^q
+        \gamma_q^p
+        (\mathbf{Y})_p^{p'}
+        =
+        \delta_{q'}^{p'}
+        \gamma_{q'}
+    \end{equation}
+
+\end{subappendices}

@@ -19,6 +19,8 @@
 \usepackage{xspace}
 \usepackage{subfig}
 \usepackage{graphicx}
+\usepackage{algorithm}% http://ctan.org/pkg/algorithms
+\usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
 
 % Control header sizes
 \usepackage{titlesec}
@@ -36,6 +38,9 @@
 % Use symbolic rather than numeric footnotes
 \usepackage[symbol]{footmisc}
 \renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+% Reduce vertical spacing in tables and arrays
+\renewcommand*{\arraystretch}{0.6}
 
 % Define some macros
 \newcommand{\hartree}{\ensuremath{E_\mathrm{h}}\xspace}
