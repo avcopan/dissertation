@@ -33,36 +33,29 @@ to within 0.15~\eV and matches the energy gap to within 0.01~\eV.
 
 \section{Introduction}
 
-Paragraph 1:
-\begin{enumerate}
-    \item
-        The success of ground state coupled-cluster theory comes not from CCSD
-        itself, which has a relatively poor cost-accuracy ratio, but from the
-        non-iterative (T) correction to CCSD, which affords truly exceptional
-        accuracy relative to its cost.\cite{Stanton:1997p130}
-    \item
-        Coupled-cluster theory has also been extremely popular in the study of
-        electronic excited states through the equation-of-motion coupled-cluster
-        (EOM-CC) method,\cite{Krylov:2008p433} because it is relatively
-        black-box compared to multi-reference methods like
-        CASPT2\cite{Andersson:1992p1218} which require artfully chosen active
-        spaces and empirical shift parameters.\cite{Zobel:2017p1482}
-    \item
-        Unfortunately, despite ongoing efforts to develop perturbative triples
-        corrections for EOM-CCSD excitation energies, none of these attempts
-        have been nearly as successful as CCSD(T).\cite{Matthews:2016p124102}
-    \item
-        As a result, one must resort to non-iterative triples methods like
-        EOM-CC3\cite{Koch:1998p1808} or EOM-CCSDT\cite{Hirata:2000p255} to
-        achieve quantitative (\(<0.1~\eV\)) accuracy, which are prohibitive even
-        for modest-sized systems and basis sets.
-    \item
-        The LR-ODC-12 method improves on EOM-CCSD without including triples
-        parameters.
-\end{enumerate}
+The success of ground state coupled-cluster theory comes not from CCSD
+itself, which has a relatively poor cost-accuracy ratio, but from the
+non-iterative (T) correction to CCSD, which affords truly exceptional
+accuracy relative to its cost.\cite{Stanton:1997p130}
+Coupled-cluster theory has also been extremely popular in the study of
+electronic excited states through the equation-of-motion coupled-cluster
+(EOM-CC) method,\cite{Krylov:2008p433} because it is relatively
+black-box compared to multi-reference methods like
+CASPT2\cite{Andersson:1992p1218} which require artfully chosen active
+spaces and empirical shift parameters.\cite{Zobel:2017p1482}
+Unfortunately, despite ongoing efforts to develop perturbative triples
+corrections for EOM-CCSD excitation energies, none of these attempts
+have been nearly as successful as CCSD(T).\cite{Matthews:2016p124102}
+As a result, one must resort to non-iterative triples methods like
+EOM-CC3\cite{Koch:1998p1808} or EOM-CCSDT\cite{Hirata:2000p255} to
+achieve quantitative (\(<0.1~\eV\)) accuracy, which are prohibitive even
+for modest-sized systems and basis sets.
+The LR-ODC-12 method improves on EOM-CCSD without including triples
+parameters.
 
 
 \section{Algorithms}
+\label{sec:algorithms}
 
 \begin{algorithm}
     \caption{%
@@ -472,14 +465,14 @@ equations.
 Substituting one into the other leads to a non-symmetric eigenvalue equation for
 the squares of the excitation energies.
 \begin{equation}
-    \widehat{\mathbf{E}}
+    \mathbf{H}
     (\mathbf{x}_k - \mathbf{y}_k)
     =
     \omega_k^2
     (\mathbf{x}_k - \mathbf{y}_k)
     ,
     \quad
-    \widehat{\mathbf{E}}
+    \mathbf{H}
     \equiv
     \mathbf{S}^{-1}
     (\mathbf{A} + \mathbf{B})
@@ -491,200 +484,77 @@ the memory requirements by a factor of three, provided we do not need to recover
 the full eigenvector \(\mathbf{z}_k\) to compute transition properties.
 From \cref{eq:conjugate-blocks} we can see that computing the inverse of
 \(\mathbf{S}\) requires us to invert the orbital block of the metric.
-
-
+This matrix is given by
 \begin{equation}
-    \mathbf{E}(\mathbf{Z})
+    (\mathbf{S}_{11})_{ia,jb}
     =
-    \mathbf{M}(\mathbf{Z})
-    \boldsymbol{\Omega}
-\end{equation}
-Need not be square
-
-\begin{equation}
-    \mathbf{Z}
-    =
-    \begin{pmatrix}
-        \mathbf{X}_1 \\
-        \mathbf{X}_2 \\
-        \mathbf{Y}_1 \\
-        \mathbf{Y}_2
-    \end{pmatrix}
-\end{equation}
-
-\begin{equation}
-    \mathbf{E}(\mathbf{Z})
-    =
-    \begin{pmatrix}
-        \mathbf{A}_{11}(\mathbf{X}_1) +
-        \mathbf{A}_{12}(\mathbf{X}_2) +
-        \mathbf{B}_{11}(\mathbf{Y}_1) +
-        \mathbf{B}_{12}(\mathbf{Y}_2) \\
-        \mathbf{A}_{21}(\mathbf{X}_1) +
-        \mathbf{A}_{22}(\mathbf{X}_2) +
-        \mathbf{B}_{21}(\mathbf{Y}_1) +
-        \mathbf{B}_{22}(\mathbf{Y}_2) \\
-        \mathbf{B}^*_{11}(\mathbf{X}_1) +
-        \mathbf{B}^*_{12}(\mathbf{X}_2) +
-        \mathbf{A}^*_{11}(\mathbf{Y}_1) +
-        \mathbf{A}^*_{12}(\mathbf{Y}_2) \\
-        \mathbf{B}^*_{21}(\mathbf{X}_1) +
-        \mathbf{B}^*_{22}(\mathbf{X}_2) +
-        \mathbf{A}^*_{21}(\mathbf{Y}_1) +
-        \mathbf{A}^*_{22}(\mathbf{Y}_2) \\
-    \end{pmatrix}
-\end{equation}
-
-
-    We have implemented the LR-ODC-12 method using a multi-root Davidson algorithm,
-    which solves the linear-response generalized eigenvalue problem by progressively
-    growing an expansion space for the \(n_\mathrm{root}\) lowest generalized
-    eigenvectors of \(\mathbf{E}\) and \(\mathbf{M}\).
-    The general procedure looks as follows:
-    \begin{enumerate}
-        \item
-            \label{item:davidson-initialization}
-            Initialize the expansion space with a set of \(n_\mathrm{guess}\geq
-            n_\mathrm{root}\) orthonormal vectors.
-            \[
-                \mathbf{R}^{(0)}
-                =
-                (
-                    \mathbf{u}_1^{(0)}
-                    \cdots
-                    \mathbf{u}_{n_\mathrm{guess}}^{(0)}
-                )
-            \]
-        \item
-            \label{item:davidson-step-one}
-            Express the energy-Hessian and metric matrices in the reduced expansion
-            space.
-            \[
-                \mathbf{E}^{(i)}
-                =
-                \mathbf{R}^{(i)\dagger}
-                \mathbf{E}(\mathbf{R}^{(i)})
-            \]
-            \[
-                \mathbf{M}^{(i)}
-                =
-                \mathbf{R}^{(i)\dagger}
-                \mathbf{M}(\mathbf{R}^{(i)})
-            \]
-        \item
-            Solve for the \(n_\mathrm{root}\) highest eigenvectors of the
-            inverse eigenvalue equation.
-            \[
-                \mathbf{M}^{(i)}
-                \mathbf{z}_k^{(i)}
-                =
-                \mathbf{E}^{(i)}
-                \mathbf{z}_k^{(i)}/
-                \omega_k^{(i)}
-            \]
-        \item
-            Determine the residual for each root.
-            \[
-                \mathbf{d}_k^{(i)}
-                =
-                \mathbf{M}(\mathbf{z}_k^{(i)})
-                -
-                \mathbf{E}(\mathbf{z}_k^{(i)})/
-                \omega_k^{(i)}
-            \]
-            If the residual elements are sufficiently small we consider the
-            eigenvectors converged and exit the loop.
-        \item
-            \label{item:davidson-step-three}
-            Form new direction vectors by preconditioning the residuals.
-            \[
-                \mathbf{g}_k^{(i+1)}
-                =
-                -
-                (
-                    \tilde{\mathbf{M}}
-                    -
-                    \tilde{\mathbf{E}}/
-                    \omega_k^{(i)}
-                )^{-1}
-                \mathbf{d}_k
-            \]
-            The tildes in this equation denote diagonal approximations to these
-            matrices.
-        \item
-            Project out the span of the current expansion space from the new
-            direction vectors.
-            \[
-                \mathbf{J}^{(i+1)}
-                =
-                (\mathbf{1} - \mathbf{R}^{(i)}\mathbf{R}^{(i)\dagger})
-                (\mathbf{g}_1^{(i+1)}\cdots \mathbf{g}_{n_\mathrm{root}}^{(i+1)})
-            \]
-        \item
-            Determine an orthonormal basis for the new direction vectors using a
-            compressed singular value decomposition, and add these new vectors to
-            the expansion space.
-            \[
-                \mathbf{J}^{(i+1)}
-                \approx
-                \mathbf{U}^{(i+1)}
-                \boldsymbol\Sigma^{(i+1)}
-                \mathbf{V}^{(i+1)\dagger}
-            \]
-            \[
-                \mathbf{R}^{(i+1)}
-                \leftarrow
-                (\mathbf{R}^{(i)}\ \mathbf{U}^{(i+1)})
-            \]
-        \item
-            Increment \(i\) and return to step~\ref{item:davidson-step-one}.
-    \end{enumerate}
-    A key feature of this algorithm is that we never need to explicilty construct
-    the energy-Hessian and metric matrices in memory, only their images over the
-    expansion space.
-
-    For the diagonal approximations in step~\ref{item:davidson-step-three} we use
-    the following.
-    \[
-        \tilde{\mathbf{S}}_{11}
-        \equiv
-        \mathbf{1}_1
-    \]
-    \[
-        (\tilde{\mathbf{A}}_{11})_{ia,ia}
-        \equiv
-        -
-        f_i^i
-        +
-        f_a^a
-    \]
-    \[
-        (\tilde{\mathbf{A}}_{22})_{ijab,ijab}
-        \equiv
-        -
-        \mathcal{F}_i^i
-        -
-        \mathcal{F}_j^j
+    \gamma^i_j
+    \delta_a^b
     -
-    \mathcal{F}_a^a
-    -
-    \mathcal{F}_b^b
-\]
-These can also be used to construct the initial expansion space in
-step~\ref{item:davidson-initialization}, namely by including unit vectors for
-the \(n_\mathrm{guess}\) smallest positive entries in \(\tilde{\mathbf{E}}\).
+    \delta_j^i
+    \gamma^b_a
+\end{equation}
+where
+\(
+    \gamma_j^i
+\)
+and
+\(
+    \gamma_a^b
+\)
+are occupied and virtual blocks of the one-body density matrix.
+By expanding these matrices in the natural spin-orbital basis (indicated by
+prime indices) where the one-body density matrix is diagonal
+\begin{equation}
+    \gamma_j^i
+    =
+    (\mathbf{Y})_j^{j'}
+    (\mathbf{Y}^\dagger)_{i'}^i
+    \delta_{j'}^{i'}
+    \gamma_{j'}
+    \qquad
+    \gamma_a^b
+    =
+    (\mathbf{Y})_a^{a'}
+    (\mathbf{Y}^\dagger)_{b'}^b
+    \delta_{a'}^{b'}
+    \gamma_{a'}
+\end{equation}
+we can derive the following simple and inexpensive formula for the inverse of
+the orbital metric.
+\begin{equation}
+    (\mathbf{S}_{11}^{-1})_{ia,jb}
+    =
+    \frac{%
+        (\mathbf{Y}^\dagger)_{j'}^i
+        (\mathbf{Y})_a^{b'}
+    }{%
+        \gamma_{j'}-\gamma_{b'}
+    }
+    (\mathbf{Y}^\dagger)_{b'}^b
+    (\mathbf{Y})_j^{j'}
+\end{equation}
+The appropriate diagonal approximation to \(\mathbf{H}\) can simply be computed
+as the square of \(\tilde{\mathbf{A}}\), since in low order we have
+\(\mathbf{B}\approx\mathbf{0}\) and \(\mathbf{S}\approx\mathbf{1}\)
 
 
 \section{Computational Details}
 
-For alkenes (\cref{sec:alkenes}), the ANO-L-pVXZ (X = D, T) basis
-sets\cite{Widmark:1990p291} were used as in Ref.~\citenum{Daday:2012p4441}.
-For alkenes in \cref{sec:alkenes}, the frozen-core MP2/cc-pVQZ geometries were
-used as in Refs.~\citenum{Daday:2012p4441} and \citenum{Zimmerman:2017p4712}.
+The LR-ODC-12 and LR-OLCCD methods were implemented as a standalone Python
+program, which was interfaced with \textsc{Psi4}\cite{Parrish:2017p3185} and
+\textsc{Pyscf}\cite{Sun:2018pe1340} to obtain the one- and two-electron
+integrals.
+We used several iterations of Strategy 1, as described in \cref{sec:algorithms},
+to assign states based on the transition dipole moments and used Strategy 2 to
+fully converge the energies.
+We used the \textsc{Q-Chem} program, version 4.4,\cite{QChem} to calculate
+EOM-CCSD values for comparison.
+The ANO-L-pVXZ (X = D, T) basis sets\cite{Widmark:1990p291} were used in the
+excitation energy computations as in Ref.~\citenum{Daday:2012p4441}.
+Frozen-core MP2/cc-pVQZ geometries were used as in
+Refs.~\citenum{Daday:2012p4441} and \citenum{Zimmerman:2017p4712}.
 
-
-\section{Results and Discussion}
-\label{sec:alkenes}
 
 \begin{table*}[h!]
     \centering
@@ -742,6 +612,10 @@ used as in Refs.~\citenum{Daday:2012p4441} and \citenum{Zimmerman:2017p4712}.
         \end{tablenotes}    
     \end{threeparttable}
 \end{table*}
+
+
+\section{Results and Discussion}
+\label{sec:alkenes}
 
 
 We apply the LR-ODC-12 method to challenging excited states of ethylene
