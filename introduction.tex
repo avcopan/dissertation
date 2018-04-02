@@ -99,4 +99,168 @@ variations in the orbitals
 where the arguments \(1,\ldots,n\) are short hand for the spin,
 \(s_1,\ldots,s_n\), and spatial, \(\mathbf{r}_1,\ldots,\mathbf{r}_n\), degrees
 of freedom of individual electrons.
+This variational condition can be written as an eigenvalue equation of a
+one-body ``Fock'' operator which represents an effective Hamiltonian for the
+interaction of an electron with the mean field of the other electrons.
+\begin{equation}
+    \hat{f}
+    \psi_i
+    =
+    \epsilon_i
+    \psi_i
+\end{equation}
+Once we have solved for these variationally optimal ``Hartree-Fock'' orbitals,
+the expectation value \(\langle\Phi|\hat{H}_e|\Phi\rangle\) is itself a good
+first approximation to the electronic energy.
+More importantly, however, when we use this new set of Hartree-Fock spin-orbitals, $\{\psi_p\}$, the FCI expansion tends to converge much more quickly to the true wavefunction.
+Specifically, when we rewrite equation~\ref{eq:full-ci-wavefunction-expansion}
+in terms of single $\{\Phi_i^a\}$, double $\{\Phi_{ij}^{ab}\}$, triple
+$\{\Phi_{ijk}^{abc}\}$, etc.\ replacements of the orbitals in the Hartree-Fock
+determinant $\Phi$ with the remaining orbitals in the basis
+\begin{align}
+  \Psi
+=
+  \Phi
++
+  \sum_{\substack{a\\i}}
+  \Phi_i^ac_a^i
++
+  \sum_{\substack{a<b\\i<j}}
+  \Phi_{ij}^{ab}c_{ab}^{ij}
++
+  \sum_{\substack{a<b<c\\i<j<k}}
+  \Phi_{ijk}^{abc}c_{abc}^{ijk}
+  +\ldots
+\end{align}
+the coefficients tend to be very small, and are often virtually negligible for higher than quadruple replacements.
 
+Our starting point in density cumulant theory (DCT) is to express the electronic
+energy as a trace of the one- and antisymmetrized two-electron integrals (\(
+h_p^q \) and \(\overline{g}_{pq}^{rs}\)) with the reduced one- and two-body
+density matrices (\(\gamma^p_q\) and \(\gamma^{pq}_{rs}\)):
+\begin{equation}
+    \label{eq:energy-expression}
+    E
+    =
+    h_p^q
+    \gamma^p_q
+    +
+    \tfrac{1}{4}
+    \overline{g}_{pq}^{rs}
+    \gamma^{pq}_{rs}
+\end{equation}
+where summation over the repeated indices is implied.
+In DCT, the two-body density matrix \(\gamma^{pq}_{rs}\) is expanded in terms of
+its connected part, the two-body density cumulant ($\lambda^{pq}_{rs}$), and its
+disconnected part, which is given by an antisymmetrized product of one-body
+density matrices:\cite{Kutzelnigg:2006p171101}
+\begin{equation}
+    \label{eq:two-body-n-rep}
+    \gamma^{pq}_{rs}
+    =
+    \langle\Psi|
+    a^{pq}_{rs}
+    |\Psi\rangle
+    =
+    \lambda^{pq}_{rs}
+    +
+    P_{(r/s)}
+    \gamma^p_r
+    \gamma^q_s
+\end{equation}
+where \(P_{(r/s)}v_{rs} = v_{rs} - v_{sr}\) denotes antisymmetrization and
+\mbox{$a^{pq}_{rs}=a^{\dag}_{p}a^{\dag}_{q}a^{}_{s}a^{}_{r}$} is the two-body operator in second quantization.
+The one-body density matrix \(\gamma^p_q\) is determined from its non-linear
+relationship to the cumulant's partial trace:\cite{Sokolov:2013p024107}
+\begin{equation}
+    \label{eq:one-body-n-rep}
+    \gamma^p_q
+    =
+    \gamma^p_r
+    \gamma^r_q
+    -
+    \lambda^{pr}_{qr}
+\end{equation}
+This reduces \cref{eq:energy-expression} to a functional of the two-body
+cumulant and the basis of spin-orbitals, thereby defining the DCT energy
+functional.
+The density cumulant is parametrized by choosing a specific Ansatz for the
+wavefunction \(|\Psi\rangle\) such that\cite{Sokolov:2014p074111}
+\begin{equation}
+    \label{eq:cumulant-parametrization}
+    \lambda^{pq}_{rs}
+    =
+    \langle\Psi|
+    a^{pq}_{rs}
+    |\Psi\rangle_\mathrm{c}
+\end{equation}
+where $\mathrm{c}$ indicates that only fully connected terms are included in the
+parametrization.
+\Cref{eq:cumulant-parametrization} can be considered as a set of
+\(n\)-representability conditions that ensure that the resulting one- and
+two-electron density matrices represent a physical \(n\)-electron wavefunction.
+To compute the DCT energy, the functional \eqref{eq:energy-expression} is made
+stationary with respect to all of its parameters.
+Importantly, due to the connected nature of \cref{eq:cumulant-parametrization},
+DCT is both size-consistent and size-extensive for any parametrization of
+\(|\Psi\rangle\), and is exact in the limit of a complete
+parametrization.\cite{Sokolov:2014p074111}
+
+In this work, we consider the ODC-12
+method,\cite{Sokolov:2013p024107,Sokolov:2013p204110} which parametrizes the
+cumulant through a unitary treatment of single excitations and a linear
+expansion of double excitations.
+\begin{equation}
+    \label{eq:odc12-wavefunction}
+    |\Psi\rangle
+    =
+    e^{T_1-T_1^\dagger}
+    (1 + T_2)
+    |\Phi\rangle
+\end{equation}
+\begin{equation}
+    T_1
+    =
+    \mathbf{t}_1\cdot\mathbf{a}_1
+    =
+    t_a^i
+    a^a_i
+\end{equation}
+\begin{equation}
+    T_2
+    =
+    \mathbf{t}_2\cdot\mathbf{a}_2
+    =
+    \tfrac{1}{4}
+    t_{ab}^{ij}
+    a^{ab}_{ij}
+\end{equation}
+The exponential singles operator \(e^{T_1-T_1^\dagger}\) has the effect of a
+unitary transformation of the spin-orbital basis and is incorportated in our
+implementation of the ODC-12 method by optimizing the
+orbitals.\cite{Sokolov:2013p204110}
+The \(\mathbf{t}_1\) and \(\mathbf{t}_2\) parameters are obtained from the
+stationarity conditions
+\begin{equation}
+    \label{eq:stationarity_conditions}
+    \dfrac{\partial E}{\partial \mathbf{t}_1^\dagger}
+    \overset{!}{=}
+    0 \ ,
+    \qquad
+    \dfrac{\partial E}{\partial \mathbf{t}_2^\dagger}
+    \overset{!}{=}
+    0
+\end{equation}
+and are used to compute the ODC-12 energy.
+Explicit equations for the stationarity conditions are given in Refs.\@
+\citenum{Sokolov:2013p024107} and \citenum{Sokolov:2013p204110}.
+Although in ODC-12 the wavefunction parametrization is linear with respect
+to double excitations (\cref{eq:odc12-wavefunction}), the ODC-12 energy
+stationarity conditions are non-linear in $\mathbf{t}_2$ due to the non-linear
+relationship between the one-particle density matrix and the density cumulant
+(\cref{eq:one-body-n-rep}).\cite{Sokolov:2013p024107} Neglecting the non-linear
+$\mathbf{t}_2$ terms in \cref{eq:stationarity_conditions} results in the
+equations that define the linearized orbital-optimized  coupled cluster doubles
+method (OLCCD).
+This method is equivalent to the orbital-optimized coupled electron pair
+approximation zero (OCEPA$_0$).\cite{Bozkaya:2013p054104}

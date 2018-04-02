@@ -1,4 +1,46 @@
 \chapter{Conclusion}
 \label{ch:conclusion}
 
-My conclusions.
+We have presented comprehensive benchmarks to demonstrate that orbital-optimized
+density cumulant theory with double excitations (ODC-12) consistently
+outperforms coupled-cluster theory with singles and doubles (CCSD) for
+the description of noncovalent interactions, hydrogen-transfer barrier
+heights, radical stabilization energies, ionization energies, and covalent bond
+stretching.
+Thus having established the promising performance of this model for ground state
+calculations, we have extended the theory for the calculation of excitation
+energies and transition properties through the use of linear response theory.
+After numerically demonstrating that our initial working equations and
+implementation are correct, we have empirically shown this method to be
+size-intensive, i.e.\ displaying the correct qualitative behavior with respect
+to excited states of independent systems.
+Next, we have shown that this method is more stable with respect to strong
+electron correlation than its linearized variant, LR-OLCCD, which often achieves
+impressive error cancellation in the absence of strong correlation.
+This demonstrates that the infinite order one-particle \(n\)-representability
+conditions defining the ODC-12 method contribute to a robust description of the
+electron distribution for more challenging states.
+Our initial benchmark study of the vertical excitation energies predicted by
+this method shows that it reduces the mean absolute error by roughly a factor of
+two relative to the popular equation-of-motion coupled-cluster with singles and
+doubles (EOM-CCSD) method, similar to our findings for ground states.
+For well-behaved systems we find that the linearized model, LR-OLCCD, is an
+effective approximation to LR-ODC-12 with a lower cost prefactor.
+Finally, we develop some improvements to the algorithms used for solving the
+LR-ODC-12 equations using disk-based direct matrix algorithms (variants of the
+Davidson algorithm).
+These developments allow us to study polyene systems as large as hexatriene with
+a natural orbital basis of double-zeta quality.
+This calculation involves 44 electrons and 124 spatial orbitals withnearly 20
+million unique wavefunction parameters, which would not be feasible without the
+new algorithms.
+The advantages of LR-ODC-12 over EOM-CCSD and LR-OLCCD for these polyene systems
+are even more stark than for our previous benchmarks.
+Whereas EOM-CCSD overestimates the energy of the challenging
+\termsymbol{2{}^1A_g} state of hexatriene and its gap with the neighboring
+\termsymbol{1{}^1B_u} state by close to 1~\eV each, LR-ODC-12 matches its energy
+to within 0.15~\eV and matches the energy gap to within 0.01~\eV.
+Given the relative sparsity of inexpensive alternatives to EOM-CCSD, we believe
+that these results merit further development of algorithms for the LR-ODC-12
+method to expand our toolkit for studying excited electronic states.
+
