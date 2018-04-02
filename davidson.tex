@@ -10,35 +10,25 @@
 
 \section{Abstract}
 
-\begin{enumerate}
-    \item
-        We have recently proposed the LR-ODC-12 model for electronic excited
-        states, a linear response extension of density cumulant theory with
-        linearized doubles and variationally optimized orbitals.
-    \item
-        Our benchmark calculations have shown that LR-ODC-12 is consistently
-        more accurate than its popular equation-of-motion coupled-cluster
-        counterpart, EOM-CCSD.
-    \item
-        Here we propose improved algorithms for solving the LR-ODC-12 equations
-        in order to extend its range of application to larger systems.
-    \item
-        We use the new implementation to study the valence spectra of ethylene,
-        butadiene, and hexatriene.
-    \item
-        The latter has 44 electrons and 124 spatial orbitals, a formidable
-        challenge for a spin-orbital code where this results in nearly 20
-        million unique wavefunction parameters.
-    \item
-        The advantages of LR-ODC-12 for the polyenes are even more stark than
-        for our previous benchmarks.
-    \item
-        Whereas EOM-CCSD overestimates the energy of the challenging
-        \termsymbol{2{}^1A_g} state of hexatriene and its gap with the
-        neighboring \termsymbol{1{}^1B_u} state by close to 1~\eV, LR-ODC-12
-        matches its energy to within 0.15~\eV and matches the energy gap to
-        within 0.01~\eV.
-\end{enumerate}
+We have recently proposed the LR-ODC-12 model for electronic excited states, a
+linear response extension of density cumulant theory with linearized double
+excitations and variationally optimized orbitals.
+Our benchmark calculations have shown that LR-ODC-12 is consistently more
+accurate than its popular equation-of-motion coupled-cluster counterpart,
+EOM-CCSD\@.
+Here we propose improved algorithms for solving the LR-ODC-12 equations in order
+to extend its range of application to larger systems.
+We use the new implementation to study the valence spectra of ethylene,
+butadiene, and hexatriene.
+The latter has 44 electrons and 124 spatial orbitals, a formidable challenge for
+a spin-orbital code where this results in nearly 20 million unique wavefunction
+parameters.
+The advantages of LR-ODC-12 for these polyene systems are even more stark than
+for our previous benchmarks.
+Whereas EOM-CCSD overestimates the energy of the challenging
+\termsymbol{2{}^1A_g} state of hexatriene and its gap with the neighboring
+\termsymbol{1{}^1B_u} state by close to 1~\eV each, LR-ODC-12 matches its energy
+to within 0.15~\eV and matches the energy gap to within 0.01~\eV.
 
 
 \section{Introduction}
@@ -51,13 +41,14 @@ Paragraph 1:
         non-iterative (T) correction to CCSD, which affords truly exceptional
         accuracy relative to its cost.\cite{Stanton:1997p130}
     \item
-        Coupled-cluster theory is also extremely popular for excited states
-        through its equation-of-motion (EOM-CC) extension\cite{Krylov:2008p433}
-        because it is relatively black-box compared to multi-reference methods
-        like CASPT2\cite{Andersson:1992p1218} which require artfully chosen
-        active spaces and empirical shift parameters.\cite{Zobel:2017p1482}
+        Coupled-cluster theory has also been extremely popular in the study of
+        electronic excited states through the equation-of-motion coupled-cluster
+        (EOM-CC) method,\cite{Krylov:2008p433} because it is relatively
+        black-box compared to multi-reference methods like
+        CASPT2\cite{Andersson:1992p1218} which require artfully chosen active
+        spaces and empirical shift parameters.\cite{Zobel:2017p1482}
     \item
-        Unfortunately, despite ongoing efforts to develop similar perturbative
+        Unfortunately, despite ongoing efforts to develop perturbative triples
         corrections for EOM-CCSD excitation energies, none of these attempts
         have been nearly as successful as CCSD(T).\cite{Matthews:2016p124102}
     \item
@@ -65,6 +56,9 @@ Paragraph 1:
         EOM-CC3\cite{Koch:1998p1808} or EOM-CCSDT\cite{Hirata:2000p255} to
         achieve quantitative (\(<0.1~\eV\)) accuracy, which are prohibitive even
         for modest-sized systems and basis sets.
+    \item
+        The LR-ODC-12 method improves on EOM-CCSD without including triples
+        parameters.
 \end{enumerate}
 
 
@@ -100,7 +94,7 @@ Paragraph 1:
         \(\mathbf{U}\leftarrow\mathbf{U}^{(0)}\).
         \For{$1\leq i\leq i_\mathrm{max}$}{}
             \State
-            Construct subspace representations and get the lowest \(n\)
+            Construct subspace representation and solve the lowest \(n\)
             eigenvalues.
             \[
                 \mathbf{L}^\mathrm{sub}
@@ -123,7 +117,7 @@ Paragraph 1:
                 \mathbf{v}_k^\mathrm{sub}
             \]
             \State
-            Calculate the eigenvector residuals in the full space.
+            Calculate the eigenvector residuals over the full space.
             \[
                 \mathbf{r}_k
                 =
@@ -261,14 +255,14 @@ blocked according to whether they describe variations with respect to one-body
     =
     \begin{pmatrix}
         \mathbf{A}_{11} & \mathbf{A}_{12} \\
-        \mathbf{A}_{12}^\dagger & \mathbf{A}_{22} \\
+        \mathbf{A}_{21} & \mathbf{A}_{22} \\
     \end{pmatrix}
     \quad
     \mathbf{B}
     =
     \begin{pmatrix}
         \mathbf{B}_{11} & \mathbf{B}_{12} \\
-        \mathbf{B}_{12}^\mathrm{T} & \mathbf{B}_{22} \\
+        \mathbf{B}_{21} & \mathbf{B}_{22} \\
     \end{pmatrix}
     \quad
     \mathbf{S}
@@ -285,23 +279,28 @@ blocked according to whether they describe variations with respect to one-body
         \mathbf{x}_{k,2}
     \end{pmatrix}
 \end{equation}
-The dimensions of the diagonal two-body blocks in these matrices scale as
+The dimensions of the diagonal two-body blocks (\(\mathbf{A}_{22}\) and
+\(\mathbf{B}_{22}\) and \(\mathbf{1}_s\)) in these matrices scale as
 \((\mathrm{o}^2\mathrm{v}^2)^2\) with the number of occupied (\(\mathrm{o}\))
-and virtual (\(\mathrm{v}\)) orbitals, which rapidly overwhelms the available
-storage space on a computer as the number of electrons and basis functions
-increases.
-This problem can be mitigated through the use of direct matrix algorithms, which
-avoid the explicit representation of a matrix \(\mathbf{L}\) as an array of
-coefficients by instead defining a function \(\mathbf{L}(\mathbf{U})\) which
-returns the output of the linear transformation on an arbitrary set of vectors
-\(\mathbf{U}=(\mathbf{u}_1\ \cdots\ \mathbf{u}_m)\).
-The most common direct algorithm for eigenvalues of large, diagonally-dominant
-matrices is the Davidson algorithm, which is given in its most general form in
-\Cref{algo:davidson}.
+and virtual (\(\mathrm{v}\)) orbitals, rapidly overwhelming the storage space on
+a given computer as the number of electrons and basis functions increases.
+This problem can be circumvented by using so-called ``direct'' matrix
+algorithms, which avoid the explicit representation of a matrix as an array of
+coefficients \(\mathbf{L}=[L_{\mu\nu}]\) by instead defining a function
+\(\mathbf{L}(\mathbf{U})\) which returns the output of the linear transformation
+on an arbitrary set of vectors \(\mathbf{U}=(\mathbf{u}_1\ \cdots\
+\mathbf{u}_m)\).
+The standard direct algorithm for extremal eigenvalues of large,
+diagonally-dominant matrices is the Davidson
+algorithm,\cite{Davidson:1975p87,Liu:1978p49} which solves the eigenvalue
+problem by progressively growing an expansion space for the \(n\) lowest (or
+highest) generalized eigenvectors.
+The procedure is described in \Cref{algo:davidson}.
 
-The full set of linear transformation formulas for LR-ODC-12 is given in the
-appendix (\cref{sec:linear-transformation-formulas}), but let us consider the
-diagonal two-body Hessian as an example.
+The full set of linear transformation formulas for the LR-ODC-12 Hessian and
+metric blocks is given in the appendix
+(\cref{sec:linear-transformation-formulas}), but let us consider the diagonal
+two-body Hessian as an example.
 The image of an arbitrary two-body vector
 \(
     \mathbf{u}_{\mu,2}
@@ -310,6 +309,7 @@ The image of an arbitrary two-body vector
 \)
 under this transformation is given by
 \begin{equation}
+    \label{eq:two-body-hessian-function-in-text}
     \begin{array}{r@{\,}l}
         (\mathbf{A}_{22}(\mathbf{u}_{\mu,2}))_{ijab}
         =
@@ -371,23 +371,21 @@ under this transformation is given by
 where the \(i,j,k,l,\ldots\) run over occupied spin-orbitals, \(a,b,c,d,\ldots\)
 run over virtual (un-occupied) spin-orbitals, and summation over repeated
 indices is implied.
-The important thing to note is that we need only two \(\mathrm{v}^4\)
+The important thing to note is that we need only two \(\mathrm{v}^4\)-sized
 intermediates (\(\overline{g}_{ab}^{cd}\) and \(\mathcal{G}_{ab}^{cd}\)) to
-define our linear transformations and the image of the two-body Hessian only
-\(\mathcal{O}(d_\mu\mathrm{o}^2\mathrm{v}^2)\) elements where \(d_\mu\) is the
-dimension of the \(\mu\) index.
+define our linear transformations, and that the image of the two-body Hessian
+only has \(\mathcal{O}(d_\mu\mathrm{o}^2\mathrm{v}^2)\) elements where \(d_\mu\)
+is the dimension of the \(\mu\) index.
 In general the Davidson algorithm requires no more than 10-20 subspace vectors
-per root, and often one can get away with as few as 2 or 3, so that even for
-small systems it is easy to satisfy
-\(
-    d_\mu \ll \mathrm{o}^2\mathrm{v}^2
-\),
-resulting in substantial memory savings.
-This transformation contains the timing bottleneck for the LR-ODC-12 method,
-namely the third term which scales as
-\(\mathcal{O}(d_\mu\mathrm{o}^2\mathrm{v}^4)\)
-in the number of floating point operations.
-This term is the bottleneck in EOM-CCSD as well.
+per root, sometimes as few as 2 or 3, so that even for small systems it is easy
+to satisfy \( d_\mu \ll \mathrm{o}^2\mathrm{v}^2 \), resulting in substantial
+memory savings.
+\Cref{eq:two-body-hessian-function-in-text} also includes the timing bottleneck
+for the LR-ODC-12, the contraction of the \(\mathrm{v}^4\) integrals with the
+expansion vector, \(\mathrm{g}_{ab}^{cd}u_{\mu,cd}^{ij}\), which scales as
+\(\mathcal{O}(d_\mu\mathrm{o}^2\mathrm{v}^4)\) in the number of floating point
+operations.
+This term is the rate limiting step in EOM-CCSD as well.
 
 
 \paragraph{Strategy 1}
