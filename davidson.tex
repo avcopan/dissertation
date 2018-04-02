@@ -62,7 +62,7 @@ Paragraph 1:
 \end{enumerate}
 
 
-\section{Theory}
+\section{Algorithms}
 
 \begin{algorithm}
     \caption{%
@@ -251,6 +251,7 @@ The submatrices in \cref{eq:linear-response-eigenvalue-equation} are further
 blocked according to whether they describe variations with respect to one-body
 (\(\mathbf{t}_1\)) or two-body (\(\mathbf{t}_2\)) parameters.
 \begin{equation}
+    \label{eq:conjugate-blocks}
     \mathbf{A}
     =
     \begin{pmatrix}
@@ -387,20 +388,79 @@ expansion vector, \(\mathrm{g}_{ab}^{cd}u_{\mu,cd}^{ij}\), which scales as
 operations.
 This term is the rate limiting step in EOM-CCSD as well.
 
+A direct application of \cref{algo:davidson} to
+\cref{eq:linear-response-eigenvalue-equation} is complicated by the fact that
+the desired (small, positive) eigenvalues are in the middle of the spectrum,
+rather than at the extremes.
+We make use of two strategies.
+
+\begin{figure}[h!]
+    \centering
+    \caption{%
+        \label{fig:davidson}
+        A schematic illustrating the sequence of reduced representations of
+        \(\mathbf{E}\) in a blocked Davidson algorithm.
+        The colored entries must be explicitly computed, whereas the gray
+        entries are determined by Hermitian symmetry.
+    }
+    \includegraphics[width=8.5cm]{figures/davidson.pdf}
+\end{figure}
+
 
 \paragraph{Strategy 1}
-The Davidson algorithm cannot be directly applied to
-\cref{eq:linear-response-eigenvalue-equation}.
+One approach is to invert the eigenvalue equation, solving for the {\itshape
+largest} positive inverse eigenvalues, which is easily done by selecting the
+highest rather than the lowest roots at each step in \cref{algo:davidson}.
 \begin{equation}
     \mathbf{M}(\mathbf{z}_k)
     =
     \omega_k^{-1}
     \mathbf{E}(\mathbf{z}_k)
 \end{equation}
+This has the added advantage that the energy Hessian \(\mathbf{E}\) is generally
+positive definite, which allows us to treat the subspace diagonalizations as
+standard Hermitian eigenvalue equation with real eigenvalues and orthonormal
+eigenvectors.
+A simple, effective choice of guess vectors in this approach is to determine the
+lowest eigenvectors of the following diagonal approximation to
+\cref{eq:two-body-hessian-function-in-text}
+\begin{equation}
+    (\tilde{\mathbf{A}}_{22}(\mathbf{u}_{\mu}))_{ijab}
+    \equiv
+    -
+    (
+        \mathcal{F}_i^i
+        +
+        \mathcal{F}_j^j
+        +
+        \mathcal{F}_a^a
+        +
+        \mathcal{F}_b^b
+    )
+    u_{\mu,ab}^{ij}
+\end{equation}
+which are simply the standard unit vectors associated with the smallest diagonal
+entries.
+The virtual coefficients \(\mathcal{F}_a^a,\mathcal{F}_b^b\) in this equation
+are generally negative, so this has the form of an orbital energy difference
+like we see in Hartree-Fock theory.
+For larger systems, we manage the memory requirements of the method by keeping
+successive groups of expansion vectors and images,
+\(
+    \mathbf{U}^{(i)},
+    \mathbf{E}(\mathbf{U}^{(i)}),
+    \mathbf{M}(\mathbf{U}^{(i)})
+\),
+on disk and reading them in as needed.
+These can be further subdivided into even smaller blocks if needed.
+\Cref{fig:davidson} illustrates which entries in the subspace representation
+need to be explicitly computed as we add vectors to the expansion space.
 
 
 \paragraph{Strategy 2}
-Assuming real matrices
+Assuming real matrices, we can add and subtract the block rows of
+\cref{eq:linear-response-eigenvalue-equation} to arrive at the following pair of
+equations.
 \begin{equation}
     (\mathbf{A} \pm \mathbf{B})
     (\mathbf{x}_k  \pm \mathbf{y}_k)
@@ -409,24 +469,28 @@ Assuming real matrices
     \mathbf{S}
     (\mathbf{x}_k \mp \mathbf{y}_k)
 \end{equation}
-which leads to
+Substituting one into the other leads to a non-symmetric eigenvalue equation for
+the squares of the excitation energies.
 \begin{equation}
-    \overline{\mathbf{E}}
+    \widehat{\mathbf{E}}
     (\mathbf{x}_k - \mathbf{y}_k)
     =
     \omega_k^2
     (\mathbf{x}_k - \mathbf{y}_k)
     ,
     \quad
-    \overline{\mathbf{E}}
+    \widehat{\mathbf{E}}
     \equiv
     \mathbf{S}^{-1}
     (\mathbf{A} + \mathbf{B})
     \mathbf{S}^{-1}
     (\mathbf{A} - \mathbf{B})
 \end{equation}
-
-Analytic inverse of \(\mathbf{S}_{11}\)
+By halving the dimension of the problem and eliminating the metric, this reduces
+the memory requirements by a factor of three, provided we do not need to recover
+the full eigenvector \(\mathbf{z}_k\) to compute transition properties.
+From \cref{eq:conjugate-blocks} we can see that computing the inverse of
+\(\mathbf{S}\) requires us to invert the orbital block of the metric.
 
 
 \begin{equation}
@@ -472,147 +536,135 @@ Need not be square
 \end{equation}
 
 
-\begin{figure}[h!]
-    \centering
-    \caption{%
-        \label{fig:davidson}
-        A schematic illustrating the sequence of reduced representations of
-        \(\mathbf{E}\) in the algorithm employed in this study.
-        The colored entries must be explicitly computed, whereas the gray
-        entries are determined by Hermitian symmetry.
-    }
-    \includegraphics[width=8.5cm]{figures/davidson.pdf}
-\end{figure}
-
-We have implemented the LR-ODC-12 method using a multi-root Davidson algorithm,
-which solves the linear-response generalized eigenvalue problem by progressively
-growing an expansion space for the \(n_\mathrm{root}\) lowest generalized
-eigenvectors of \(\mathbf{E}\) and \(\mathbf{M}\).
-The general procedure looks as follows:
-\begin{enumerate}
-    \item
-        \label{item:davidson-initialization}
-        Initialize the expansion space with a set of \(n_\mathrm{guess}\geq
-        n_\mathrm{root}\) orthonormal vectors.
-        \[
-            \mathbf{R}^{(0)}
-            =
-            (
-                \mathbf{u}_1^{(0)}
-                \cdots
-                \mathbf{u}_{n_\mathrm{guess}}^{(0)}
-            )
-        \]
-    \item
-        \label{item:davidson-step-one}
-        Express the energy-Hessian and metric matrices in the reduced expansion
-        space.
-        \[
-            \mathbf{E}^{(i)}
-            =
-            \mathbf{R}^{(i)\dagger}
-            \mathbf{E}(\mathbf{R}^{(i)})
-        \]
-        \[
-            \mathbf{M}^{(i)}
-            =
-            \mathbf{R}^{(i)\dagger}
-            \mathbf{M}(\mathbf{R}^{(i)})
-        \]
-    \item
-        Solve for the \(n_\mathrm{root}\) highest eigenvectors of the
-        inverse eigenvalue equation.
-        \[
-            \mathbf{M}^{(i)}
-            \mathbf{z}_k^{(i)}
-            =
-            \mathbf{E}^{(i)}
-            \mathbf{z}_k^{(i)}/
-            \omega_k^{(i)}
-        \]
-    \item
-        Determine the residual for each root.
-        \[
-            \mathbf{d}_k^{(i)}
-            =
-            \mathbf{M}(\mathbf{z}_k^{(i)})
-            -
-            \mathbf{E}(\mathbf{z}_k^{(i)})/
-            \omega_k^{(i)}
-        \]
-        If the residual elements are sufficiently small we consider the
-        eigenvectors converged and exit the loop.
-    \item
-        \label{item:davidson-step-three}
-        Form new direction vectors by preconditioning the residuals.
-        \[
-            \mathbf{g}_k^{(i+1)}
-            =
-            -
-            (
-                \tilde{\mathbf{M}}
-                -
-                \tilde{\mathbf{E}}/
+    We have implemented the LR-ODC-12 method using a multi-root Davidson algorithm,
+    which solves the linear-response generalized eigenvalue problem by progressively
+    growing an expansion space for the \(n_\mathrm{root}\) lowest generalized
+    eigenvectors of \(\mathbf{E}\) and \(\mathbf{M}\).
+    The general procedure looks as follows:
+    \begin{enumerate}
+        \item
+            \label{item:davidson-initialization}
+            Initialize the expansion space with a set of \(n_\mathrm{guess}\geq
+            n_\mathrm{root}\) orthonormal vectors.
+            \[
+                \mathbf{R}^{(0)}
+                =
+                (
+                    \mathbf{u}_1^{(0)}
+                    \cdots
+                    \mathbf{u}_{n_\mathrm{guess}}^{(0)}
+                )
+            \]
+        \item
+            \label{item:davidson-step-one}
+            Express the energy-Hessian and metric matrices in the reduced expansion
+            space.
+            \[
+                \mathbf{E}^{(i)}
+                =
+                \mathbf{R}^{(i)\dagger}
+                \mathbf{E}(\mathbf{R}^{(i)})
+            \]
+            \[
+                \mathbf{M}^{(i)}
+                =
+                \mathbf{R}^{(i)\dagger}
+                \mathbf{M}(\mathbf{R}^{(i)})
+            \]
+        \item
+            Solve for the \(n_\mathrm{root}\) highest eigenvectors of the
+            inverse eigenvalue equation.
+            \[
+                \mathbf{M}^{(i)}
+                \mathbf{z}_k^{(i)}
+                =
+                \mathbf{E}^{(i)}
+                \mathbf{z}_k^{(i)}/
                 \omega_k^{(i)}
-            )^{-1}
-            \mathbf{d}_k
-        \]
-        The tildes in this equation denote diagonal approximations to these
-        matrices.
-    \item
-        Project out the span of the current expansion space from the new
-        direction vectors.
-        \[
-            \mathbf{J}^{(i+1)}
-            =
-            (\mathbf{1} - \mathbf{R}^{(i)}\mathbf{R}^{(i)\dagger})
-            (\mathbf{g}_1^{(i+1)}\cdots \mathbf{g}_{n_\mathrm{root}}^{(i+1)})
-        \]
-    \item
-        Determine an orthonormal basis for the new direction vectors using a
-        compressed singular value decomposition, and add these new vectors to
-        the expansion space.
-        \[
-            \mathbf{J}^{(i+1)}
-            \approx
-            \mathbf{U}^{(i+1)}
-            \boldsymbol\Sigma^{(i+1)}
-            \mathbf{V}^{(i+1)\dagger}
-        \]
-        \[
-            \mathbf{R}^{(i+1)}
-            \leftarrow
-            (\mathbf{R}^{(i)}\ \mathbf{U}^{(i+1)})
-        \]
-    \item
-        Increment \(i\) and return to step~\ref{item:davidson-step-one}.
-\end{enumerate}
-A key feature of this algorithm is that we never need to explicilty construct
-the energy-Hessian and metric matrices in memory, only their images over the
-expansion space.
+            \]
+        \item
+            Determine the residual for each root.
+            \[
+                \mathbf{d}_k^{(i)}
+                =
+                \mathbf{M}(\mathbf{z}_k^{(i)})
+                -
+                \mathbf{E}(\mathbf{z}_k^{(i)})/
+                \omega_k^{(i)}
+            \]
+            If the residual elements are sufficiently small we consider the
+            eigenvectors converged and exit the loop.
+        \item
+            \label{item:davidson-step-three}
+            Form new direction vectors by preconditioning the residuals.
+            \[
+                \mathbf{g}_k^{(i+1)}
+                =
+                -
+                (
+                    \tilde{\mathbf{M}}
+                    -
+                    \tilde{\mathbf{E}}/
+                    \omega_k^{(i)}
+                )^{-1}
+                \mathbf{d}_k
+            \]
+            The tildes in this equation denote diagonal approximations to these
+            matrices.
+        \item
+            Project out the span of the current expansion space from the new
+            direction vectors.
+            \[
+                \mathbf{J}^{(i+1)}
+                =
+                (\mathbf{1} - \mathbf{R}^{(i)}\mathbf{R}^{(i)\dagger})
+                (\mathbf{g}_1^{(i+1)}\cdots \mathbf{g}_{n_\mathrm{root}}^{(i+1)})
+            \]
+        \item
+            Determine an orthonormal basis for the new direction vectors using a
+            compressed singular value decomposition, and add these new vectors to
+            the expansion space.
+            \[
+                \mathbf{J}^{(i+1)}
+                \approx
+                \mathbf{U}^{(i+1)}
+                \boldsymbol\Sigma^{(i+1)}
+                \mathbf{V}^{(i+1)\dagger}
+            \]
+            \[
+                \mathbf{R}^{(i+1)}
+                \leftarrow
+                (\mathbf{R}^{(i)}\ \mathbf{U}^{(i+1)})
+            \]
+        \item
+            Increment \(i\) and return to step~\ref{item:davidson-step-one}.
+    \end{enumerate}
+    A key feature of this algorithm is that we never need to explicilty construct
+    the energy-Hessian and metric matrices in memory, only their images over the
+    expansion space.
 
-For the diagonal approximations in step~\ref{item:davidson-step-three} we use
-the following.
-\[
-    \tilde{\mathbf{S}}_{11}
-    \equiv
-    \mathbf{1}_1
-\]
-\[
-    (\tilde{\mathbf{A}}_{11})_{ia,ia}
-    \equiv
-    -
-    f_i^i
-    +
-    f_a^a
-\]
-\[
-    (\tilde{\mathbf{A}}_{22})_{ijab,ijab}
-    \equiv
-    -
-    \mathcal{F}_i^i
-    -
-    \mathcal{F}_j^j
+    For the diagonal approximations in step~\ref{item:davidson-step-three} we use
+    the following.
+    \[
+        \tilde{\mathbf{S}}_{11}
+        \equiv
+        \mathbf{1}_1
+    \]
+    \[
+        (\tilde{\mathbf{A}}_{11})_{ia,ia}
+        \equiv
+        -
+        f_i^i
+        +
+        f_a^a
+    \]
+    \[
+        (\tilde{\mathbf{A}}_{22})_{ijab,ijab}
+        \equiv
+        -
+        \mathcal{F}_i^i
+        -
+        \mathcal{F}_j^j
     -
     \mathcal{F}_a^a
     -
@@ -623,9 +675,6 @@ step~\ref{item:davidson-initialization}, namely by including unit vectors for
 the \(n_\mathrm{guess}\) smallest positive entries in \(\tilde{\mathbf{E}}\).
 
 
-\section{Algorithms}
-
-
 \section{Computational Details}
 
 For alkenes (\cref{sec:alkenes}), the ANO-L-pVXZ (X = D, T) basis
@@ -634,14 +683,11 @@ For alkenes in \cref{sec:alkenes}, the frozen-core MP2/cc-pVQZ geometries were
 used as in Refs.~\citenum{Daday:2012p4441} and \citenum{Zimmerman:2017p4712}.
 
 
-
-\section{Results}
-
-
-\subsection{Ethylene, Butadiene, and Hexatriene}
+\section{Results and Discussion}
 \label{sec:alkenes}
 
 \begin{table*}[h!]
+    \centering
     \caption{%
         \label{tab:alkenes}
         Vertical excitation energies computed using LR-OLCCD, LR-ODC-12, and
@@ -668,19 +714,19 @@ used as in Refs.~\citenum{Daday:2012p4441} and \citenum{Zimmerman:2017p4712}.
             \hline                           
             \ce{C4H6}                        
             & \(1{}^3\mathrm{B_{u}}\)  &
-            3.20 & 3.58         & 3.43         & 3.37 \\
+            3.20 & 3.58 & 3.43 & 3.37 \\
             & \(1{}^1\mathrm{B_{u}}\)  &
             6.53 & 6.76 (4.2) & 6.67 (4.4) & 6.45 \\
             & \(2{}^1\mathrm{A_{g}}\)  &
-            7.28 & 7.14         & 6.81         & 6.58 \\
+            7.28 & 7.14 & 6.81 & 6.58 \\
             \hline                           
             \ce{C6H8}                        
             & \(1{}^3\mathrm{B_{u}}\)  &
-            2.64 & 3.01         & 2.83         & 2.77 \\
+            2.64 & 3.01 & 2.83 & 2.77 \\
             & \(1{}^1\mathrm{B_{u}}\)  &
             5.60 & 5.89 (6.5)  & 5.74 (8.1)   & 5.59 \\
             & \(2{}^1\mathrm{A_{g}}\)  &
-            6.55 &  {\color{red} XXX}   & 5.73              & 5.58 \\
+            6.55 & 4.21 & 5.73 & 5.58 \\
             \hline
             \hline
         \end{tabular}
@@ -771,9 +817,11 @@ non-linear terms in the description of electron correlation significantly
 improves the agreement with the reference SHCI data.
 In particular, for the $1{}^3\mathrm{B_{u}}$ and $1{}^1\mathrm{B_{u}}$ states,
 the LR-OLCCD errors are larger than the LR-ODC-12 errors by $\sim$ 0.15 eV.
-For the $2{}^1\mathrm{A_{g}}$ doubly-excited state, linearizing the equations in
-LR-OLCCD increases the error by 0.33 and {\color{red} XXX} eV for butadiene and
-hexatriene, respectively. 
+For the doubly-excited $2{}^1\mathrm{A_{g}}$ state, LR-OLCCD shows very large
+errors of 0.56 and $-$1.37 eV for butadiene and hexatriene, respectively.
+These results indicate that the non-linear terms included in LR-ODC-12 are very
+important for the description of excited states with double-excitation
+character.
 
 
 
@@ -1175,6 +1223,36 @@ hexatriene, respectively.
         =
         \delta_{q'}^{p'}
         \gamma_{q'}
+    \end{equation}
+
+    \begin{equation}
+        \tilde{\mathbf{S}}_{11}
+        \equiv
+        \tilde{\mathbf{S}}_{11}^{-1}
+        \equiv
+        \mathbf{1}_1
+    \end{equation}
+
+    \begin{equation}
+        (\tilde{\mathbf{A}}_{11})_{ia,ia}
+        \equiv
+        -
+        f_i^i
+        +
+        f_a^a
+    \end{equation}
+
+    \begin{equation}
+        (\tilde{\mathbf{A}}_{22})_{ijab,ijab}
+        \equiv
+        -
+        \mathcal{F}_i^i
+        -
+        \mathcal{F}_j^j
+        -
+        \mathcal{F}_a^a
+        -
+        \mathcal{F}_b^b
     \end{equation}
 
 \end{subappendices}
