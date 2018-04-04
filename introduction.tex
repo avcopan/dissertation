@@ -1,266 +1,177 @@
 \chapter[%
     Introduction
 ]{%
-    Introduction\footnote{%
-        Adapted from my lecture notes at
-        \url{https://github.com/CCQC/chem-8950}.
-    }
+    Introduction
 }
 
-The goal of electronic structure theory is to solve the time-independent
-Born-Oppenheimer Schr\"odinger equation with an optimal balance of accuracy and
-efficiency for the problem of interest.
+\section{One-Electron States}
+
+Hydrogen or silver or alkali metals
 \begin{equation}
-    \label{eq:electronic-schrodinger-equation}
-    \hat{H}\Psi_k
+    (\hat{h} + \hat{v}_\mathrm{e})
+    |\psi\rangle
     =
-    E_k\Psi_k
+    \epsilon
+    |\psi\rangle
 \end{equation}
+
+\begin{equation}
+    \hat{h}
+    =
+    \tfrac{1}{2}
+    \hat{\mathbf{p}}^2
+    +
+    \hat{v}_\mathrm{n}
+    \qquad
+    \hat{v}_\mathrm{n}
+    =
+    \sum_a^{\mathrm{nuclei}}
+    \frac{q_a}{|\mathbf{r}_a-\hat{\mathbf{r}}|}
+\end{equation}
+
+Symmetry properties of the potential give us spatial symmetries
+\begin{equation}
+    \hat{o}
+    |\psi\rangle
+    =
+    o
+    |\psi\rangle
+\end{equation}
+point groups and lattice groups.
+For one electron atoms the O(3) symmetries are described by the conservation of
+angular momentum, \(\hat{\mathbf{j}}^2\) and \(\hat{j}_z\).
+
+Goudsmit-Uhlenbeck (Uhlenbeck:1926p264) give us spin, which is a constant intrinsic to the electron
+as a particle
+\begin{equation}
+    \hat{s}^2
+    |\psi\rangle
+    =
+    \tfrac{3}{4}
+    |\psi\rangle
+\end{equation}
+
+The earlier Stern-Gerlach experiment (Gerlach:1922p349) showed in hindsight that
+spin can be oriented up or down along a given axis
+\begin{equation}
+    \hat{s}_z
+    |\psi\rangle
+    =
+    \pm
+    \tfrac{1}{2}
+    |\psi\rangle
+\end{equation}
+
+\begin{equation}
+    \hat{s}_z
+    =
+    \tfrac{1}{2}
+    (
+        |\alpha\rangle\langle\alpha|
+        -
+        |\beta\rangle\langle\beta|
+    )
+\end{equation}
+
+\begin{equation}
+    \mathcal{H}
+    =
+    L^2(\mathbb{R}^3)
+    \otimes
+    \mathrm{SU}(2)
+\end{equation}
+
+
+\section{Many-Electron States}
+
 \begin{equation}
     \hat{H}
     =
-    V_{\mathrm{nuc}}
+    \sum_{i=1}^n
+    \hat{h}(i)
     +
-    \hat{H}_e
-    =
-    \sum_{a<b}^{\text{nuc.}}
-    \frac{Z_aZ_b}{|\mathbf{R}_a-\mathbf{R}_b|}
-    -
-    \frac{1}{2}
-    \sum_i^{\text{elec.}}
-    \nabla_i^2
-    -
-    \sum_a^{\text{nuc.}}
-    \sum_i^{\text{elec.}}
-    \frac{Z_a}{|\mathbf{R}_a-\mathbf{r}_i|}
-    +
-    \sum_{i<j}^{\text{elec.}}
-    \frac{1}{|\mathbf{r}_i-\mathbf{r}_j|}
+    \sum_{i=1}^n
+    \sum_{j=i+1}^n
+    \hat{g}(i,j)
 \end{equation}
-The most accurate solution possible for a given one-particle basis set of
-spin-orbitals
-\(
-    \{\psi_p\}
-\)
-results from expanding the wavefunction as a linear combination of all
-antisymmetrized products of these one-particle states, which are known as Slater
-determinants
-\(
-    \{\Phi_\mu\}
-\).
-\begin{equation}
-    \label{eq:full-ci-wavefunction-expansion}
-    \Psi_k
-    =
-    \sum_\mu
-    \Phi_\mu
-    c_{\mu k}
-\end{equation}
-The expansion coefficients \((\mathbf{c})_k=c_{\mu k}\) are eigenvectors of the
-matrix \((\mathbf{H})_{\mu\nu}=\langle\Phi_\mu|\hat{H}|\Phi_\nu\rangle\), which
-is the matrix representation of the Hamiltonian in the determinant basis.
-This is called the {\itshape full configuration-interaction}\ (FCI) solution.
 
-Any one-electron basis spans the same ``function space'' as the AO basis set
-itself, and the full $n$-electron basis $\{\Phi_\mu\}$ spans the same space of
-$n$-electron functions regardless of how one forms spin orbitals from the AO
-basis set.
-As a result, one obtains the same FCI solution for any choice of spin-orbitals.
-In general, however, FCI solutions are completely unfeasible for basis sets of
-sufficient size to approach the complete basis set limit because the number of
-determinants grows exponentially with the dimension of the one-particle basis.
-The upshot is that we usually have to omit some Slater determinants in order to get an answer in a reasonable amount of time.
-As soon as we truncate our determinant expansion
-(\ref{eq:full-ci-wavefunction-expansion}), our choice of spin MOs makes a
-significant difference in the quality of our results.
-In particular, we need to choose our set of one-electron functions to minimize
-the number of Slater determinants it takes to ``get close to'' the exact
-wavefunction.
-One approach is to determine the best single-determinant approximation to the
-wavefunction by optimizing its energy expectation value with respect to
-variations in the orbitals
-\begin{align}
-    \frac{\delta\langle\Phi|\hat{H}_e|\Phi\rangle}{\delta\psi_i}
-    \overset{!}{=}
-    0
-    \qquad
-    \Phi(1,\ldots,n)
-    =
-    \frac{1}{\sqrt{n!}}
-    \left|
-    \begin{matrix}
-      \psi_1(1)&\psi_2(1)&\cdots&\psi_n(1)\\
-      \psi_1(2)&\psi_2(2)&\cdots&\psi_n(2)\\
-      \vdots    &\vdots    &\ddots&\vdots    \\
-      \psi_1(n)&\psi_2(n)&\cdots&\psi_n(n)
-    \end{matrix}
-    \right|
-\end{align}
-where the arguments \(1,\ldots,n\) are short hand for the spin,
-\(s_1,\ldots,s_n\), and spatial, \(\mathbf{r}_1,\ldots,\mathbf{r}_n\), degrees
-of freedom of individual electrons.
-This variational condition can be written as an eigenvalue equation of a
-one-body ``Fock'' operator which represents an effective Hamiltonian for the
-interaction of an electron with the mean field of the other electrons.
 \begin{equation}
-    \hat{f}
-    \psi_i
+    \hat{g}(i,j)
     =
-    \epsilon_i
-    \psi_i
+    \frac{1}{|\hat{\mathbf{r}}_i-\hat{\mathbf{r}}_j|}
 \end{equation}
-Once we have solved for these variationally optimal ``Hartree-Fock'' orbitals,
-the expectation value \(\langle\Phi|\hat{H}_e|\Phi\rangle\) is itself a good
-first approximation to the electronic energy.
-More importantly, however, when we use this new set of Hartree-Fock spin-orbitals, $\{\psi_p\}$, the FCI expansion tends to converge much more quickly to the true wavefunction.
-Specifically, when we rewrite equation~\ref{eq:full-ci-wavefunction-expansion}
-in terms of single $\{\Phi_i^a\}$, double $\{\Phi_{ij}^{ab}\}$, triple
-$\{\Phi_{ijk}^{abc}\}$, etc.\ replacements of the orbitals in the Hartree-Fock
-determinant $\Phi$ with the remaining orbitals in the basis
-\begin{align}
-  \Psi
-=
-  \Phi
-+
-  \sum_{\substack{a\\i}}
-  \Phi_i^ac_a^i
-+
-  \sum_{\substack{a<b\\i<j}}
-  \Phi_{ij}^{ab}c_{ab}^{ij}
-+
-  \sum_{\substack{a<b<c\\i<j<k}}
-  \Phi_{ijk}^{abc}c_{abc}^{ijk}
-  +\ldots
-\end{align}
-the coefficients tend to be very small, and are often virtually negligible for higher than quadruple replacements.
 
-Our starting point in density cumulant theory (DCT) is to express the electronic
-energy as a trace of the one- and antisymmetrized two-electron integrals (\(
-h_p^q \) and \(\overline{g}_{pq}^{rs}\)) with the reduced one- and two-body
-density matrices (\(\gamma^p_q\) and \(\gamma^{pq}_{rs}\)):
 \begin{equation}
-    \label{eq:energy-expression}
-    E
+    \mathcal{H}^n
     =
-    h_p^q
-    \gamma^p_q
-    +
-    \tfrac{1}{4}
-    \overline{g}_{pq}^{rs}
-    \gamma^{pq}_{rs}
+    \mathcal{H}(1)\otimes\cdots\otimes\mathcal{H}(n)
 \end{equation}
-where summation over the repeated indices is implied.
-In DCT, the two-body density matrix \(\gamma^{pq}_{rs}\) is expanded in terms of
-its connected part, the two-body density cumulant ($\lambda^{pq}_{rs}$), and its
-disconnected part, which is given by an antisymmetrized product of one-body
-density matrices:\cite{Kutzelnigg:2006p171101}
+
 \begin{equation}
-    \label{eq:two-body-n-rep}
-    \gamma^{pq}_{rs}
-    =
-    \langle\Psi|
-    a^{pq}_{rs}
     |\Psi\rangle
     =
-    \lambda^{pq}_{rs}
-    +
-    P_{(r/s)}
-    \gamma^p_r
-    \gamma^q_s
+    \sum_{p_1\cdots p_n}
+    c_{p_1\cdots p_n}
+    |\psi_{p_1}\rangle
+    \otimes
+    \cdots
+    \otimes
+    |\psi_{p_n}\rangle
 \end{equation}
-where \(P_{(r/s)}v_{rs} = v_{rs} - v_{sr}\) denotes antisymmetrization and
-\mbox{$a^{pq}_{rs}=a^{\dag}_{p}a^{\dag}_{q}a^{}_{s}a^{}_{r}$} is the two-body operator in second quantization.
-The one-body density matrix \(\gamma^p_q\) is determined from its non-linear
-relationship to the cumulant's partial trace:\cite{Sokolov:2013p024107}
-\begin{equation}
-    \label{eq:one-body-n-rep}
-    \gamma^p_q
-    =
-    \gamma^p_r
-    \gamma^r_q
-    -
-    \lambda^{pr}_{qr}
-\end{equation}
-This reduces \cref{eq:energy-expression} to a functional of the two-body
-cumulant and the basis of spin-orbitals, thereby defining the DCT energy
-functional.
-The density cumulant is parametrized by choosing a specific Ansatz for the
-wavefunction \(|\Psi\rangle\) such that\cite{Sokolov:2014p074111}
-\begin{equation}
-    \label{eq:cumulant-parametrization}
-    \lambda^{pq}_{rs}
-    =
-    \langle\Psi|
-    a^{pq}_{rs}
-    |\Psi\rangle_\mathrm{c}
-\end{equation}
-where $\mathrm{c}$ indicates that only fully connected terms are included in the
-parametrization.
-\Cref{eq:cumulant-parametrization} can be considered as a set of
-\(n\)-representability conditions that ensure that the resulting one- and
-two-electron density matrices represent a physical \(n\)-electron wavefunction.
-To compute the DCT energy, the functional \eqref{eq:energy-expression} is made
-stationary with respect to all of its parameters.
-Importantly, due to the connected nature of \cref{eq:cumulant-parametrization},
-DCT is both size-consistent and size-extensive for any parametrization of
-\(|\Psi\rangle\), and is exact in the limit of a complete
-parametrization.\cite{Sokolov:2014p074111}
 
-In this work, we consider the ODC-12
-method,\cite{Sokolov:2013p024107,Sokolov:2013p204110} which parametrizes the
-cumulant through a unitary treatment of single excitations and a linear
-expansion of double excitations.
+
+Two problems led to particle stats: the anomalous Zeeman effect, and the absence
+of electron {\itshape bunching}.
+In an orbital picture, you would expect all of the electrons to fall in the
+lowest energy state, such that the ground state is qualitatively described by a
+product
 \begin{equation}
-    \label{eq:odc12-wavefunction}
-    |\Psi\rangle
-    =
-    e^{T_1-T_1^\dagger}
-    (1 + T_2)
-    |\Phi\rangle
+    \Psi_0(1,\ldots,n)
+    \approx
+    \psi_0(1)
+    \cdots
+    \psi_0(n)
 \end{equation}
-\begin{equation}
-    T_1
-    =
-    \mathbf{t}_1\cdot\mathbf{a}_1
-    =
-    t_a^i
-    a^a_i
-\end{equation}
-\begin{equation}
-    T_2
-    =
-    \mathbf{t}_2\cdot\mathbf{a}_2
-    =
-    \tfrac{1}{4}
-    t_{ab}^{ij}
-    a^{ab}_{ij}
-\end{equation}
-The exponential singles operator \(e^{T_1-T_1^\dagger}\) has the effect of a
-unitary transformation of the spin-orbital basis and is incorportated in our
-implementation of the ODC-12 method by optimizing the
-orbitals.\cite{Sokolov:2013p204110}
-The \(\mathbf{t}_1\) and \(\mathbf{t}_2\) parameters are obtained from the
-stationarity conditions
-\begin{equation}
-    \label{eq:stationarity_conditions}
-    \dfrac{\partial E}{\partial \mathbf{t}_1^\dagger}
-    \overset{!}{=}
-    0 \ ,
-    \qquad
-    \dfrac{\partial E}{\partial \mathbf{t}_2^\dagger}
-    \overset{!}{=}
-    0
-\end{equation}
-and are used to compute the ODC-12 energy.
-Explicit equations for the stationarity conditions are given in Refs.\@
-\citenum{Sokolov:2013p024107} and \citenum{Sokolov:2013p204110}.
-Although in ODC-12 the wavefunction parametrization is linear with respect
-to double excitations (\cref{eq:odc12-wavefunction}), the ODC-12 energy
-stationarity conditions are non-linear in $\mathbf{t}_2$ due to the non-linear
-relationship between the one-particle density matrix and the density cumulant
-(\cref{eq:one-body-n-rep}).\cite{Sokolov:2013p024107} Neglecting the non-linear
-$\mathbf{t}_2$ terms in \cref{eq:stationarity_conditions} results in the
-equations that define the linearized orbital-optimized  coupled cluster doubles
-method (OLCCD).
-This method is equivalent to the orbital-optimized coupled electron pair
-approximation zero (OCEPA$_0$).\cite{Bozkaya:2013p054104}
+which is indeed what you find for bosons.
+
+Paul describing spin before people knew what it was (Pauli:1925p373):
+``The closed energy configurations contribute nothing to the magnetic moment or
+angular momentum of the atom.
+In particular, in alkali metals the angular momentum values of the atom and its
+energy changes in the presence of an external magnetic field are appropriately
+interpreted as the sole working of the optically active electron, and the same
+situation is thought to be the case in the observations of the anomalous Zeeman
+effect.
+From this standpoint, the doublet structure of the alkali spectra, as well as
+the breakdown of Larmor's theorem, must therefore come from some intrinsic,
+classically non-describable type of two-valuedness that is a characteristic of
+the optically active electron's state.''
+Pauli proposed this without proposing any model for this extra degree of
+freedom.
+That was the contribution of Uhlenbeck and Goudsmit in 1926.
+
+
+Pauli exlusion (Pauli:1925p756):
+``By considering the case of strong magnetic fields we can reduce [E.~C.]
+Stoner's result, that the number of electrons in a completed subgroup [of an
+atom] is the same as the number of the corresponding terms of the Zeeman effect
+of the alkali spectra, to the following more general rule about the occurrence
+of equivalent electrons in an atom:
+{\itshape
+    There can never be two or more equivalent electrons in an atom for which in
+    strong fields the values of all quantum numbers \(n, k_1, k_2, m_1\) (or,
+    equivalently \(n, k_1, m_1, m_2\)) are  the same.
+    If an electron is present in the atom for which these quantum numbers (in an
+    external field) have definite values, this state is ``occupied.''%
+}
+\dots We cannot give a further justification for this rule, but it seems to be a
+very plausible one.
+It refers, as mentioned, first of all to the case of strong field.
+However, from thermodynamic arguments (the invariance of statistic weights under
+adiabatic transformations of the system) it follows that the number of
+stationary states of an atom must be the same in strong and weak fields for
+given values of the number \(k_1\) and \(k_2\) of the separate electrons and a
+value of \(\overline{m_1}=\sum m_1\) for the whole atom.''
+
+This is in contrast to photons in stimulated emission, wehre they are all forced
+to occupy the same state.

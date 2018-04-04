@@ -14,25 +14,27 @@
 \section{Abstract}
 
 We present a linear-response formulation of density cumulant functional theory
-(DCT) that provides accurate access to many electronic states.
-DCT expresses the electronic energy as a Hermitian, size-extensive, and
-stationary functional of the one-particle density matrix and the two-particle
-density cumulant.
-In the original DCT formulation only the information about a single electronic
+(DCT) that provides accurate access to many electronic states. 
+In the original DCT formulation, only the information about a single electronic
 state (usually, the ground state) is obtained.
 In this research, we combine DCT with linear response theory to obtain
 information about many electronic states simultaneously.
 We discuss the derivation of linear-response DCT, present its implementation for
-the ODC-12 method (LR-ODC-12), and benchmark its performance against highly
-accurate equation-of-motion coupled cluster theory with up to full triple
-excitations (EOM-CCSDT).
-Our results for a set of small molecules demonstrate that LR-ODC-12 vertical
-excitation energies are in closer agreement with EOM-CCSDT than those obtained
-from equation-of-motion coupled cluster theory with up to double excitations
-(EOM-CCSD).
-In addition, we report a linear-response formulation of the orbital-optimized
-linearized coupled cluster theory with double excitations (LR-OLCCD), which we
-obtain by neglecting the non-linear terms in the LR-ODC-12 equations.
+the ODC-12 method (LR-ODC-12), and benchmark its performance for excitation in
+energies in small molecules (\ce{N2}, \ce{CO}, \ce{HCN}, \ce{HNC}, \ce{C2H2},
+and \ce{H2CO}), as well as challenging excited states in ethylene, butadiene,
+and hexatriene. 
+For small molecules, LR-ODC-12 shows smaller mean absolute errors in excitation
+energies than equation-of-motion coupled cluster theory with single and double
+excitations (EOM-CCSD), relative to the reference data from EOM-CCSDT\@.
+In a study of butadiene and hexatriene, LR-ODC-12 correctly describes the
+relative energies of the singly-excited $1{}^1\mathrm{B_{u}}$ and the
+doubly-excited $2{}^1\mathrm{A_{g}}$ states, in an excellent agreement with
+highly accurate results from semistochastic heat-bath configuration interaction,
+while EOM-CCSD overestimates the energy of the $2{}^1\mathrm{A_{g}}$ state by
+almost 1 eV.
+Our results demonstrate that LR-DCT is a promising theoretical approach for
+excited states of molecules. 
 
 
 \section{Introduction}
@@ -129,24 +131,159 @@ particular symmetry (usually, the ground state). By combining DCT with linear
 response theory, we remove this limitation, providing access to many electronic
 states simultaneously.
 
-We begin with a brief overview of linear response theory (\cref{sec:lr}).
-We then discuss the derivation of linear-response theory for the ODC-12 method
-(LR-ODC-12, \cref{sec:lr_odc12}).
-In section \cref{sec:olccd}, 
-we derive equations for the linear-response orbital-optimized linearized
-coupled cluster theory with double excitations (LR-OLCCD), which we obtain by
-neglecting the non-linear terms in the LR-ODC-12 equations. 
-We outline the
-computational details in \cref{sec:comp_details}.
+We begin with a brief overview of DCT (\cref{sec:dct}) and linear response
+theory (\cref{sec:lr}). We then discuss the derivation of linear-response theory
+for the ODC-12 method (LR-ODC-12, \cref{sec:lr_odc12}).
+In section \cref{sec:olccd}, we derive equations for the linear-response
+orbital-optimized linearized coupled cluster theory with double excitations
+(LR-OLCCD), which we obtain by neglecting the non-linear terms in the LR-ODC-12
+equations. 
+We outline the computational details in \cref{sec:comp_details}.
 In section \cref{sec:results}, we demonstrate that the LR-ODC-12 excitation
 energies are size-intensive (\cref{sec:size_intensivity}), test the performance
 of LR-ODC-12 for the dissociation of \ce{H2} (\cref{sec:two_electron}), and
-benchmark the accuracy of LR-ODC-12 for vertical
-excitation energies of small molecules (\cref{sec:vert_excit}).
-% Finally, we present our conclusions in section \cref{sec:conclusions}.
+benchmark the accuracy of LR-ODC-12 for vertical excitation energies of small
+molecules (\cref{sec:vert_excit}), as well as excited states in ethylene,
+butadiene, and hexatriene (\cref{sec:alkenes}).
+Finally, we present our conclusions in section \cref{sec:conclusions}. 
 
 
 \section{Theory}
+
+\subsection{Overview of Density Cumulant Theory}
+\label{sec:dct}
+
+We begin with a brief overview of DCT for a single electronic state.
+Our starting point is to express the electronic energy as a trace of the one-
+and antisymmetrized two-electron integrals (\( h_p^q \) and
+\(\overline{g}_{pq}^{rs}\)) with the reduced one- and two-body density matrices
+(\(\gamma^p_q\) and \(\gamma^{pq}_{rs}\)):
+\begin{equation}
+    \label{eq:energy-expression}
+    E
+    =
+    h_p^q
+    \gamma^p_q
+    +
+    \tfrac{1}{4}
+    \overline{g}_{pq}^{rs}
+    \gamma^{pq}_{rs}
+\end{equation}
+where summation over the repeated indices is implied.
+In DCT, the two-body density matrix \(\gamma^{pq}_{rs}\) is expanded in terms of
+its connected part, the two-body density cumulant ($\lambda^{pq}_{rs}$), and its
+disconnected part, which is given by an antisymmetrized product of one-body
+density matrices:\cite{Kutzelnigg:2006p171101}
+\begin{equation}
+    \label{eq:two-body-n-rep}
+    \gamma^{pq}_{rs}
+    =
+    \langle\Psi|
+    a^{pq}_{rs}
+    |\Psi\rangle
+    =
+    \lambda^{pq}_{rs}
+    +
+    P_{(r/s)}
+    \gamma^p_r
+    \gamma^q_s
+\end{equation}
+where \(P_{(r/s)}v_{rs} = v_{rs} - v_{sr}\) denotes antisymmetrization and
+\mbox{$a^{pq}_{rs}=a^{\dag}_{p}a^{\dag}_{q}a^{}_{s}a^{}_{r}$} is the two-body operator in second quantization.
+The one-body density matrix \(\gamma^p_q\) is determined from its non-linear
+relationship to the cumulant's partial trace:\cite{Sokolov:2013p024107}
+\begin{equation}
+    \label{eq:one-body-n-rep}
+    \gamma^p_q
+    =
+    \gamma^p_r
+    \gamma^r_q
+    -
+    \lambda^{pr}_{qr}
+\end{equation}
+This reduces \cref{eq:energy-expression} to a functional of the two-body
+cumulant and the basis of spin-orbitals, thereby defining the DCT energy
+functional.
+The density cumulant is parametrized by choosing a specific Ansatz for the
+wavefunction \(|\Psi\rangle\) such that\cite{Sokolov:2014p074111}
+\begin{equation}
+    \label{eq:cumulant-parametrization}
+    \lambda^{pq}_{rs}
+    =
+    \langle\Psi|
+    a^{pq}_{rs}
+    |\Psi\rangle_\mathrm{c}
+\end{equation}
+where $\mathrm{c}$ indicates that only fully connected terms are included in the
+parametrization.
+\cref{eq:cumulant-parametrization} can be considered as a set of
+\(n\)-representability conditions that ensure that the resulting one- and
+two-electron density matrices represent a physical \(n\)-electron wavefunction.
+To compute the DCT energy, the functional \eqref{eq:energy-expression} is made
+stationary with respect to all of its parameters.
+Importantly, due to the connected nature of \cref{eq:cumulant-parametrization},
+DCT is both size-consistent and size-extensive for any parametrization of
+\(|\Psi\rangle\), and is exact in the limit of a complete
+parametrization.\cite{Sokolov:2014p074111}
+
+In this work, we consider the ODC-12
+method,\cite{Sokolov:2013p024107,Sokolov:2013p204110} which parametrizes the
+cumulant through a unitary treatment of single excitations and a linear
+expansion of double excitations.
+\begin{equation}
+    \label{eq:odc12-wavefunction}
+    |\Psi\rangle
+    =
+    e^{T_1-T_1^\dagger}
+    (1 + T_2)
+    |\Phi\rangle
+\end{equation}
+\begin{equation}
+    T_1
+    =
+    \mathbf{t}_1\cdot\mathbf{a}_1
+    =
+    t_a^i
+    a^a_i
+\end{equation}
+\begin{equation}
+    T_2
+    =
+    \mathbf{t}_2\cdot\mathbf{a}_2
+    =
+    \tfrac{1}{4}
+    t_{ab}^{ij}
+    a^{ab}_{ij}
+\end{equation}
+The exponential singles operator \(e^{T_1-T_1^\dagger}\) has the effect of a
+unitary transformation of the spin-orbital basis and is incorportated in our
+implementation of the ODC-12 method by optimizing the
+orbitals.\cite{Sokolov:2013p204110}
+The \(\mathbf{t}_1\) and \(\mathbf{t}_2\) parameters are obtained from the
+stationarity conditions
+\begin{equation}
+    \label{eq:stationarity_conditions}
+    \dfrac{\partial E}{\partial \mathbf{t}_1^\dagger}
+    \overset{!}{=}
+    0 \ ,
+    \qquad
+    \dfrac{\partial E}{\partial \mathbf{t}_2^\dagger}
+    \overset{!}{=}
+    0
+\end{equation}
+and are used to compute the ODC-12 energy.
+Explicit equations for the stationarity conditions are given in Refs.\@
+\citenum{Sokolov:2013p024107} and \citenum{Sokolov:2013p204110}.
+Although in ODC-12 the wavefunction parametrization is linear with respect
+to double excitations (\cref{eq:odc12-wavefunction}), the ODC-12 energy
+stationarity conditions are non-linear in $\mathbf{t}_2$ due to the non-linear
+relationship between the one-particle density matrix and the density cumulant
+(\cref{eq:one-body-n-rep}).\cite{Sokolov:2013p024107} Neglecting the non-linear
+$\mathbf{t}_2$ terms in \cref{eq:stationarity_conditions} results in the
+equations that define the linearized orbital-optimized  coupled cluster doubles
+method (OLCCD).
+This method is equivalent to the orbital-optimized coupled electron pair
+approximation zero (OCEPA$_0$).\cite{Bozkaya:2013p054104}
 
 \subsection{Linear Response Theory}
 \label{sec:lr}
