@@ -1,7 +1,7 @@
 \chapter[%
-    Introduction
+    Introduction and Literature Review
 ]{%
-    Introduction
+    Introduction and Literature Review
 }
 
 \section{One-Electron States}
@@ -13,9 +13,7 @@ Hydrogen or silver or alkali metals
     =
     \epsilon
     |\psi\rangle
-\end{equation}
-
-\begin{equation}
+    \qquad
     \hat{h}
     =
     \tfrac{1}{2}
@@ -28,6 +26,17 @@ Hydrogen or silver or alkali metals
     \sum_a^{\mathrm{nuclei}}
     \frac{q_a}{|\mathbf{r}_a-\hat{\mathbf{r}}|}
 \end{equation}
+\begin{equation}
+    \mathcal{H}
+    =
+    L^2(\mathbb{R}^3)
+\end{equation}
+Assume the motion of the nuclei is infinitely slow on the time-scale of
+electronic motion (Born-Oppenheimer approximation).\\
+Assume the electron only sees an average field describing the shielding due to
+the other electrons (mean-field approximation).
+
+\subsection{Symmetry}
 
 Symmetry properties of the potential give us spatial symmetries
 \begin{equation}
@@ -40,6 +49,55 @@ Symmetry properties of the potential give us spatial symmetries
 point groups and lattice groups.
 For one electron atoms the O(3) symmetries are described by the conservation of
 angular momentum, \(\hat{\mathbf{j}}^2\) and \(\hat{j}_z\).
+
+\noindent
+Atoms: angular momentum (s, p, d)
+
+\noindent
+Free electrons: plane waves
+
+\noindent
+Molecules and crystals are described by symmetry adapted combinations of these
+functions
+
+\subsection{Naive \(n\)-Electron States and the Mean Field}
+The mean field of the electrons could be derived by analyzing the full
+Schr\"odinger equation
+\begin{equation}
+    \hat{H}
+    |\Psi\rangle
+    =
+    E
+    |\Psi\rangle
+    \qquad
+    \hat{H}_1
+    =
+    \sum_{i=1}^n
+    \hat{h}_i
+    +
+    \sum_{i=1}^n
+    \sum_{j=i+1}^n
+    \hat{g}_{ij}
+    \qquad
+    \hat{g}_{ij}
+    =
+    \frac{1}{|\hat{\mathbf{r}}_i-\hat{\mathbf{r}}_j|}
+\end{equation}
+\begin{equation}
+    \mathcal{H}_n
+    =
+    \mathcal{H}_1
+    \otimes
+    \cdots
+    \otimes
+    \mathcal{H}_1
+\end{equation}
+
+Mean field is described by assuming statistically independent electrons.
+
+Discuss how symmetries combine for the \(n\)-electron state.
+
+\section{Spin and Pauli Exclusion}
 
 Goudsmit-Uhlenbeck (Uhlenbeck:1926p264) give us spin, which is a constant intrinsic to the electron
 as a particle
@@ -79,44 +137,6 @@ spin can be oriented up or down along a given axis
     L^2(\mathbb{R}^3)
     \otimes
     \mathrm{SU}(2)
-\end{equation}
-
-
-\section{Many-Electron States}
-
-\begin{equation}
-    \hat{H}
-    =
-    \sum_{i=1}^n
-    \hat{h}(i)
-    +
-    \sum_{i=1}^n
-    \sum_{j=i+1}^n
-    \hat{g}(i,j)
-\end{equation}
-
-\begin{equation}
-    \hat{g}(i,j)
-    =
-    \frac{1}{|\hat{\mathbf{r}}_i-\hat{\mathbf{r}}_j|}
-\end{equation}
-
-\begin{equation}
-    \mathcal{H}^n
-    =
-    \mathcal{H}(1)\otimes\cdots\otimes\mathcal{H}(n)
-\end{equation}
-
-\begin{equation}
-    |\Psi\rangle
-    =
-    \sum_{p_1\cdots p_n}
-    c_{p_1\cdots p_n}
-    |\psi_{p_1}\rangle
-    \otimes
-    \cdots
-    \otimes
-    |\psi_{p_n}\rangle
 \end{equation}
 
 
@@ -173,5 +193,67 @@ stationary states of an atom must be the same in strong and weak fields for
 given values of the number \(k_1\) and \(k_2\) of the separate electrons and a
 value of \(\overline{m_1}=\sum m_1\) for the whole atom.''
 
-This is in contrast to photons in stimulated emission, wehre they are all forced
+This is in contrast to photons in stimulated emission, where they are all forced
 to occupy the same state.
+
+\subsection{Antisymmetry}
+
+The original explanation of Pauli exclusion in terms of particle ansitymmetry
+goes back to Heisenberg's attempt to explain the spectrum of Helium.
+\\
+In May of 1926, Heisenberg informs Pauli that he has found `a rather
+decisive argument that your prohibition of the equivalent orbitals is related to
+the singlet-triplet spacing' in Helium (Enz:1983p993), which he explains in a
+paper the following month (Heisenberg:1926p411).
+\\
+There he explains the connection between particle symmetry and Pauli exclusion
+and proposes the form of the Slater determinant.
+\begin{equation}
+    |\Phi\rangle
+    =
+    \tfrac{1}{\sqrt{n!}}
+    \sum_{\pi\in \mathrm{S}_n}
+    (-)^\pi
+    \psi_{1}(\pi_1)
+    \cdots
+    \psi_{n}(\pi_n)
+\end{equation}
+
+
+
+\section{Fock Space}
+
+\begin{equation}
+    \hat{H}
+    =
+    \sum_{i=1}^n
+    \hat{h}(i)
+    +
+    \sum_{i=1}^n
+    \sum_{j=i+1}^n
+    \hat{g}(i,j)
+\end{equation}
+
+\begin{equation}
+    \hat{g}(i,j)
+    =
+    \frac{1}{|\hat{\mathbf{r}}_i-\hat{\mathbf{r}}_j|}
+\end{equation}
+
+\begin{equation}
+    \mathcal{H}^n
+    =
+    \mathcal{H}(1)\otimes\cdots\otimes\mathcal{H}(n)
+\end{equation}
+
+\begin{equation}
+    |\Psi\rangle
+    =
+    \sum_{p_1\cdots p_n}
+    c_{p_1\cdots p_n}
+    |\psi_{p_1}\rangle
+    \otimes
+    \cdots
+    \otimes
+    |\psi_{p_n}\rangle
+\end{equation}

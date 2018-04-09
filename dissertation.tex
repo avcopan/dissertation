@@ -44,6 +44,14 @@
 % Reduce vertical spacing in tables and arrays
 \renewcommand*{\arraystretch}{0.6}
 
+% Use capitalized cref names
+\crefname{figure}{Figure}{Figures}      
+\crefname{table}{Table}{Tables}         
+\crefname{equation}{Eq.}{Eqs.}          
+\crefname{chapter}{Chapter}{Chapters}   
+\crefname{section}{Section}{Sections}   
+\crefname{subsection}{Section}{Sections}
+
 % Define some macros
 \newcommand{\hartree}{\ensuremath{E_\mathrm{h}}\xspace}
 \newcommand{\mhartree}{\ensuremath{\mathrm{m}E_\mathrm{h}}\xspace}
@@ -157,7 +165,7 @@ Electronic Version Approved:\\[12pt]
 Suzanne Barbour\\
 Dean of the Graduate School\\
 The University of Georgia\\
-December 2018
+May 2018
 \end{flushleft}
 
 \newpage
@@ -175,6 +183,8 @@ December 2018
 \pagenumbering{arabic}
 
 % Chapters. Organize and name as you wish, as long as these refer to files that exist.
+
+\nocite{Copan:2014p2389}
 \input{introduction}
 \input{benchmark}
 \input{response}

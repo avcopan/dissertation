@@ -1,48 +1,75 @@
 \chapter[%
-    Linear-Response Density Cumulant Theory for Excited States:\\
-	Better Algorithms, Bigger Systems
+    Algorithms for Linear-Response Density Cumulant Theory
 ]{%
-    Linear-Response Density Cumulant Theory for Excited States:\\
-	Better Algorithms, Bigger Systems
+    Algorithms for Linear-Response Density Cumulant Theory
 }
 \label{ch:davidson}
 
+\begin{enumerate}
+    \item
+        \cref{ch:response} presents a new model for electronic excited states,
+        which is based on a linear-response formulation of density cumulant
+        theory.
+    \item
+        In this model, excitation energies and transition properties are
+        computed as generalized eigenpairs of the DCT energy Hessian with
+        respect to the parameters of the energy functional.
+    \item
+        Since number of parameters in the ODC-12 variant of density cumulant
+        theory scales as
+        \(
+            \mathcal{O}(o^2v^2)
+        \)
+        with the number of occupied (\(o\)) and virtual (\(v\)) orbitals, the
+        memory requirement for the Hessian matrix scales with the fourth power
+        of \(o\) and \(v\), and the number of floating point operations needed
+        to diagonalize it scales with the sixth power of these dimensions.
+    \item
+        Such an approach will rapidly overwhelm available computing resources
+        even for relatively small molecules.
+\end{enumerate}
 
-\section{Abstract}
 
-We have recently proposed the LR-ODC-12 model for electronic excited states, a
-linear response extension of density cumulant theory with linearized double
-excitations and variationally optimized orbitals.
-Our benchmark calculations have shown that LR-ODC-12 is consistently more
-accurate than its popular equation-of-motion coupled-cluster counterpart,
-EOM-CCSD\@.
-Here we propose improved algorithms for solving the LR-ODC-12 equations in order
-to extend its range of application to larger systems.
-We use the new implementation to study the valence spectra of ethylene,
-butadiene, and hexatriene.
+\section{The Davidson Algorithm}
+\begin{enumerate}
+    \item
+        For the study of valence and low-lying Rydberg states, the cost of the
+        LR-ODC-12 method can be drastically reduced by the use of direct matrix
+        algorithms, such as the Davidson
+        algorithm.\cite{Liu:1978p49,Davidson:1975p87}
+    \item
+        Direct algorithms represent a linear transformation as a function
+        \(
+            \mathbf{L}(\cdot)
+        \)
+        mapping vectors in its domain to vectors in its codomain, rather than as
+        an array of coefficients
+        \(
+            \mathbf{L}
+            =
+            [L_{ij}]
+        \)
+        over a complete basis.
+    \item
+        That is, the result of the transformation is determined {\itshape
+        directly} without forming its matrix representation in computer memory.
+    \item
+        The Davidson algorithm applies this technique in the context of a matrix
+        diagonalization, by progressively growing a basis
+        \(
+            \{\mathbf{u}_1, \ldots,\mathbf{u}_d\}
+        \)
+        to span the lowest or highest eigenvectors of a matrix to some threshold
+        of accuracy.
+    \item
+        In the context of LR-ODC-12, this allows us to reduce our computational
+        effort to \(\mathcal{O}(o^2v^4d)\) and our memory requirement to
+        \(\mathcal{O}(o^2v^2d)\), where \(d\) is typically on the order of ten
+        times the desired number of eigenvalues.
+\end{enumerate}
 
 
-\section{Introduction}
-
-The success of ground state coupled-cluster theory comes not from CCSD
-itself, which has a relatively poor cost-accuracy ratio, but from the
-non-iterative (T) correction to CCSD, which affords truly exceptional
-accuracy relative to its cost.\cite{Stanton:1997p130}
-Coupled-cluster theory has also been extremely popular in the study of
-electronic excited states through the equation-of-motion coupled-cluster
-(EOM-CC) method,\cite{Krylov:2008p433} because it is relatively
-black-box compared to multi-reference methods like
-CASPT2\cite{Andersson:1992p1218} which require artfully chosen active
-spaces and empirical shift parameters.\cite{Zobel:2017p1482}
-Unfortunately, despite ongoing efforts to develop perturbative triples
-corrections for EOM-CCSD excitation energies, none of these attempts
-have been nearly as successful as CCSD(T).\cite{Matthews:2016p124102}
-As a result, one must resort to non-iterative triples methods like
-EOM-CC3\cite{Koch:1998p1808} or EOM-CCSDT\cite{Hirata:2000p255} to
-achieve quantitative (\(<0.1~\eV\)) accuracy, which are prohibitive even
-for modest-sized systems and basis sets.
-The LR-ODC-12 method improves on EOM-CCSD without including triples
-parameters.
+\section{The LR-ODC-12 Eigenvalue Equation}
 
 
 \section{Algorithms}
@@ -378,19 +405,6 @@ the desired (small, positive) eigenvalues are in the middle of the spectrum,
 rather than at the extremes.
 We make use of two strategies.
 
-\begin{figure}[h!]
-    \centering
-    \caption{%
-        \label{fig:davidson}
-        A schematic illustrating the sequence of reduced representations of
-        \(\mathbf{E}\) in a blocked Davidson algorithm.
-        The colored entries must be explicitly computed, whereas the gray
-        entries are determined by Hermitian symmetry.
-    }
-    \includegraphics[width=8.5cm]{figures/davidson.pdf}
-\end{figure}
-
-
 \paragraph{Strategy 1}
 One approach is to invert the eigenvalue equation, solving for the {\itshape
 largest} positive inverse eigenvalues, which is easily done by selecting the
@@ -437,8 +451,6 @@ successive groups of expansion vectors and images,
 \),
 on disk and reading them in as needed.
 These can be further subdivided into even smaller blocks if needed.
-\Cref{fig:davidson} illustrates which entries in the subspace representation
-need to be explicitly computed as we add vectors to the expansion space.
 
 
 \paragraph{Strategy 2}
@@ -446,33 +458,127 @@ Assuming real matrices, we can add and subtract the block rows of
 \cref{eq:linear-response-eigenvalue-equation} to arrive at the following pair of
 equations.
 \begin{equation}
-    (\mathbf{A} \pm \mathbf{B})
-    (\mathbf{x}_k  \pm \mathbf{y}_k)
+    \label{eq:a-plus-b}
+    (\mathbf{A} + \mathbf{B})
+    (\mathbf{x}_k + \mathbf{y}_k)
     =
     \omega_k
     \mathbf{S}
-    (\mathbf{x}_k \mp \mathbf{y}_k)
+    (\mathbf{x}_k - \mathbf{y}_k)
 \end{equation}
-Substituting one into the other leads to a non-symmetric eigenvalue equation for
-the squares of the excitation energies.
 \begin{equation}
-    \mathbf{H}
+    \label{eq:a-minus-b}
+    (\mathbf{A} - \mathbf{B})
     (\mathbf{x}_k - \mathbf{y}_k)
     =
-    \omega_k^2
-    (\mathbf{x}_k - \mathbf{y}_k)
-    ,
-    \quad
-    \mathbf{H}
+    \omega_k
+    \mathbf{S}
+    (\mathbf{x}_k + \mathbf{y}_k)
+\end{equation}
+Multiplying both equations by \(\mathbf{S}^{-1}\), we can write them as follows
+\begin{equation}
+    \mathbf{H}^+(\mathbf{c}_k^+)
+    =
+    \omega_k
+    \mathbf{c}_k^-
+\end{equation}
+\begin{equation}
+    \mathbf{H}^-(\mathbf{c}_k^-)
+    =
+    \omega_k
+    \mathbf{c}_k^+
+\end{equation}
+where we have defined the following intermediates
+\begin{equation}
+    \mathbf{H}^{\pm}
     \equiv
     \mathbf{S}^{-1}
-    (\mathbf{A} + \mathbf{B})
-    \mathbf{S}^{-1}
-    (\mathbf{A} - \mathbf{B})
+    (\mathbf{A} \pm \mathbf{B})
 \end{equation}
-By halving the dimension of the problem and eliminating the metric, this reduces
-the memory requirements by a factor of three, provided we do not need to recover
-the full eigenvector \(\mathbf{z}_k\) to compute transition properties.
+\begin{equation}
+    \mathbf{c}_k^{\pm}
+    \equiv
+    \mathbf{x}_k \pm \mathbf{y}_k
+\end{equation}
+This provides a reduced eigenvalue equation for the squared excitations energies
+\begin{equation}
+    \overline{\mathbf{H}}(\mathbf{c}_k^+)
+    =
+    \omega_k^2
+    \mathbf{c}_k^+
+\end{equation}
+\begin{equation}
+    \overline{\mathbf{H}}
+    =
+    \mathbf{H}^-
+    \mathbf{H}^+
+\end{equation}
+The blocks of the generalized eigenvector can then be recovered as follows
+\begin{equation}
+    \mathbf{x}_k
+    =
+    \tfrac{1}{2}
+    (
+        \mathbf{c}_k^+
+        +
+        \omega_k^{-1}
+        \mathbf{H}^+(\mathbf{c}_k^+)
+    )
+\end{equation}
+\begin{equation}
+    \mathbf{y}_k
+    =
+    \tfrac{1}{2}
+    (
+        \mathbf{c}_k^+
+        -
+        \omega_k^{-1}
+        \mathbf{H}^+(\mathbf{c}_k^+)
+    )
+\end{equation}
+
+Which also shows that any formula can be reduced to a formula for the reduced
+eigenvalues and eigenvectors.
+For example, assuming real integral arrays (\(\mathbf{p}^*=\mathbf{p}\))
+\begin{equation}
+    \mathbf{z}_k^\dagger
+    \mathbf{v}'
+    =
+    \mathbf{c}_k^{+\dagger}
+    \mathbf{p}
+\end{equation}
+and
+\begin{equation}
+    \mathbf{z}_k^\dagger
+    \mathbf{M}
+    \mathbf{z}_k
+    =
+    \mathbf{c}_k^{+\dagger}
+    \mathbf{S}
+    \mathbf{c}_k^{-}
+    =
+    \omega_k^{-1}
+    \mathbf{c}_k^{+\dagger}
+    \mathbf{S}
+    \mathbf{H}^+
+    \mathbf{c}_k^+
+\end{equation}
+\begin{equation}
+    \lim_{\omega\rightarrow \omega_k}
+    (\omega-\omega_k)
+    \langle\!\langle \hat{V}; \hat{V} \rangle\!\rangle_\omega
+    =
+    \frac{%
+        \omega_k
+        |\mathbf{c}_k^{+\dagger} \mathbf{p}|^2
+    }{% 
+        \mathbf{c}_k^{+\dagger} 
+        (\mathbf{A} + \mathbf{B})
+        \mathbf{c}_k^+
+    }
+\end{equation}
+
+
 From \cref{eq:conjugate-blocks} we can see that computing the inverse of
 \(\mathbf{S}\) requires us to invert the orbital block of the metric.
 This matrix is given by
@@ -530,594 +636,447 @@ as the square of \(\tilde{\mathbf{A}}\), since in low order we have
 \(\mathbf{B}\approx\mathbf{0}\) and \(\mathbf{S}\approx\mathbf{1}\)
 
 
-\section{Computational Details}
-
-The LR-ODC-12 and LR-OLCCD methods were implemented as a standalone Python
-program, which was interfaced with \textsc{Psi4}\cite{Parrish:2017p3185} and
-\textsc{Pyscf}\cite{Sun:2018pe1340} to obtain the one- and two-electron
-integrals.
-We used several iterations of Strategy 1, as described in \cref{sec:algorithms},
-to assign states based on the transition dipole moments and used Strategy 2 to
-fully converge the energies.
-We used the \textsc{Q-Chem} program, version 4.4,\cite{QChem} to calculate
-EOM-CCSD values for comparison.
-The ANO-L-pVXZ (X = D, T) basis sets\cite{Widmark:1990p291} were used in the
-excitation energy computations as in Ref.~\citenum{Daday:2012p4441}.
-Frozen-core MP2/cc-pVQZ geometries were used as in
-Refs.~\citenum{Daday:2012p4441} and \citenum{Zimmerman:2017p4712}.
-
-
-\begin{table*}[h!]
-    \centering
-    \caption{%
-        \label{tab:alkenes}
-        Vertical excitation energies computed using LR-OLCCD, LR-ODC-12, and
-        EOM-CCSD for the low-lying electronic states of ethylene (\ce{C2H4}),
-        butadiene (\ce{C4H6}), and hexatriene (\ce{C6H8}).
-        Computations employed the ANO-L-pVDZ (for \ce{C4H6} and \ce{C6H8}) and
-        ANO-L-pVTZ (for \ce{C2H4}) basis sets and the MP2/cc-pVQZ optimized
-        geometries.
-        For LR-OLCCD and LR-ODC-12, oscillator strengths of the allowed
-        transitions are given in parentheses.
-        All electrons were correlated in all computations.
-    }
-    \begin{threeparttable}
-        \begin{tabular}{clccccc}
-            \hline
-            \hline
-            && EOM-CCSD & LR-OLCCD & LR-ODC-12 & SHCI\tnote{a} \\
-            \hline
-            \ce{C2H4}
-            & \(1{}^3\mathrm{B_{1u}}\) &
-            4.46 & 4.66         & 4.52         & 4.59  \\ 
-            & \(1{}^1\mathrm{B_{1u}}\) &
-            8.14 & 8.20 (1.8) & 8.14 (1.9) & 8.05 \\
-            \hline                           
-            \ce{C4H6}                        
-            & \(1{}^3\mathrm{B_{u}}\)  &
-            3.20 & 3.58 & 3.43 & 3.37 \\
-            & \(1{}^1\mathrm{B_{u}}\)  &
-            6.53 & 6.76 (4.2) & 6.67 (4.4) & 6.45 \\
-            & \(2{}^1\mathrm{A_{g}}\)  &
-            7.28 & 7.14 & 6.81 & 6.58 \\
-            \hline                           
-            \ce{C6H8}                        
-            & \(1{}^3\mathrm{B_{u}}\)  &
-            2.64 & 3.01 & 2.83 & 2.77 \\
-            & \(1{}^1\mathrm{B_{u}}\)  &
-            5.60 & 5.89 (6.5)  & 5.74 (8.1)   & 5.59 \\
-            & \(2{}^1\mathrm{A_{g}}\)  &
-            6.55 & 4.21 & 5.73 & 5.58 \\
-            \hline
-            \hline
-        \end{tabular}
-        \begin{tablenotes}
-            \item[a]
-                Also shown are the excitation energies from the semistochastic
-                heat-bath CI (SHCI) method, extrapolated to full CI
-                limit.\cite{Chien:2018p2714}
-                The $1s$ orbitals of carbon atoms were not included in the SHCI
-                correlation treatment.
-                The SHCI computations used the same basis sets and optimized
-                geometries as those used for LR-OLCCD, LR-ODC-12, and EOM-CCSD.
-        \end{tablenotes}    
-    \end{threeparttable}
-\end{table*}
-
-
-\section{Results and Discussion}
-\label{sec:alkenes}
-
-
-We apply the LR-ODC-12 method to challenging excited states of ethylene
-(\ce{C2H4}), butadiene (\ce{C4H6}), and hexatriene (\ce{C6H8}).  A reliable
-description of these electronic states requires accurate treatment of electron
-correlation.\cite{%
-    Tavan:1986p6602, Tavan:1987p4337, Nakayama:1998p157,
-    Davidson:1996p6161, Watts:1998p6979, Muller:1999p7176, Li:1999p177,
-    Starcke:2006p39, Kurashige:2004p425, Ghosh:2008p144117, Sokolov:2017p244102,
-    Schreiber:2008p134110, Zgid:2009p194107, Angeli:2010p2436, Daday:2012p4441,
-    Watson:2012p4013, Zimmerman:2017p4712%
-}
-All three molecules feature a dipole-allowed $1{}^1\mathrm{B_{u}}$ (or
-$1{}^1\mathrm{B_{1u}}$) state that is well described by a $\pi-\pi^*$
-excitation, but requires a very accurate description of dynamic correlation
-between the $\sigma$ and $\pi$ electrons.
-In butadiene and hexatriene, the $1{}^1\mathrm{B_{u}}$ state is near-degenerate
-with a dipole-forbidden $2{}^1\mathrm{A_{g}}$ state that has a substantial
-double-excitation character, requiring the description of static correlation in
-the $\pi$ and $\pi^*$
-orbitals.\cite{Kurashige:2004p425,Ghosh:2008p144117,Sokolov:2017p244102}
-For this reason, the relative energies and ordering of the $1{}^1\mathrm{B_{u}}$
-and $2{}^1\mathrm{A_{g}}$ states are very sensitive to various levels of theory.
-For example, single-reference methods truncated to single and double excitations
-are usually more accurate in describing the $1{}^1\mathrm{B_{u}}$ state than the
-$2{}^1\mathrm{A_{g}}$ state, while multi-reference methods are more reliable for
-the $2{}^1\mathrm{A_{g}}$ state, missing important dynamic correlation for the
-$1{}^1\mathrm{B_{u}}$ state.
-Very recently, Chien et al.\cite{Chien:2018p2714} reported accurate vertical
-excitation energies for the low-lying states of ethylene, butadiene, and
-hexatriene computed using semistochastic heat-bath configuration interaction
-(SHCI) extrapolated to the full CI limit.
-In this section, we will use the SHCI results to benchmark the accuracy of the
-LR-ODC-12 method.
-
-\Cref{tab:alkenes} reports the vertical excitation energies of ethylene,
-butadiene, and hexatriene computed using the EOM-CCSD, LR-OLCCD, and LR-ODC-12
-methods, along with the SHCI results from Ref.\@ \citenum{Chien:2018p2714}.
-All methods employed the same optimized geometries and basis sets (see
-\cref{tab:alkenes} for details).
-We refer to the $\mathrm{B_{1u}}$ states of \ce{C2H4} as $\mathrm{B_{u}}$ for
-brevity.
-All excitation energies decrease as the number of double bonds increases.
-For butadiene and hexatriene, the ($1{}^1\mathrm{B_{u}}$; $2{}^1\mathrm{A_{g}}$)
-excitation energies computed using the SHCI method are (6.45; 6.58) and (5.59;
-5.58) eV, respectively, indicating that the two states are nearly degenerate for
-the longer polyene.
-This feature is not reproduced by the EOM-CCSD method, which predicts the
-$1{}^1\mathrm{B_{u}}$ state energies in close agreement with SHCI, but
-significantly overestimates the energies for the doubly-excited
-$2{}^1\mathrm{A_{g}}$ state.
-As a result, the EOM-CCSD method overestimates the energy spacing between the
-$1{}^1\mathrm{B_{u}}$ and $2{}^1\mathrm{A_{g}}$ states by $\sim$ 0.6 eV and 1.0
-eV for butadiene and hexatriene, respectively. 
-
-On the contrary, the LR-ODC-12 method correctly describes the relative energies
-and ordering of the $1{}^1\mathrm{B_{u}}$ and $2{}^1\mathrm{A_{g}}$ states,
-predicting their energy spacing to be 0.14 and 0.01 eV for butadiene and
-hexatriene, respectively, in an excellent agreement with the SHCI results (0.13
-and 0.01 eV).
-For the singlet excited states, the LR-ODC-12 method consistently overestimates
-the SHCI excitation energies by $\sim$ 0.1 -- 0.2 eV.
-For the $1{}^3\mathrm{B_{u}}$ state, the LR-ODC-12 errors are smaller in
-magnitude ($\sim$ 0.06 eV).
-Importantly, these results suggest that the LR-ODC-12 method provides a balanced
-description of the excited states with different electronic structure effects,
-as illustrated by its consistent performance for the $1{}^3\mathrm{B_{u}}$,
-$1{}^1\mathrm{B_{u}}$, and $2{}^1\mathrm{A_{g}}$ states in ethylene, butadiene,
-and hexatriene.
-
-Comparing the LR-ODC-12 and the LR-OLCCD results suggests that including the
-non-linear terms in the description of electron correlation significantly
-improves the agreement with the reference SHCI data.
-In particular, for the $1{}^3\mathrm{B_{u}}$ and $1{}^1\mathrm{B_{u}}$ states,
-the LR-OLCCD errors are larger than the LR-ODC-12 errors by $\sim$ 0.15 eV.
-For the doubly-excited $2{}^1\mathrm{A_{g}}$ state, LR-OLCCD shows very large
-errors of 0.56 and $-$1.37 eV for butadiene and hexatriene, respectively.
-These results indicate that the non-linear terms included in LR-ODC-12 are very
-important for the description of excited states with double-excitation
-character.
-
+\begin{equation}
+    \mathbf{H}^\dagger
+    (\mathbf{S}(\mathbf{x}_k - \mathbf{y}_k))
+    =
+    \omega_k^2
+    (\mathbf{S}(\mathbf{x}_k - \mathbf{y}_k))
+\end{equation}
 
 
 \begin{subappendices}
-    \section{LR-ODC-12 Linear Transformation Formulas}
-    \label{sec:linear-transformation-formulas}
+\section{LR-ODC-12 Linear Transformation Formulas}
+\label{sec:linear-transformation-formulas}
 
-    \begin{equation}
-        \begin{array}{r@{\,}l}
-            (\mathbf{A}_{11}(\mathbf{u}_{\mu,1}))_{ia}
-            =
-            &
-            h_j^i
-            \gamma_a^b
-            u_{\mu,b}^j
-            +
-            h_a^b
-            \gamma_j^i
-            u_{\mu,b}^j
-            -
-            (\bar{\mathbf{F}})_j^i
-            u_{\mu,a}^j
-            -
-            (\bar{\mathbf{F}})_a^b
-            u_{\mu,b}^i
-            +
-            \overline{g}_{nj}^{mi}
-            \gamma_{ma}^{nb}
-            u_{\mu,b}^j
-            \\[5pt]
-            &
-            +
-            \overline{g}_{ma}^{nb}
-            \gamma_{nj}^{mi}
-            u_{\mu,b}^j
-            +
-            \overline{g}_{jf}^{ie}
-            \gamma_{ae}^{bf}
-            u_{\mu,b}^j
-            +
-            \overline{g}_{ae}^{bf}
-            \gamma_{jf}^{ie}
-            u_{\mu,b}^j
-            +
-            \overline{g}_{me}^{ib}
-            \gamma_{ja}^{me}
-            u_{\mu,b}^j
-            \\[5pt]
-            &
-            +
-            \overline{g}_{ja}^{me}
-            \gamma_{me}^{ib}
-            u_{\mu,b}^j
-        \end{array}
-    \end{equation}
-
-    \begin{equation}
-        \begin{array}{r@{\,}l}
-            (\mathbf{B}_{11}(\mathbf{u}_{\mu,1}))_{ia}
-            =
-            &
-            \overline{g}_{be}^{im}
-            \gamma_{ma}^{je}
-            u_{\mu,j}^b
-            +
-            \overline{g}_{ma}^{je}
-            \gamma_{be}^{im}
-            u_{\mu,j}^b
-            +
-            \overline{g}_{mb}^{ie}
-            \gamma_{ae}^{jm}
-            u_{\mu,j}^b
-            +
-            \overline{g}_{ae}^{jm}
-            \gamma_{mb}^{ie}
-            u_{\mu,j}^b
-            \\[5pt]
-            &
-            +
-            \tfrac{1}{2}
-            \overline{g}_{mn}^{ij}
-            \gamma_{ab}^{mn}
-            u_{\mu,j}^b
-            +
-            \tfrac{1}{2}
-            \overline{g}_{ab}^{mn}
-            \gamma_{mn}^{ij}
-            u_{\mu,j}^b
-            +
-            \tfrac{1}{2}
-            \overline{g}_{ef}^{ij}
-            \gamma_{ab}^{ef}
-            u_{\mu,j}^b
-            +
-            \tfrac{1}{2}
-            \overline{g}_{ab}^{ef}
-            \gamma_{ef}^{ij}
-            u_{\mu,j}^b
-        \end{array}
-    \end{equation}
-
-    \begin{equation}
-        \begin{array}{r@{\,}l}
-            (\mathbf{A}_{22}(\mathbf{u}_{\mu,2}))_{ijab}
-            =
-            &
-            -
-            P_{(a/b)}
-            \mathcal{F}_a^c
-            u_{\mu,cb}^{ij}
-            -
-            P^{(i/j)}
-            \mathcal{F}_k^i
-            u_{\mu,ab}^{kj}
-            +
-            \tfrac{1}{2}
-            \overline{g}_{ab}^{cd}
-            u_{\mu,cd}^{ij}
-            +
-            \tfrac{1}{2}
-            \overline{g}_{kl}^{ij}
-            u_{\mu,ab}^{kl}
-            \\[5pt]
-            &
-            -
-            P_{(a/b)}^{(i/j)}
-            \overline{g}_{la}^{jc}
-            u_{\mu,cb}^{il}
-            +
-            \tfrac{1}{2}
-            P_{(a/b)}
-            \mathcal{G}_{af}^{ec}
-            t_{eb}^{ij}
-            t_{kl}^{fd*}
-            u_{\mu,cd}^{kl}
-            +
-            \tfrac{1}{2}
-            P_{(a/b)}
-            \mathcal{G}_{ka}^{me}
-            t_{eb}^{ij}
-            t_{ml}^{cd*}
-            u_{\mu,cd}^{kl}
-            \\[5pt]
-            &
-            +
-            \tfrac{1}{2}
-            P^{(i/j)}
-            \mathcal{G}_{me}^{ic}
-            t_{ab}^{mj}
-            t_{kl}^{ed*}
-            u_{\mu,cd}^{kl}
-            +
-            \tfrac{1}{2}
-            P^{(i/j)}
-            \mathcal{G}_{mk}^{in}
-            t_{ab}^{mj}
-            t_{nl}^{cd*}
-            u_{\mu,cd}^{kl}
-        \end{array}
-    \end{equation}
-
-    \begin{equation}
-        \begin{array}{r@{\,}l}
-            (\mathbf{B}_{22}(\mathbf{u}_{\mu,2}))_{ijab}
-            =
-            &
-            \tfrac{1}{2}
-            P_{(a/b)}
-            \mathcal{G}_{ac}^{ef}
-            t_{eb}^{ij}
-            t_{fd}^{kl}
-            u_{\mu,kl}^{cd}
-            +
-            \tfrac{1}{2}
-            P_{(a/b)}
-            \mathcal{G}_{na}^{ke}
-            t_{eb}^{ij}
-            t_{cd}^{nl}
-            u_{\mu,kl}^{cd}
-            \\[5pt]
-            &
-            +
-            \tfrac{1}{2}
-            P^{(i/j)}
-            \mathcal{G}_{mc}^{if}
-            t_{ab}^{mj}
-            t_{fd}^{kl}
-            u_{\mu,kl}^{cd}
-            +
-            \tfrac{1}{2}
-            P^{(i/j)}
-            \mathcal{G}_{mn}^{ik}
-            t_{ab}^{mj}
-            t_{cd}^{nl}
-            u_{\mu,kl}^{cd}
-        \end{array}
-    \end{equation}
-
-    \begin{equation}
-        \begin{array}{r@{\,}l}
-            (\mathbf{A}_{12}(\mathbf{u}_{\mu,2}))_{ia}
-            =
-            &
-            \tfrac{1}{2}
-            \overline{g}_{la}^{cd}
-            u_{\mu,cd}^{il}
-            +
-            \tfrac{1}{2}
-            \overline{g}_{kl}^{id}
-            u_{\mu,ad}^{kl}
-            +
-            \tfrac{1}{2}
-            (\mathcal{I}_a^i)_k^m
-            t_{ml}^{cd*}
-            u_{\mu,cd}^{kl}
-            +
-            \tfrac{1}{2}
-            (\mathcal{I}_a^i)_e^c
-            t_{kl}^{ed*}
-            u_{\mu,cd}^{kl}
-            \\[5pt]
-            &
-            +
-            \overline{g}_{ae}^{mc}
-            t_{ml}^{ed*}
-            u_{\mu,cd}^{il}
-            +
-            \overline{g}_{ke}^{im}
-            t_{ml}^{ed*}
-            u_{\mu,ad}^{kl}
-            +
-            \tfrac{1}{4}
-            \overline{g}_{la}^{mn}
-            t_{mn}^{cd*}
-            u_{\mu,cd}^{il}
-            \\[5pt]
-            &
-            +
-            \tfrac{1}{4}
-            \overline{g}_{ef}^{id}
-            t_{kl}^{ef*}
-            u_{\mu,ad}^{kl}
-        \end{array}
-    \end{equation}
-
-    \begin{equation}
-        \begin{array}{r@{\,}l}
-            (\mathbf{B}_{12}(\mathbf{u}_{\mu,2}))_{ia}
-            =
-            &
-            \tfrac{1}{2}
-            (\mathcal{I}_a^i)_m^k
-            t_{cd}^{ml}
-            u_{\mu,kl}^{cd}
-            +
-            \tfrac{1}{2}
-            (\mathcal{I}_a^i)_c^e
-            t_{ed}^{kl}
-            u_{\mu,kl}^{cd}
-            +
-            \overline{g}_{ad}^{le}
-            t_{ce}^{ki}
-            u_{\mu,kl}^{cd}
-            +
-            \overline{g}_{md}^{il}
-            t_{ca}^{km}
-            u_{\mu,kl}^{cd}
-            \\[5pt]
-            &
-            +
-            \tfrac{1}{4}
-            \overline{g}_{ma}^{kl}
-            t_{cd}^{im}
-            u_{\mu,kl}^{cd}
-            +
-            \tfrac{1}{4}
-            \overline{g}_{cd}^{ie}
-            t_{ae}^{kl}
-            u_{\mu,kl}^{cd}
-        \end{array}
-    \end{equation}
-
-    \begin{equation}
-        \begin{array}{r@{\,}l}
-            (\mathbf{A}_{21}(\mathbf{u}_{\mu,1}))_{ijab}
-            =
-            &
-            P^{(i/j)}
-            \overline{g}_{ab}^{jc}
-            u_{\mu,c}^i
-            +
-            P_{(a/b)}
-            \overline{g}_{kb}^{ij}
-            u_{\mu,a}^k
-            +
-            P^{(i/j)}
-            (\mathcal{I}_k^c)_m^i
-            t_{ab}^{mj}
-            u_{\mu,c}^k
-            \\[5pt]
-            &
-            +
-            P_{(a/b)}
-            (\mathcal{I}_k^c)_a^e
-            t_{eb}^{ij}
-            u_{\mu,c}^k
-            +
-            P_{(a/b)}^{(i/j)}
-            \overline{g}_{ma}^{ce}
-            t_{eb}^{mj}
-            u_{\mu,c}^i
-            +
-            P_{(a/b)}^{(i/j)}
-            \overline{g}_{km}^{ie}
-            t_{eb}^{mj}
-            u_{\mu,a}^k
-            \\[5pt]
-            &
-            +
-            \tfrac{1}{2}
-            P^{(i/j)}
-            \overline{g}_{mn}^{jc}
-            t_{ab}^{mn}
-            u_{\mu,c}^i
-            +
-            \tfrac{1}{2}
-            P_{(a/b)}
-            \overline{g}_{kb}^{ef}
-            t_{ef}^{ij}
-            u_{\mu,a}^k
-        \end{array}
-    \end{equation}
-
-    \begin{equation}
-        \begin{array}{r@{\,}l}
-            (\mathbf{B}_{21}(\mathbf{u}_{\mu,1}))_{ijab}
-            =
-            &
-            P^{(i/j)}
-            (\mathcal{I}_c^k)_m^i
-            t_{ab}^{mj}
-            u_{\mu,k}^c
-            +
-            P_{(a/b)}
-            (\mathcal{I}_c^k)_a^e
-            t_{eb}^{ij}
-            u_{\mu,k}^c
-            +
-            P_{(a/b)}^{(i/j)}
-            \overline{g}_{cb}^{je}
-            t_{ae}^{ik}
-            u_{\mu,k}^c
-            \\[5pt]
-            &
-            +
-            P_{(a/b)}^{(i/j)}
-            \overline{g}_{kj}^{mb}
-            t_{ac}^{im}
-            u_{\mu,k}^c
-            +
-            \overline{g}_{mc}^{ij}
-            t_{ab}^{km}
-            u_{\mu,k}^c
-            +
-            \overline{g}_{ab}^{ke}
-            t_{ce}^{ij}
-            u_{\mu,k}^c
-        \end{array}
-    \end{equation}
-
-    \begin{equation}
-        (\mathbf{S}_{11}(\mathbf{u}_{\mu,1}))_{ia}
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        (\mathbf{A}_{11}(\mathbf{u}_{\mu,1}))_{ia}
         =
-        \gamma^i_j
+        &
+        h_j^i
+        \gamma_a^b
+        u_{\mu,b}^j
+        +
+        h_a^b
+        \gamma_j^i
+        u_{\mu,b}^j
+        -
+        (\bar{\mathbf{F}})_j^i
         u_{\mu,a}^j
         -
-        \gamma^b_a
+        (\bar{\mathbf{F}})_a^b
         u_{\mu,b}^i
-    \end{equation}
-
-    \begin{equation}
-        (\mathbf{S}_{11}^{-1}(\mathbf{u}_{\mu,1}))_{ia}
-        =
-        \frac{%
-            (\mathbf{Y}^\dagger)_{j'}^i
-            (\mathbf{Y})_a^{b'}
-        }{%
-            \gamma_{j'}-\gamma_{b'}
-        }
-        (\mathbf{Y}^\dagger)_{b'}^b
-        (\mathbf{Y})_j^{j'}
-        u_{\mu,b}^j
-    \end{equation}
-
-    \begin{equation}
-        (\mathbf{Y}^\dagger)_{q'}^q
-        \gamma_q^p
-        (\mathbf{Y})_p^{p'}
-        =
-        \delta_{q'}^{p'}
-        \gamma_{q'}
-    \end{equation}
-
-    \begin{equation}
-        \tilde{\mathbf{S}}_{11}
-        \equiv
-        \tilde{\mathbf{S}}_{11}^{-1}
-        \equiv
-        \mathbf{1}_1
-    \end{equation}
-
-    \begin{equation}
-        (\tilde{\mathbf{A}}_{11})_{ia,ia}
-        \equiv
-        -
-        f_i^i
         +
-        f_a^a
-    \end{equation}
+        \overline{g}_{nj}^{mi}
+        \gamma_{ma}^{nb}
+        u_{\mu,b}^j
+        \\[5pt]
+        &
+        +
+        \overline{g}_{ma}^{nb}
+        \gamma_{nj}^{mi}
+        u_{\mu,b}^j
+        +
+        \overline{g}_{jf}^{ie}
+        \gamma_{ae}^{bf}
+        u_{\mu,b}^j
+        +
+        \overline{g}_{ae}^{bf}
+        \gamma_{jf}^{ie}
+        u_{\mu,b}^j
+        +
+        \overline{g}_{me}^{ib}
+        \gamma_{ja}^{me}
+        u_{\mu,b}^j
+        \\[5pt]
+        &
+        +
+        \overline{g}_{ja}^{me}
+        \gamma_{me}^{ib}
+        u_{\mu,b}^j
+    \end{array}
+\end{equation}
 
-    \begin{equation}
-        (\tilde{\mathbf{A}}_{22})_{ijab,ijab}
-        \equiv
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        (\mathbf{B}_{11}(\mathbf{u}_{\mu,1}))_{ia}
+        =
+        &
+        \overline{g}_{be}^{im}
+        \gamma_{ma}^{je}
+        u_{\mu,j}^b
+        +
+        \overline{g}_{ma}^{je}
+        \gamma_{be}^{im}
+        u_{\mu,j}^b
+        +
+        \overline{g}_{mb}^{ie}
+        \gamma_{ae}^{jm}
+        u_{\mu,j}^b
+        +
+        \overline{g}_{ae}^{jm}
+        \gamma_{mb}^{ie}
+        u_{\mu,j}^b
+        \\[5pt]
+        &
+        +
+        \tfrac{1}{2}
+        \overline{g}_{mn}^{ij}
+        \gamma_{ab}^{mn}
+        u_{\mu,j}^b
+        +
+        \tfrac{1}{2}
+        \overline{g}_{ab}^{mn}
+        \gamma_{mn}^{ij}
+        u_{\mu,j}^b
+        +
+        \tfrac{1}{2}
+        \overline{g}_{ef}^{ij}
+        \gamma_{ab}^{ef}
+        u_{\mu,j}^b
+        +
+        \tfrac{1}{2}
+        \overline{g}_{ab}^{ef}
+        \gamma_{ef}^{ij}
+        u_{\mu,j}^b
+    \end{array}
+\end{equation}
+
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        (\mathbf{A}_{22}(\mathbf{u}_{\mu,2}))_{ijab}
+        =
+        &
         -
-        \mathcal{F}_i^i
+        P_{(a/b)}
+        \mathcal{F}_a^c
+        u_{\mu,cb}^{ij}
         -
-        \mathcal{F}_j^j
+        P^{(i/j)}
+        \mathcal{F}_k^i
+        u_{\mu,ab}^{kj}
+        +
+        \tfrac{1}{2}
+        \overline{g}_{ab}^{cd}
+        u_{\mu,cd}^{ij}
+        +
+        \tfrac{1}{2}
+        \overline{g}_{kl}^{ij}
+        u_{\mu,ab}^{kl}
+        \\[5pt]
+        &
         -
-        \mathcal{F}_a^a
+        P_{(a/b)}^{(i/j)}
+        \overline{g}_{la}^{jc}
+        u_{\mu,cb}^{il}
+        +
+        \tfrac{1}{2}
+        P_{(a/b)}
+        \mathcal{G}_{af}^{ec}
+        t_{eb}^{ij}
+        t_{kl}^{fd*}
+        u_{\mu,cd}^{kl}
+        +
+        \tfrac{1}{2}
+        P_{(a/b)}
+        \mathcal{G}_{ka}^{me}
+        t_{eb}^{ij}
+        t_{ml}^{cd*}
+        u_{\mu,cd}^{kl}
+        \\[5pt]
+        &
+        +
+        \tfrac{1}{2}
+        P^{(i/j)}
+        \mathcal{G}_{me}^{ic}
+        t_{ab}^{mj}
+        t_{kl}^{ed*}
+        u_{\mu,cd}^{kl}
+        +
+        \tfrac{1}{2}
+        P^{(i/j)}
+        \mathcal{G}_{mk}^{in}
+        t_{ab}^{mj}
+        t_{nl}^{cd*}
+        u_{\mu,cd}^{kl}
+    \end{array}
+\end{equation}
+
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        (\mathbf{B}_{22}(\mathbf{u}_{\mu,2}))_{ijab}
+        =
+        &
+        \tfrac{1}{2}
+        P_{(a/b)}
+        \mathcal{G}_{ac}^{ef}
+        t_{eb}^{ij}
+        t_{fd}^{kl}
+        u_{\mu,kl}^{cd}
+        +
+        \tfrac{1}{2}
+        P_{(a/b)}
+        \mathcal{G}_{na}^{ke}
+        t_{eb}^{ij}
+        t_{cd}^{nl}
+        u_{\mu,kl}^{cd}
+        \\[5pt]
+        &
+        +
+        \tfrac{1}{2}
+        P^{(i/j)}
+        \mathcal{G}_{mc}^{if}
+        t_{ab}^{mj}
+        t_{fd}^{kl}
+        u_{\mu,kl}^{cd}
+        +
+        \tfrac{1}{2}
+        P^{(i/j)}
+        \mathcal{G}_{mn}^{ik}
+        t_{ab}^{mj}
+        t_{cd}^{nl}
+        u_{\mu,kl}^{cd}
+    \end{array}
+\end{equation}
+
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        (\mathbf{A}_{12}(\mathbf{u}_{\mu,2}))_{ia}
+        =
+        &
         -
-        \mathcal{F}_b^b
-    \end{equation}
+        \tfrac{1}{2}
+        \overline{g}_{la}^{cd}
+        u_{\mu,cd}^{il}
+        -
+        \tfrac{1}{2}
+        \overline{g}_{kl}^{id}
+        u_{\mu,ad}^{kl}
+        -
+        \tfrac{1}{2}
+        (\mathcal{I}_a^i)_k^m
+        t_{ml}^{cd*}
+        u_{\mu,cd}^{kl}
+        -
+        \tfrac{1}{2}
+        (\mathcal{I}_a^i)_e^c
+        t_{kl}^{ed*}
+        u_{\mu,cd}^{kl}
+        \\[5pt]
+        &
+        -
+        \overline{g}_{ae}^{mc}
+        t_{ml}^{ed*}
+        u_{\mu,cd}^{il}
+        -
+        \overline{g}_{ke}^{im}
+        t_{ml}^{ed*}
+        u_{\mu,ad}^{kl}
+        -
+        \tfrac{1}{4}
+        \overline{g}_{la}^{mn}
+        t_{mn}^{cd*}
+        u_{\mu,cd}^{il}
+        \\[5pt]
+        &
+        -
+        \tfrac{1}{4}
+        \overline{g}_{ef}^{id}
+        t_{kl}^{ef*}
+        u_{\mu,ad}^{kl}
+    \end{array}
+\end{equation}
+
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        (\mathbf{B}_{12}(\mathbf{u}_{\mu,2}))_{ia}
+        =
+        &
+        -
+        \tfrac{1}{2}
+        (\mathcal{I}_a^i)_m^k
+        t_{cd}^{ml}
+        u_{\mu,kl}^{cd}
+        -
+        \tfrac{1}{2}
+        (\mathcal{I}_a^i)_c^e
+        t_{ed}^{kl}
+        u_{\mu,kl}^{cd}
+        -
+        \overline{g}_{ad}^{le}
+        t_{ce}^{ki}
+        u_{\mu,kl}^{cd}
+        -
+        \overline{g}_{md}^{il}
+        t_{ca}^{km}
+        u_{\mu,kl}^{cd}
+        \\[5pt]
+        &
+        -
+        \tfrac{1}{4}
+        \overline{g}_{ma}^{kl}
+        t_{cd}^{im}
+        u_{\mu,kl}^{cd}
+        -
+        \tfrac{1}{4}
+        \overline{g}_{cd}^{ie}
+        t_{ae}^{kl}
+        u_{\mu,kl}^{cd}
+    \end{array}
+\end{equation}
+
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        (\mathbf{A}_{21}(\mathbf{u}_{\mu,1}))_{ijab}
+        =
+        &
+        -
+        P^{(i/j)}
+        \overline{g}_{ab}^{jc}
+        u_{\mu,c}^i
+        -
+        P_{(a/b)}
+        \overline{g}_{kb}^{ij}
+        u_{\mu,a}^k
+        -
+        P^{(i/j)}
+        (\mathcal{I}_k^c)_m^i
+        t_{ab}^{mj}
+        u_{\mu,c}^k
+        \\[5pt]
+        &
+        -
+        P_{(a/b)}
+        (\mathcal{I}_k^c)_a^e
+        t_{eb}^{ij}
+        u_{\mu,c}^k
+        -
+        P_{(a/b)}^{(i/j)}
+        \overline{g}_{ma}^{ce}
+        t_{eb}^{mj}
+        u_{\mu,c}^i
+        -
+        P_{(a/b)}^{(i/j)}
+        \overline{g}_{km}^{ie}
+        t_{eb}^{mj}
+        u_{\mu,a}^k
+        \\[5pt]
+        &
+        -
+        \tfrac{1}{2}
+        P^{(i/j)}
+        \overline{g}_{mn}^{jc}
+        t_{ab}^{mn}
+        u_{\mu,c}^i
+        -
+        \tfrac{1}{2}
+        P_{(a/b)}
+        \overline{g}_{kb}^{ef}
+        t_{ef}^{ij}
+        u_{\mu,a}^k
+    \end{array}
+\end{equation}
+
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        (\mathbf{B}_{21}(\mathbf{u}_{\mu,1}))_{ijab}
+        =
+        &
+        -
+        P^{(i/j)}
+        (\mathcal{I}_c^k)_m^i
+        t_{ab}^{mj}
+        u_{\mu,k}^c
+        -
+        P_{(a/b)}
+        (\mathcal{I}_c^k)_a^e
+        t_{eb}^{ij}
+        u_{\mu,k}^c
+        -
+        P_{(a/b)}^{(i/j)}
+        \overline{g}_{cb}^{je}
+        t_{ae}^{ik}
+        u_{\mu,k}^c
+        \\[5pt]
+        &
+        -
+        P_{(a/b)}^{(i/j)}
+        \overline{g}_{kj}^{mb}
+        t_{ac}^{im}
+        u_{\mu,k}^c
+        -
+        \overline{g}_{mc}^{ij}
+        t_{ab}^{km}
+        u_{\mu,k}^c
+        -
+        \overline{g}_{ab}^{ke}
+        t_{ce}^{ij}
+        u_{\mu,k}^c
+    \end{array}
+\end{equation}
+
+\begin{equation}
+    (\mathbf{S}_{11}(\mathbf{u}_{\mu,1}))_{ia}
+    =
+    \gamma^i_j
+    u_{\mu,a}^j
+    -
+    \gamma^b_a
+    u_{\mu,b}^i
+\end{equation}
+
+\begin{equation}
+    (\mathbf{S}_{11}^{-1}(\mathbf{u}_{\mu,1}))_{ia}
+    =
+    \frac{%
+        (\mathbf{Y}^\dagger)_{j'}^i
+        (\mathbf{Y})_a^{b'}
+    }{%
+        \gamma_{j'}-\gamma_{b'}
+    }
+    (\mathbf{Y}^\dagger)_{b'}^b
+    (\mathbf{Y})_j^{j'}
+    u_{\mu,b}^j
+\end{equation}
+
+\begin{equation}
+    (\mathbf{Y}^\dagger)_{q'}^q
+    \gamma_q^p
+    (\mathbf{Y})_p^{p'}
+    =
+    \delta_{q'}^{p'}
+    \gamma_{q'}
+\end{equation}
+
+\begin{equation}
+    \tilde{\mathbf{S}}_{11}
+    \equiv
+    \tilde{\mathbf{S}}_{11}^{-1}
+    \equiv
+    \mathbf{1}_1
+\end{equation}
+
+\begin{equation}
+    (\tilde{\mathbf{A}}_{11})_{ia,ia}
+    \equiv
+    -
+    f_i^i
+    +
+    f_a^a
+\end{equation}
+
+\begin{equation}
+    (\tilde{\mathbf{A}}_{22})_{ijab,ijab}
+    \equiv
+    -
+    \mathcal{F}_i^i
+    -
+    \mathcal{F}_j^j
+    -
+    \mathcal{F}_a^a
+    -
+    \mathcal{F}_b^b
+\end{equation}
 
 \end{subappendices}
