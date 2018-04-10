@@ -4,6 +4,28 @@
     Introduction and Literature Review
 }
 
+The general strategy of many-body quantum mechanics:
+\begin{enumerate}
+    \item
+        Determine the Hilbert spaces for the individual particles in your
+        system, ideally by solving an effective one-body problem for the
+        stationary states.
+    \item
+        The Hilbert space for the many-body system is the tensor-product of
+        one-particle Hilbert spaces, i.e.~the many-body states are spanned by
+        all possible products of one-particle states.
+    \item
+        Solve for the many-body wavefunction in the basis one or more of these
+        product functions.
+        If the particles are approximately decoupled, and the one-body basis is
+        carefully chosen, one may be able to describe the wavefunction to a good
+        approximation using only one or a few product functions.
+    \item
+        If one or more particles are highly coupled, one may need to include
+        larger expansions, such as all possible combinations of states in a
+        given energy range, in order to achieve even qualitative accuracy.
+\end{enumerate}
+
 \section{One-Electron States}
 
 Hydrogen or silver or alkali metals
@@ -198,25 +220,39 @@ to occupy the same state.
 
 \subsection{Antisymmetry}
 
-The original explanation of Pauli exclusion in terms of particle ansitymmetry
-goes back to Heisenberg's attempt to explain the spectrum of Helium.
+Heisenberg to Pauli (May 5, 1926) on the connection between Pauli exclusion and
+the singlet triplet gap in helium (Mehra:1982):
+{\itshape
+    I want to write to you that I have found a rather decisive argument that
+    your exclusion of equivalent orbitals is connected with the singlet-triplet
+    separation [in helium].
+}
+
+Heisenberg to Born (May 26, 1926) on the challenge of calculating the energy
+states of helium (Mehra:1982):
+{\itshape
+    The large separation between the singlet and triplet systems could not be
+    explained by a magnetic interaction of the spinning electrons; one had
+    therefore to assume with Hund a large force of unknown origin between the
+    magnets [Hund's rule].
+}
 \\
-In May of 1926, Heisenberg informs Pauli that he has found `a rather
-decisive argument that your prohibition of the equivalent orbitals is related to
-the singlet-triplet spacing' in Helium (Enz:1983p993), which he explains in a
-paper the following month (Heisenberg:1926p411).
+He explains everything by qualitative arguments in his paper on ``The Many-Body
+Problem and Resonance in Quantum Mechanics'' (Heisenberg:1926p411), which
+{\itshape
+    aims to lay the groundwork for a quantum-mechanical treatment of the
+    many-body problem.
+}
 \\
-There he explains the connection between particle symmetry and Pauli exclusion
-and proposes the form of the Slater determinant.
+He is the first to propose the form of the Slater determinant.
 \begin{equation}
-    |\Phi\rangle
+    \Phi
     =
-    \tfrac{1}{\sqrt{n!}}
-    \sum_{\pi\in \mathrm{S}_n}
+    \sum_{\pi\in\mathrm{S}_n}
     (-)^\pi
-    \psi_{1}(\pi_1)
+    \phi_(\pi(1))
     \cdots
-    \psi_{n}(\pi_n)
+    \phi_n(\pi(n))
 \end{equation}
 
 

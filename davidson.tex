@@ -644,6 +644,77 @@ as the square of \(\tilde{\mathbf{A}}\), since in low order we have
     (\mathbf{S}(\mathbf{x}_k - \mathbf{y}_k))
 \end{equation}
 
+\afterpage{%
+    \clearpage
+    \centering
+    \captionof{table}{%
+        A comparison of the convergence properties for three different
+        LR-ODC-12 algorithms using the def2-SV(P) basis.
+        In each case we compute 10 roots with 100 guess vectors and include a
+        periodic subspace collapse to allow no more than 200 vectors in our
+        expansion space.
+    }
+    \begin{tabular}{ccccccccccccc}
+        \hline
+        \hline
+        &
+        &
+        &
+        \multicolumn{3}{c}{algorithm 1}
+        &
+        \multicolumn{3}{c}{algorithm 2}
+        &
+        \multicolumn{3}{c}{algorithm 3}
+        \\
+        &
+        \(n_1\)
+        &
+        \(n_2\)
+        &
+        iter
+        &
+        time
+        &
+        roots
+        &
+        iter
+        &
+        time
+        &
+        roots
+        &
+        iter
+        &
+        time
+        &
+        roots
+        \\
+        \hline
+        \ce{H2O}
+        & 260 & 14,625
+        & 11 & 2.3 & 10/10 & 17 & 1.9 & 10/10 & 17 & 2.2 & 10/10
+        \\
+        \ce{N2}
+        & 588 & 78,351
+        & 11 & 14.3 & 10/10 & 17 & 13.1 & 9/10 & 17 & 12.6 & 9/10
+        \\
+        \ce{HCN}
+        & 644 & 94,185
+        & 14 & 17.1 & 9/10 & 21 & 15.7 & 9/10 & 21 & 14.9 & 9/10
+        \\
+        \ce{H2CO}
+        & 768 & 135,360
+        & 15 & 25.3 & 7/10 & 28 & 21.9 & 6/10 & 28 & 22.0 & 6/10
+        \\
+        \ce{C2H4}
+        & 896 & 184,800
+        & 11 & 41.0 & 9/10 & 25 & 32.3 & 9/10 & 25 & 32.5 & 9/10
+        \\
+        \hline
+        \hline
+    \end{tabular}
+}
+
 
 \begin{subappendices}
 \section{LR-ODC-12 Linear Transformation Formulas}
