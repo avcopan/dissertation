@@ -12,8 +12,9 @@
         theory.
     \item
         In this model, excitation energies and transition properties are
-        computed as generalized eigenpairs of the DCT energy Hessian with
-        respect to the parameters of the energy functional.
+        computed from the eigenpairs of the energy functional's parameter
+        Hessian, with respect to a metric that arises from the time-dependence
+        of the parameter responses.
     \item
         Since number of parameters in the ODC-12 variant of density cumulant
         theory scales as
@@ -25,65 +26,44 @@
         of \(o\) and \(v\), and the number of floating point operations needed
         to diagonalize it scales with the sixth power of these dimensions.
     \item
-        Such an approach will rapidly overwhelm available computing resources
-        even for relatively small molecules.
+        Such a brute-force approach will rapidly overwhelm available computing
+        resources even for relatively small molecules.
+    \item
+        For the common scenario where we only care about states within a narrow
+        energy range, the cost of diagonalization can be drastically reduced
+        through the use of ``direct algorithms'' which allow us to compute
+        subsets of eigenvectors and eigenvalues without explicitly constructing
+        the full matrix of the linear transformation in computer memory.
+    \item
+        This chapter will explore the use of the Davidson
+        algorithm\cite{Liu:1978p49,Davidson:1975p87} to efficiently compute the
+        lowest-energy states of the LR-ODC-12 model.
+    \item
+        After describing the generic Davidson algorithm in
+        \cref{sec:davidson:davidson} and analyzing the structure of the
+        LR-ODC-12 equations in \cref{sec:davidson:eig}, I will present several
+        strategies for solving the LR-ODC-12 model in
+        \cref{sec:davidson:strategies},
+        along with a benchmark study of their convergence characteristics for
+        several small molecules:
+        \ce{H2O}, \ce{N2}, \ce{HCN}, \ce{H2CO}, \ce{C2H4}.
+    \item
+        Finally, in \cref{sec:davidson:disk} I will discuss how to reduce memory
+        consumption in the Davidson algorithm by partitioning the expansion
+        space into blocks and storing large arrays on disk.
 \end{enumerate}
-
 
 \section{The Davidson Algorithm}
-\begin{enumerate}
-    \item
-        For the study of valence and low-lying Rydberg states, the cost of the
-        LR-ODC-12 method can be drastically reduced by the use of direct matrix
-        algorithms, such as the Davidson
-        algorithm.\cite{Liu:1978p49,Davidson:1975p87}
-    \item
-        Direct algorithms represent a linear transformation as a function
-        \(
-            \mathbf{L}(\cdot)
-        \)
-        mapping vectors in its domain to vectors in its codomain, rather than as
-        an array of coefficients
-        \(
-            \mathbf{L}
-            =
-            [L_{ij}]
-        \)
-        over a complete basis.
-    \item
-        That is, the result of the transformation is determined {\itshape
-        directly} without forming its matrix representation in computer memory.
-    \item
-        The Davidson algorithm applies this technique in the context of a matrix
-        diagonalization, by progressively growing a basis
-        \(
-            \{\mathbf{u}_1, \ldots,\mathbf{u}_d\}
-        \)
-        to span the lowest or highest eigenvectors of a matrix to some threshold
-        of accuracy.
-    \item
-        In the context of LR-ODC-12, this allows us to reduce our computational
-        effort to \(\mathcal{O}(o^2v^4d)\) and our memory requirement to
-        \(\mathcal{O}(o^2v^2d)\), where \(d\) is typically on the order of ten
-        times the desired number of eigenvalues.
-\end{enumerate}
-
-
-\section{The LR-ODC-12 Eigenvalue Equation}
-
-
-\section{Algorithms}
-\label{sec:algorithms}
+\label{sec:davidson:davidson}
 
 \begin{algorithm}
     \caption{%
-        Canonical multiroot Davidson algorithm for a generalized non-symmetric
-        eigenvalue problem,
-        $\mathbf{L}\mathbf{v}_k=\lambda_k\mathbf{G}\mathbf{v}_k$, with periodic
+        Canonical multiroot Davidson algorithm for a generic eigenvalue problem,
+        $\mathbf{L}\mathbf{v}_j=\lambda_j\mathbf{G}\mathbf{v}_j$, with periodic
         subspace collapse.
         Requires linear transformation functions and diagonal approximations
         (indicated by tildes) for \(\mathbf{L}\) and \(\mathbf{G}\)
-        and solves for the lowest \(n\) eigenvalues and eigenvectors.
+        and solves for the lowest \(k\) eigenvalues and eigenvectors.
     }
     \label{algo:davidson}
     \begin{algorithmic}[1]
@@ -94,7 +74,7 @@
             \tilde{\mathbf{L}},
             \tilde{\mathbf{G}},
             \mathbf{U}^{(0)},
-            n,
+            k,
             d_\mathrm{max},
             i_\mathrm{max},
             r_\mathrm{tol}
@@ -105,7 +85,7 @@
         \(\mathbf{U}\leftarrow\mathbf{U}^{(0)}\).
         \For{$1\leq i\leq i_\mathrm{max}$}{}
             \State
-            Construct subspace representation and solve the lowest \(n\)
+            Construct subspace representation and solve the lowest \(k\)
             eigenvalues.
             \[
                 \mathbf{L}^\mathrm{sub}
@@ -121,44 +101,44 @@
             \]
             \[
                 \mathbf{L}^\mathrm{sub}
-                \mathbf{v}_k^\mathrm{sub}
+                \mathbf{v}_j^\mathrm{sub}
                 =
-                \lambda_k
+                \lambda_j
                 \mathbf{G}^\mathrm{sub}
-                \mathbf{v}_k^\mathrm{sub}
+                \mathbf{v}_j^\mathrm{sub}
             \]
             \State
             Calculate the eigenvector residuals over the full space.
             \[
-                \mathbf{r}_k
+                \mathbf{r}_j
                 =
                 (
                     \mathbf{L}(\mathbf{U})
                     -
-                    \lambda_k
+                    \lambda_j
                     \mathbf{G}(\mathbf{U})
                 )
-                \mathbf{v}_k^\mathrm{sub}
+                \mathbf{v}_j^\mathrm{sub}
             \]
-            \If{$\max(\mathbf{r}_k) < r_\mathrm{tol}$ for all $k$}
+            \If{$\max(\mathbf{r}_j) < r_\mathrm{tol}$ for all $j$}
                 \State
                 Set
-                \(\mathbf{v}_k\leftarrow\mathbf{U}\mathbf{v}_k^\mathrm{sub}\)
+                \(\mathbf{v}_j\leftarrow\mathbf{U}\mathbf{v}_j^\mathrm{sub}\)
                 and quit the loop.  The eigenvectors are converged.
             \EndIf
             \State
-            Determine new direction vectors by a quasi-Newton-Raphson step.
+            Determine new direction vectors by preconditioning the residual.
             \[
-                \mathbf{d}_k^{(i)}
+                \mathbf{d}_j^{(i)}
                 =
                 -
                 (
                     \tilde{\mathbf{L}}
                     -
-                    \lambda_k
+                    \lambda_j
                     \tilde{\mathbf{G}}
                 )^{-1}
-                \mathbf{r}_k
+                \mathbf{r}_j
             \]
             \State
             Project out the span of \(\mathbf{U}\) and orthogonalize via
@@ -203,7 +183,7 @@
                         \mathbf{v}_1^\mathrm{sub}\ 
                         \cdots\ 
                         \mathbf{U}
-                        \mathbf{v}_n^\mathrm{sub}
+                        \mathbf{v}_k^\mathrm{sub}
                     )
                 \).
             \EndIf
@@ -211,12 +191,168 @@
         \State
         {\bfseries return}
         \(
-            \lambda_k,
-            \mathbf{v}_k
+            \lambda_j,
+            \mathbf{v}_j
         \)
         \EndProcedure
     \end{algorithmic}
 \end{algorithm}
+
+P1
+\begin{enumerate}
+    \item
+        Direct algorithms like the Davidson algorithm represent a linear
+        transformation as a function
+        \(
+            \mathbf{L}(\cdot)
+        \)
+        mapping vectors in its domain to vectors in its codomain, rather than as
+        an array of coefficients
+        \(
+            [L_{ij}]
+            =
+            [\mathbf{e}_i \cdot \mathbf{L}(\mathbf{e}_j)]
+        \)
+        over a complete basis.
+    \item
+        That is, the result of the transformation is determined {\itshape
+        directly}, without explicitly forming its matrix representation in
+        computer memory.
+    \item
+        The Davidson algorithm applies this technique in the context of a matrix
+        diagonalization, by progressively growing a basis
+        \(
+            \{\mathbf{u}_1, \ldots,\mathbf{u}_d\}
+        \)
+        to span the lowest or highest eigenvectors of a matrix to some threshold
+        of accuracy.
+    \item
+        For a transformation on \(\mathbb{R}^n\), this allows us to reduce our
+        computational effort from \(\mathcal{O}(n^3)\) to at most
+        \(\mathcal{O}(n^2 d)\), and often much less if \(\mathbf{L}\) is
+        constructed from lower-dimensional arrays.
+    \item
+        Our memory storage requirements are reduced from \(\mathcal{O}(n^2)\) to
+        \(\mathcal{O}(nd)\), so as long as the number of roots is much smaller
+        than the dimension of the space we can easily satisfy \(d \ll n\) and
+        gain considerable savings.
+\end{enumerate}
+
+\noindent
+P2
+\begin{enumerate}
+    \item
+        The procedure for the Davidson algorithm is presented in
+        \cref{algo:davidson}, which solves for the eigenvalues and right
+        eigenvectors of a generalized eigenvalue problem, which may or may not
+        be symmetric.
+    \item
+        The general strategy of the algorithm is quite simple.
+    \item
+        We first expand our transformations in the reduced expansion space as,
+        for example,
+        \(
+            [L_{ij}^\mathrm{sub}]
+            =
+            [\mathbf{u}_i\cdot \mathbf{L}(\mathbf{u}_j)]
+        \).
+    \item
+        The eigenvalue equation is then solved in this subspace
+        \begin{equation}
+            \mathbf{L}^\mathrm{sub}
+            \mathbf{v}_j^\mathrm{sub}
+            =
+            \lambda_j^\mathrm{trial}
+            \mathbf{G}^\mathrm{sub}
+            \mathbf{v}_j^\mathrm{sub}
+        \end{equation}
+    \item
+        In the full space our trial solution is given by
+        \(
+            \mathbf{v}_j^\mathrm{trial}
+            =
+            \mathbf{U}\mathbf{v}_j^\mathrm{sub}
+        \),
+        and the correction vector
+        \(
+            \mathbf{d}_j
+            =
+            \mathbf{v}_j^\mathrm{trial}
+            -
+            \mathbf{v}_j
+        \)
+        to the exact solution can be approximated as
+        \begin{equation}
+            \mathbf{d}_j
+            \approx
+            -
+            (
+                \tilde{\mathbf{L}}
+                -
+                \lambda_j^\mathrm{trial}
+                \tilde{\mathbf{G}}
+            )^{-1}
+            \mathbf{r}_j
+            \qquad
+            \mathbf{r}_j
+            \equiv
+            (\mathbf{L} - \lambda_j^\mathrm{trial}\mathbf{G})
+            \mathbf{v}_j^\mathrm{trial}
+        \end{equation}
+        where \(\mathbf{r}_j\) is the residual vector and the preconditioner
+        \(
+            (
+                \tilde{\mathbf{L}} - \lambda^\mathrm{trial}\tilde{\mathbf{G}}
+            )^{-1}
+        \)
+        is constructed from diagonal approximations of \(\mathbf{L}\) and
+        \(\mathbf{G}\).
+    \item
+        This can be motivated as an approximate solution to the following
+        identity.
+        \begin{equation}
+            \mathbf{0}
+            =
+            (\mathbf{L} - \lambda_j\mathbf{G})
+            \mathbf{v}_j
+            =
+            (\mathbf{L} - \lambda_j\mathbf{G})
+            (
+                \mathbf{v}_j^\mathrm{trial}
+                +
+                \mathbf{d}_j
+            )
+        \end{equation}
+    \item
+        Similar algorithms can be formulated for other large matrix equations,
+        such as the linear equation \(\mathbf{L}\mathbf{x}=\mathbf{b}\) which
+        leads to a variant of the conjugate gradient method.
+\end{enumerate}
+
+\noindent
+P3
+\begin{enumerate}
+    \item
+        A key assumption is that the matrices are diagonally dominant.
+    \item
+        Efficient implementations of the Davidson algorithm will compute images
+        \(
+            \mathbf{L}(\mathbf{u}_i)
+        \)
+        only for the new expansion vectors and store these for future
+        iterations.
+    \item
+        When the expansion space becomes large, we can replace the expansion
+        vectors with the current trial vectors to keep the memory requirements
+        manageable.
+    \item
+        Frequent collapses every second or third iteration can be used to keep
+        I/O requirements to a minimum, at the cost of slower
+        convergence.\cite{Leininger:2001p1574}
+\end{enumerate}
+
+\section{The LR-ODC-12 Eigenvalue Equation}
+\label{sec:davidson:eig}
 
 The LR-ODC-12 eigenvalue equation has a two-by-two block structure which
 describes the independent variation of the state parameters and their complex
@@ -291,28 +427,8 @@ blocked according to whether they describe variations with respect to one-body
         \mathbf{x}_{k,2}
     \end{pmatrix}
 \end{equation}
-The dimensions of the diagonal two-body blocks (\(\mathbf{A}_{22}\) and
-\(\mathbf{B}_{22}\) and \(\mathbf{1}_s\)) in these matrices scale as
-\((\mathrm{o}^2\mathrm{v}^2)^2\) with the number of occupied (\(\mathrm{o}\))
-and virtual (\(\mathrm{v}\)) orbitals, rapidly overwhelming the storage space on
-a given computer as the number of electrons and basis functions increases.
-This problem can be circumvented by using so-called ``direct'' matrix
-algorithms, which avoid the explicit representation of a matrix as an array of
-coefficients \(\mathbf{L}=[L_{\mu\nu}]\) by instead defining a function
-\(\mathbf{L}(\mathbf{U})\) which returns the output of the linear transformation
-on an arbitrary set of vectors \(\mathbf{U}=(\mathbf{u}_1\ \cdots\
-\mathbf{u}_m)\).
-The standard direct algorithm for extremal eigenvalues of large,
-diagonally-dominant matrices is the Davidson
-algorithm,\cite{Davidson:1975p87,Liu:1978p49} which solves the eigenvalue
-problem by progressively growing an expansion space for the \(n\) lowest (or
-highest) generalized eigenvectors.
-The procedure is described in \Cref{algo:davidson}.
 
-The full set of linear transformation formulas for the LR-ODC-12 Hessian and
-metric blocks is given in the appendix
-(\cref{sec:linear-transformation-formulas}), but let us consider the diagonal
-two-body Hessian as an example.
+The bottleneck is in the diagonal two-body Hessian.
 The image of an arbitrary two-body vector
 \(
     \mathbf{u}_{\mu,2}
@@ -383,27 +499,30 @@ under this transformation is given by
 where the \(i,j,k,l,\ldots\) run over occupied spin-orbitals, \(a,b,c,d,\ldots\)
 run over virtual (un-occupied) spin-orbitals, and summation over repeated
 indices is implied.
-The important thing to note is that we need only two \(\mathrm{v}^4\)-sized
-intermediates (\(\overline{g}_{ab}^{cd}\) and \(\mathcal{G}_{ab}^{cd}\)) to
-define our linear transformations, and that the image of the two-body Hessian
-only has \(\mathcal{O}(d_\mu\mathrm{o}^2\mathrm{v}^2)\) elements where \(d_\mu\)
-is the dimension of the \(\mu\) index.
-In general the Davidson algorithm requires no more than 10-20 subspace vectors
-per root, sometimes as few as 2 or 3, so that even for small systems it is easy
-to satisfy \( d_\mu \ll \mathrm{o}^2\mathrm{v}^2 \), resulting in substantial
-memory savings.
-\Cref{eq:two-body-hessian-function-in-text} also includes the timing bottleneck
-for the LR-ODC-12, the contraction of the \(\mathrm{v}^4\) integrals with the
+The bottleneck is the contraction of the \(\mathrm{v}^4\) integrals with the
 expansion vector, \(\mathrm{g}_{ab}^{cd}u_{\mu,cd}^{ij}\), which scales as
 \(\mathcal{O}(d_\mu\mathrm{o}^2\mathrm{v}^4)\) in the number of floating point
 operations.
 This term is the rate limiting step in EOM-CCSD as well.
+The full set of linear transformation formulas for the LR-ODC-12 Hessian and
+metric blocks is given in the appendix
+(\cref{sec:linear-transformation-formulas}).
 
-A direct application of \cref{algo:davidson} to
-\cref{eq:linear-response-eigenvalue-equation} is complicated by the fact that
-the desired (small, positive) eigenvalues are in the middle of the spectrum,
-rather than at the extremes.
-We make use of two strategies.
+
+\section{Strategies for Solving the LR-ODC-12 Model}
+\label{sec:davidson:strategies}
+
+\section{Blocking and Disk Storage in the Davidson Algorithm}
+\label{sec:davidson:disk}
+
+
+\section{The LR-ODC-12 Eigenvalue Equation}
+
+
+\section{Algorithms}
+\label{sec:algorithms}
+
+
 
 \paragraph{Strategy 1}
 One approach is to invert the eigenvalue equation, solving for the {\itshape
@@ -673,42 +792,57 @@ as the square of \(\tilde{\mathbf{A}}\), since in low order we have
         &
         iter
         &
-        time
+        time (s)
         &
         roots
         &
         iter
         &
-        time
+        time (s)
         &
         roots
         &
         iter
         &
-        time
+        time (s)
         &
         roots
         \\
         \hline
         \ce{H2O}
         & 260 & 14,625
-        & 11 & 2.3 & 10/10 & 17 & 1.9 & 10/10 & 17 & 2.2 & 10/10
+        & 11 & 23.1 & 10/10 & 16 & 29.1 & 10/10 & 16 & 30.1 & 10/10
+        \\
+        &&
+        & 11 & 23.2 & 10/10 & 24 & 38.4 & 10/10 & 24 & 39.6 & 10/10
         \\
         \ce{N2}
         & 588 & 78,351
-        & 11 & 14.3 & 10/10 & 17 & 13.1 & 9/10 & 17 & 12.6 & 9/10
+        & 14 & 186. & 10/10 & 17 & 213. & 9/10 & 17 & 216. & 9/10
+        \\
+        &&
+        & 10 & 156. & 10/10 & 15 & 179. & 9/10 & 15 & 202. & 9/10
         \\
         \ce{HCN}
         & 644 & 94,185
-        & 14 & 17.1 & 9/10 & 21 & 15.7 & 9/10 & 21 & 14.9 & 9/10
+        & 15 & 251. & 9/10 & 21 & 281. & 9/10 & 21 & 331. & 9/10
+        \\
+        &&
+        & 10 & 205. & 9/10 & 18 & 252. & 9/10 & 19 & 308. & 9/10
         \\
         \ce{H2CO}
         & 768 & 135,360
-        & 15 & 25.3 & 7/10 & 28 & 21.9 & 6/10 & 28 & 22.0 & 6/10
+        & 20 & 478. & 7/10 & 28 & 638. & 6/10 & 27 & 650. & 6/10
+        \\
+        &&
+        & 11 & 362. & 7/10 & 23 & 442. & 7/10 & 25 & 614. & 7/10
         \\
         \ce{C2H4}
         & 896 & 184,800
-        & 11 & 41.0 & 9/10 & 25 & 32.3 & 9/10 & 25 & 32.5 & 9/10
+        & 17 & 640. & 9/10 & 25 & 874. & 9/10 & 25 & 891. & 9/10
+        \\
+        &&
+        & 10 & 500. & 9/10 & 19 & 574. & 9/10 & 20 & 722. & 9/10
         \\
         \hline
         \hline
