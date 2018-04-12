@@ -5,94 +5,71 @@
 }
 \label{ch:davidson}
 
-\begin{enumerate}
-    \item
-        \cref{ch:response} presented the LR-ODC-12 model for electronic excited
-        states, where excitation energies and transition properties are computed
-        by diagonalizing the parameter Hessian of the ODC-12 energy functional,
-        with respect to a metric that arises from the time-dependence of the
-        parameter responses.
-    \item
-        Since number of parameters in the ODC-12 variant of density cumulant
-        theory scales as
-        \(
-            \mathcal{O}(o^2v^2)
-        \)
-        with the number of occupied (\(o\)) and virtual (\(v\)) orbitals, the
-        memory requirement for the Hessian matrix scales with the fourth power
-        of \(o\) and \(v\), and the number of floating point operations needed
-        to diagonalize it scales with the sixth power of these dimensions.
-    \item
-        Such a brute-force approach will rapidly overwhelm available computing
-        resources even for relatively small molecules.
-    \item
-        For the common scenario where we only care about states within a narrow
-        energy range, the cost of diagonalization can be drastically reduced
-        through the use of so-called {\itshape direct algorithms} which enable
-        the determination of subsets of eigenvectors and eigenvalues without
-        explicitly constructing the matrix of a linear transformation in
-        computer memory.
-    \item
-        This chapter will explore the use of the Davidson
-        algorithm\cite{Liu:1978p49,Davidson:1975p87}
-        in solving the LR-ODC-12 model.
-    \item
-        After describing the algorithm and discussing the structure of the
-        LR-ODC-12 eigenvalue equations in
-        \cref{sec:davidson:davidson,sec:davidson:eig}, I will present several
-        strategies for solving the LR-ODC-12 model along with a benchmark study
-        of their convergence characteristics in \cref{sec:davidson:strategies}.
-    \item
-        Finally, in \cref{sec:davidson:disk} I will discuss how to reduce memory
-        consumption in the Davidson algorithm by partitioning the expansion
-        space into blocks and storing large arrays on disk.
-\end{enumerate}
+\cref{ch:response} presented the LR-ODC-12 model for electronic excited states,
+where excitation energies and transition properties are computed by
+diagonalizing the parameter Hessian of the ODC-12 energy functional, with
+respect to a metric that arises from the time-dependence of the parameter
+responses.
+Since number of parameters in the ODC-12 model scales as
+\(
+    \mathcal{O}(o^2v^2)
+\)
+with the number of occupied (\(o\)) and virtual (\(v\)) orbitals, the
+memory requirement for the Hessian matrix scales with the fourth power
+of \(o\) and \(v\), and the number of floating point operations needed
+to diagonalize it scales with the sixth power of these dimensions.
+Such a brute-force approach will rapidly overwhelm available computing
+resources even for relatively small molecules.
+For the common scenario in which we only care about states within a narrow
+energy range, the cost of diagonalization can be drastically reduced through the
+use of so-called {\itshape direct algorithms} which enable the determination of
+subsets of eigenvectors and eigenvalues without explicitly constructing the
+Hessian matrix in computer memory.
+This chapter will explore the use of the Davidson
+algorithm\cite{Liu:1978p49,Davidson:1975p87} in solving the LR-ODC-12 model.
+After describing the algorithm and discussing the structure of the LR-ODC-12
+eigenvalue equations in \cref{sec:davidson:davidson,sec:davidson:eig}, I will
+present several strategies for solving the LR-ODC-12 model along with some
+performance benchmarks in \cref{sec:davidson:strategies}.
+In \cref{sec:davidson:disk} I will discuss how to reduce memory consumption in
+the Davidson algorithm by partitioning the expansion space into blocks and
+storing large arrays on disk.
+
 
 \section{The Davidson Algorithm}
 \label{sec:davidson:davidson}
 
-P1
-\begin{enumerate}
-    \item
-        Direct algorithms represent linear transformations as functions mapping
-        vectors
-        \(
-            \mathbf{v}
-        \)
-        in their domain to vectors
-        \(
-            \mathbf{L}(\mathbf{v})
-        \)
-        in their codomain, rather than as coefficient arrays
-        \(
-            [L_{ij}]
-            =
-            [\mathbf{e}_i \cdot \mathbf{L}(\mathbf{e}_j)]
-        \)
-        over a complete basis.
-    \item
-        That is, the result of the transformation is determined {\itshape
-        directly}, without explicitly forming its matrix representation in
-        computer memory.
-    \item
-        The Davidson algorithm applies this technique in the context of a matrix
-        diagonalization, by progressively growing a basis
-        \(
-            \{\mathbf{u}_1, \ldots,\mathbf{u}_d\}
-        \)
-        to span the lowest or highest eigenvectors of a matrix to some threshold
-        of accuracy.
-    \item
-        For a transformation on \(\mathbb{R}^n\), this allows us to reduce our
-        computational effort from \(\mathcal{O}(n^3)\) to \(\mathcal{O}(n^2 d)\)
-        or even less when \(\mathbf{L}\) is constructed from lower-dimensional
-        arrays.
-    \item
-        Memory requirements are reduced from \(\mathcal{O}(n^2)\) to
-        \(\mathcal{O}(nd)\) in the Davidson algorithm, so that as long as the
-        dimension of the transformation is large relative to the desired number
-        of roots we can gain considerable savings.
-\end{enumerate}
+Direct algorithms represent linear transformations as functions mapping vectors
+\(
+    \mathbf{v}
+\)
+in their domain to vectors
+\(
+    \mathbf{L}(\mathbf{v})
+\)
+in their codomain, rather than as coefficient arrays
+\(
+    [L_{ij}]
+    =
+    [\mathbf{e}_i \cdot \mathbf{L}(\mathbf{e}_j)]
+\)
+over a complete basis.
+That is, the result of the transformation is determined {\itshape directly},
+without explicitly forming its matrix representation in computer memory.
+The Davidson algorithm applies this technique in the context of a matrix
+diagonalization, by progressively growing a basis
+\(
+    \{\mathbf{u}_1, \ldots,\mathbf{u}_d\}
+\)
+to span the lowest or highest eigenvectors of a matrix to some threshold of
+accuracy.
+For a transformation on \(\mathbb{R}^n\), this allows us to reduce our
+computational effort from \(\mathcal{O}(n^3)\) to \(\mathcal{O}(n^2 d)\) or even
+less when \(\mathbf{L}\) is constructed from lower-dimensional arrays.
+Memory requirements are reduced from \(\mathcal{O}(n^2)\) to \(\mathcal{O}(nd)\)
+in the Davidson algorithm, so that, as long as the dimension of the
+transformation is large relative to the desired number of roots, we can gain
+considerable savings.
 
 \begin{algorithm}
     \caption{%
@@ -236,116 +213,104 @@ P1
     \end{algorithmic}
 \end{algorithm}
 
-\noindent
-P2
-\begin{enumerate}
-    \item
-        The procedure for the Davidson algorithm is presented in
-        \cref{algo:davidson}, which solves for the eigenvalues and right
-        eigenvectors of a generalized eigenvalue problem, which may or may not
-        be symmetric.
-    \item
-        The general strategy of the algorithm is as follows.
-    \item
-        We expand our transformations in the reduced expansion space,
-        \(
-            [L_{ij}^\mathrm{sub}]
-            =
-            [\mathbf{u}_i\cdot \mathbf{L}(\mathbf{u}_j)]
-        \),
-        and solve the eigenvalue equation in this subspace.
-        \begin{equation}
-            \mathbf{L}^\mathrm{sub}
-            \mathbf{v}_j^\mathrm{sub}
-            =
-            \lambda_j^\mathrm{trial}
-            \mathbf{G}^\mathrm{sub}
-            \mathbf{v}_j^\mathrm{sub}
-        \end{equation}
-    \item
-        Expanding this trial solution in the full space as
-        \(
-            \mathbf{v}_j^\mathrm{trial}
-            =
-            \mathbf{U}\mathbf{v}_j^\mathrm{sub}
-        \),
-        the correction vector
-        \(
-            \mathbf{d}_j
-            =
-            \mathbf{v}_j^\mathrm{trial}
-            -
-            \mathbf{v}_j
-        \)
-        taking us to the exact solution can be approximated as
-        \begin{equation}
-            \label{eq:davidson:davidson-step}
-            \mathbf{d}_j
-            \approx
-            -
-            (
-                \tilde{\mathbf{L}}
-                -
-                \lambda_j^\mathrm{trial}
-                \tilde{\mathbf{G}}
-            )^{-1}
-            \mathbf{r}_j
-            \qquad
-            \mathbf{r}_j
-            \equiv
-            (\mathbf{L} - \lambda_j^\mathrm{trial}\mathbf{G})
-            \mathbf{v}_j^\mathrm{trial}
-        \end{equation}
-        where \(\mathbf{r}_j\) is termed the residual vector and
-        \(
-            (
-                \tilde{\mathbf{L}} - \lambda^\mathrm{trial}\tilde{\mathbf{G}}
-            )^{-1}
-        \)
-        is called the preconditioner, which is constructed from diagonal
-        approximations to \(\mathbf{L}\) and \(\mathbf{G}\).
-    \item
-        This can be motivated as an approximate solution to the following
-        identity.
-        \begin{equation}
-            \mathbf{0}
-            =
-            (\mathbf{L} - \lambda_j\mathbf{G})
-            \mathbf{v}_j
-            =
-            (\mathbf{L} - \lambda_j\mathbf{G})
-            (
-                \mathbf{v}_j^\mathrm{trial}
-                +
-                \mathbf{d}_j
-            )
-        \end{equation}
-    \item
-        These correction vectors are used to iteratively grow the expansion
-        space until it spans the desired eigenvector, \(\mathbf{v}_j\).
-    \item
-        A key assumption of this algorithm is that the matrices are diagonally
-        dominant, otherwise the diagonal approximation in
-        \cref{eq:davidson:davidson-step} breaks down and the procedure will
-        fail to converge on the desired roots.
-    \item
-        Efficient implementations of the Davidson algorithm will compute images
-        \(\mathbf{L}(\mathbf{u}_i)\) only for the new expansion vectors and
-        store these for future iterations.
-    \item
-        When the expansion space becomes large, one can replace the expansion
-        vectors with the current set of trial vectors in order to keep the
-        memory requirements manageable, which is known as a subspace collapse.
-    \item
-        For very large matrices, frequent collapses every second or third
-        iteration can be used to keep I/O requirements to a minimum, at the cost
-        of slower convergence.\cite{Leininger:2001p1574}
-    \item
-        This approach is quite general and can be adapted to other large matrix
-        problems, such as the linear equation
-        \(\mathbf{L}\mathbf{x}=\mathbf{b}\), where it yields a variant of the
-        conjugate gradient method.
-\end{enumerate}
+The procedure for the generalized Davidson algorithm is presented in
+\cref{algo:davidson}, which solves for the eigenvalues and right eigenvectors of
+a generalized eigenvalue problem, which may or may not be symmetric.
+The strategy of the algorithm is as follows.
+We expand our transformations in the reduced expansion space,
+\(
+    [L_{ij}^\mathrm{sub}]
+    =
+    [\mathbf{u}_i\cdot \mathbf{L}(\mathbf{u}_j)]
+\),
+and solve the eigenvalue equation in this subspace.
+\begin{equation}
+    \mathbf{L}^\mathrm{sub}
+    \mathbf{v}_j^\mathrm{sub}
+    =
+    \lambda_j^\mathrm{trial}
+    \mathbf{G}^\mathrm{sub}
+    \mathbf{v}_j^\mathrm{sub}
+\end{equation}
+This trial solution is expressed in the full space as
+\(
+    \mathbf{v}_j^\mathrm{trial}
+    =
+    \mathbf{U}\mathbf{v}_j^\mathrm{sub}
+\).
+The correction vector
+\(
+    \mathbf{d}_j
+    =
+    \mathbf{v}_j^\mathrm{trial}
+    -
+    \mathbf{v}_j
+\)
+taking us to the exact solution can be approximated as
+\begin{equation}
+    \label{eq:davidson:davidson-step}
+    \mathbf{d}_j
+    \approx
+    -
+    (
+        \tilde{\mathbf{L}}
+        -
+        \lambda_j^\mathrm{trial}
+        \tilde{\mathbf{G}}
+    )^{-1}
+    \mathbf{r}_j
+\end{equation}
+where
+\(
+    \mathbf{r}_j
+    \equiv
+    (\mathbf{L} - \lambda_j^\mathrm{trial}\mathbf{G})
+    \mathbf{v}_j^\mathrm{trial}
+\)
+is the residual vector and
+\(
+    (
+        \tilde{\mathbf{L}} - \lambda^\mathrm{trial}\tilde{\mathbf{G}}
+    )^{-1}
+\)
+is called the preconditioner, which is constructed from diagonal
+approximations to \(\mathbf{L}\) and \(\mathbf{G}\).
+This correction vector can be motivated as an approximate solution to the
+following identity.
+\begin{equation}
+    \mathbf{0}
+    =
+    (\mathbf{L} - \lambda_j\mathbf{G})
+    \mathbf{v}_j
+    =
+    (\mathbf{L} - \lambda_j\mathbf{G})
+    (
+        \mathbf{v}_j^\mathrm{trial}
+        +
+        \mathbf{d}_j
+    )
+\end{equation}
+By repeatedly addin these correction vectors to the subspace, one can
+iteratively grow the expansion space until it spans the desired eigenvector,
+\(\mathbf{v}_j\).
+At convergence, the residual becomes vanishingly small and the corrections
+vanish as well.
+A key assumption of this algorithm is that the matrices are diagonally
+dominant, otherwise the diagonal approximation in
+\cref{eq:davidson:davidson-step} breaks down and the procedure will
+fail to converge on the desired roots.
+Efficient implementations of the Davidson algorithm compute images
+\(\mathbf{L}(\mathbf{u}_i)\) only for the new expansion vectors and
+store these for future iterations.
+When the expansion space becomes large, we can periodically replace the
+expansion vectors with the current set of trial eigenvectors in order to
+keep the memory requirements more manageable.
+For very large matrices, frequent collapses every second or third iteration can be used to keep I/O requirements to a minimum, at the cost
+of slower convergence.\cite{Leininger:2001p1574}
+This approach is quite general and can be adapted to other large matrix
+problems, such as the linear equation
+\(\mathbf{L}\mathbf{x}=\mathbf{b}\), where it yields a variant of the
+conjugate gradient method.
 
 
 \section{The LR-ODC-12 Eigenvalue Equation}
@@ -540,7 +505,7 @@ under this transformation is given by
     \end{array}
 \end{equation}
 where the \(i,j,k,l,m,n\) run over occupied spin-orbitals and \(a,b,c,d,e,f\)
-run over virtual (un-occupied) spin-orbitals with implicity summation over
+run over virtual (un-occupied) spin-orbitals with implicit summation over
 pairs of upper and lower indices.
 See \cref{ch:response} for the definitions of these intermediates.
 For reasonably sized basis sets, the rate limiting step is the contraction of
@@ -835,13 +800,13 @@ metric.
         \vspace*{\fill}
         \captionof{table}{%
             A comparison of three different solution strategies for the
-            LR-ODC-12 model for five molecules, using the def2-SV(P) basis set.
+            LR-ODC-12 model for five molecules using the def2-SV(P) basis set.
             In each case 10 eigenvectors are converged to \(10^{-5}~\au\),
             starting from an initial expansion space of 100 guess vectors and
             collapsing the subspace very 200 vectors.
             The second and third columns show the number of singles and doubles
             parameters for each system, which determine the dimensions of the
-            matrix equation, and the remaining columns give the the number of
+            matrix equation, and the remaining columns give the number of
             iterations, the run-time, and the number of low-lying roots obtained
             for each strategy.
             The first row for each molecule shows the results for the FD
@@ -936,6 +901,22 @@ metric.
 \section{Blocking and Disk Storage in the Davidson Algorithm}
 \label{sec:davidson:disk}
 
+\afterpage{%
+    \clearpage
+    \centering
+    \includegraphics[width=\textwidth]{figures/mem_edited.pdf}
+    \captionof{figure}{%
+        LR-ODC-12 memory profiles for the lowest 20 states of ethylene with the
+        def2-SV(P) basis set, computed on an
+        Intel\textsuperscript{\textregistered} Core\texttrademark\ i7-5600U
+        processor using four threads.
+    }
+}
+
+\begin{enumerate}
+    \item
+        Note subspace collapses
+\end{enumerate}
 
 
 \begin{subappendices}
