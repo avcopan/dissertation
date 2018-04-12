@@ -27,13 +27,12 @@ subsets of eigenvectors and eigenvalues without explicitly constructing the
 Hessian matrix in computer memory.
 This chapter will explore the use of the Davidson
 algorithm\cite{Liu:1978p49,Davidson:1975p87} in solving the LR-ODC-12 model.
-After describing the algorithm and discussing the structure of the LR-ODC-12
-eigenvalue equations in \cref{sec:davidson:davidson,sec:davidson:eig}, I will
-present several strategies for solving the LR-ODC-12 model along with some
-performance benchmarks in \cref{sec:davidson:strategies}.
-In \cref{sec:davidson:disk} I will discuss how to reduce memory consumption in
-the Davidson algorithm by partitioning the expansion space into blocks and
-storing large arrays on disk.
+\cref{sec:davidson:davidson} describes the Davidson algorithm in general terms
+and describes strategies employed in the present implementation to reduce memory
+usage for large calculations.
+\cref{sec:davidson:eig} discusses the structure of the LR-ODC-12 eigenvalue
+equations, which is followed by a comparison of several alternative strategies
+for solving the LR-ODC-12 model in section \cref{sec:davidson:strategies}.
 
 
 \section{The Davidson Algorithm}
@@ -290,18 +289,15 @@ following identity.
         \mathbf{d}_j
     )
 \end{equation}
-By repeatedly addin these correction vectors to the subspace, one can
+By repeatedly adding these correction vectors to the subspace, one can
 iteratively grow the expansion space until it spans the desired eigenvector,
 \(\mathbf{v}_j\).
-At convergence, the residual becomes vanishingly small and the corrections
-vanish as well.
+At convergence, the residual and the correction vectors become vanishingly
+small.
 A key assumption of this algorithm is that the matrices are diagonally
 dominant, otherwise the diagonal approximation in
 \cref{eq:davidson:davidson-step} breaks down and the procedure will
 fail to converge on the desired roots.
-Efficient implementations of the Davidson algorithm compute images
-\(\mathbf{L}(\mathbf{u}_i)\) only for the new expansion vectors and
-store these for future iterations.
 When the expansion space becomes large, we can periodically replace the
 expansion vectors with the current set of trial eigenvectors in order to
 keep the memory requirements more manageable.
@@ -311,6 +307,28 @@ This approach is quite general and can be adapted to other large matrix
 problems, such as the linear equation
 \(\mathbf{L}\mathbf{x}=\mathbf{b}\), where it yields a variant of the
 conjugate gradient method.
+
+\afterpage{%
+    \clearpage
+    \includegraphics[width=0.9\textwidth]{figures/mem_edited.pdf}
+    \captionof{figure}{%
+        \label{fig:davidson:memory-profiles}
+        LR-ODC-12 memory profiles for calculating the lowest 20 states of
+        ethylene with the def2-SV(P) basis set on an
+        Intel\textsuperscript{\textregistered} Core\texttrademark\ i7-5600U
+        processor using
+        \cref{eq:davidson:canonical-reduced,eq:davidson:fock-diagonal} below.
+    }
+}
+
+\cref{fig:davidson:memory-profiles} presents memory profiles for the Davidson
+algorithm, as implemented for the present study.
+The red trace represents the most straight-forward implementation of
+\cref{algo:davidson}.
+Note that the images \(\mathbf{L}(\mathbf{u}_i)\) only need to be evaluated once
+and can be stored for future iterations as vectors are added to the expansion
+space.
+
 
 
 \section{The LR-ODC-12 Eigenvalue Equation}
@@ -600,6 +618,7 @@ Alternatively, we can solve the reduced eigenvalue equation,
 \cref{eq:davidson:reduced-eigenvalue-equation}, for the squares of the lowest
 excitation energies, which we will call the canonical reduced (CR) equation.
 \begin{equation}
+    \label{eq:davidson:canonical-reduced}
     \mathbf{H}^-(\mathbf{H}^+(\mathbf{c}_k^+))
     =
     \omega_k^2
@@ -695,6 +714,7 @@ One option is to only use the Fock-like terms in the \(\mathbf{A}\) matrix and
 approximate the metric as an identity matrix, which will here be called the Fock
 diagonal (FD) approximation.
 \begin{equation}
+    \label{eq:davidson:fock-diagonal}
     (\tilde{\mathbf{S}}_{11}^\mathrm{FD})_{ia,ia}
     \equiv
     1
@@ -954,28 +974,6 @@ preconditioner, which further widens the gap in their convergence rates.
 Taken together, these results suggest that the FI/PED combination is to be
 preferred if it can be afforded, and the CR/PED combination presents a second
 best option.
-
-
-\section{Blocking and Disk Storage in the Davidson Algorithm}
-\label{sec:davidson:disk}
-
-\afterpage{%
-    \clearpage
-    \includegraphics[width=0.9\textwidth]{figures/mem_edited.pdf}
-    \captionof{figure}{%
-        LR-ODC-12 memory profiles for calculating the lowest 20 states of
-        ethylene with the def2-SV(P) basis set on an
-        Intel\textsuperscript{\textregistered} Core\texttrademark\ i7-5600U
-        processor.
-        Computed using the CR equation and the FD preconditioner, with subspace
-        collapses every 200 vectors.
-    }
-}
-
-\begin{enumerate}
-    \item
-        Note subspace collapses
-\end{enumerate}
 
 
 \begin{subappendices}
