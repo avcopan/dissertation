@@ -581,15 +581,24 @@ metric.
 \section{Strategies for Solving the LR-ODC-12 Model}
 \label{sec:davidson:strategies}
 
-\paragraph{The full inverse (FI) eigenvalue equation.}
+We explore three strategies for solving for the excitation energies and
+transition properties of the LR-ODC-12 model using the Davidson algorithm.
+A direct solution of the full eigenvalue equation
+(\cref{eq:linear-response-eigenvalue-equation}) is not possible with the
+Davidson algorithm, because the presence of negative roots means that the
+eigenvalues of interest are in the middle of the spectrum.
+Instead, we can solve for the {\itshape highest} roots of the full inverse (FI)
+eigenvalue equation
 \begin{equation}
     \mathbf{M}(\mathbf{z}_k)
     =
     \omega_k^{-1}
     \mathbf{E}(\mathbf{z}_k)
 \end{equation}
-
-\paragraph{The canonical reduced (CR) eigenvalue equation.}
+which are the reciprocals of the excitation energies.
+Alternatively, we can solve the reduced eigenvalue equation,
+\cref{eq:davidson:reduced-eigenvalue-equation}, for the squares of the lowest
+excitation energies, which we will call the canonical reduced (CR) equation.
 \begin{equation}
     \mathbf{H}^-(\mathbf{H}^+(\mathbf{c}_k^+))
     =
@@ -607,29 +616,30 @@ metric.
     \equiv
     \mathbf{x}_k \pm \mathbf{y}_k
 \end{equation}
-\begin{equation}
-    \mathbf{x}_k
-    =
-    \tfrac{1}{2}
-    (
-        \mathbf{c}_k^+
-        +
-        \omega_k^{-1}
-        \mathbf{H}^+(\mathbf{c}_k^+)
-    )
-    \qquad
-    \mathbf{y}_k
-    =
-    \tfrac{1}{2}
-    (
-        \mathbf{c}_k^+
-        -
-        \omega_k^{-1}
-        \mathbf{H}^+(\mathbf{c}_k^+)
-    )
-\end{equation}
-
-\paragraph{The symmetrized reduced (SR) eigenvalue equation.}
+% The components of the full eigenvectors in this method can be recovered as
+% follows.
+% \begin{equation}
+%     \mathbf{x}_k
+%     =
+%     \tfrac{1}{2}
+%     (
+%         \mathbf{c}_k^+
+%         +
+%         \omega_k^{-1}
+%         \mathbf{H}^+(\mathbf{c}_k^+)
+%     )
+%     \qquad
+%     \mathbf{y}_k
+%     =
+%     \tfrac{1}{2}
+%     (
+%         \mathbf{c}_k^+
+%         -
+%         \omega_k^{-1}
+%         \mathbf{H}^+(\mathbf{c}_k^+)
+%     )
+% \end{equation}
+Lastly, we consider the following symmetrized reduced (SR) eigenvalue equation
 \begin{equation}
     \bar{\mathbf{H}}^-(\bar{\mathbf{H}}^+(\bar{\mathbf{c}}_k^+))
     =
@@ -649,46 +659,54 @@ metric.
     \mathbf{S}^{\frac{1}{2}}
     (\mathbf{x}_k \pm \mathbf{y}_k)
 \end{equation}
+which is approximately Hermitian when the elements of
+\(
+    \mathbf{B}
+\)
+are small in magnitude.
+% \begin{equation}
+%     \mathbf{x}_k
+%     =
+%     \tfrac{1}{2}
+%     \mathbf{S}^{-\tfrac{1}{2}}
+%     (
+%         \mathbf{c}_k^+
+%         +
+%         \omega_k^{-1}
+%         \mathbf{H}^+(\mathbf{c}_k^+)
+%     )
+%     \qquad
+%     \mathbf{y}_k
+%     =
+%     \tfrac{1}{2}
+%     \mathbf{S}^{-\tfrac{1}{2}}
+%     (
+%         \mathbf{c}_k^+
+%         -
+%         \omega_k^{-1}
+%         \mathbf{H}^+(\mathbf{c}_k^+)
+%     )
+% \end{equation}
+
+For each of these variants of the LR-ODC-12 eigenvalue equation we can use
+different diagonal approximations to define the preconditioner.
+Here we will consider two possibilities.
+One option is to only use the Fock-like terms in the \(\mathbf{A}\) matrix and
+approximate the metric as an identity matrix, which will here be called the Fock
+diagonal (FD) approximation.
 \begin{equation}
-    \mathbf{x}_k
-    =
-    \tfrac{1}{2}
-    \mathbf{S}^{-\tfrac{1}{2}}
-    (
-        \mathbf{c}_k^+
-        +
-        \omega_k^{-1}
-        \mathbf{H}^+(\mathbf{c}_k^+)
-    )
-    \qquad
-    \mathbf{y}_k
-    =
-    \tfrac{1}{2}
-    \mathbf{S}^{-\tfrac{1}{2}}
-    (
-        \mathbf{c}_k^+
-        -
-        \omega_k^{-1}
-        \mathbf{H}^+(\mathbf{c}_k^+)
-    )
-\end{equation}
-
-
-\paragraph{The Fock diagonal (FD) preconditioner.}
-
-\begin{equation}
-    (\tilde{\mathbf{S}}_{11})_{ia,ia}
+    (\tilde{\mathbf{S}}_{11}^\mathrm{FD})_{ia,ia}
     \equiv
     1
     \qquad
-    (\tilde{\mathbf{A}}_{11})_{ia,ia}
+    (\tilde{\mathbf{A}}_{11}^\mathrm{FD})_{ia,ia}
     \equiv
     -
     f_i^i
     +
     f_a^a
     \qquad
-    (\tilde{\mathbf{A}}_{22})_{ijab,ijab}
+    (\tilde{\mathbf{A}}_{22}^\mathrm{FD})_{ijab,ijab}
     \equiv
     -
     \mathcal{F}_i^i
@@ -699,13 +717,21 @@ metric.
     -
     \mathcal{F}_b^b
 \end{equation}
-
-
-\paragraph{The product of exact diagonals (PED) preconditioner.}
-
+These generalized Fock matrices take the place of the mean-field Fock matrix in
+a linearized theory, where this would constitute the zeroth order perturbative
+approximation to the Hessian.
+Alternatively, we can approximate diagonals of our transformation matrices as
+products of the exact diagonals of \(\mathbf{A}\), \(\mathbf{S}\), and, for the
+reduced eigenvalue equations, also \(\mathbf{B}\).
+I will call this the product of exact diagonals (PED) approximation.
+Evaluating these diagonal elements from the transformation function is
+computationally inefficient because it requires \(\mathcal{O}(o^2v^2)\) function
+evaluations, each of which scales as \(\mathcal{O}(o^2v^4)\), so it is important
+to have analytic formulae for the diagonals.
+The two-body diagonals are given by
 \begin{equation}
     \begin{array}{r@{\,}l}
-        (\tilde{\mathbf{A}}_{22})_{ijab,ijab}
+        (\tilde{\mathbf{A}}_{22}^\mathrm{PED})_{ijab,ijab}
         \equiv
         &
         -
@@ -755,10 +781,9 @@ metric.
         t_{nj}^{ab}
     \end{array}
 \end{equation}
-
 \begin{equation}
     \begin{array}{r@{\,}l}
-        (\tilde{\mathbf{B}}_{22})_{ijab,ijab}
+        (\tilde{\mathbf{B}}_{22}^\mathrm{PED})_{ijab,ijab}
         \equiv
         &
         +
@@ -791,111 +816,144 @@ metric.
         t_{ab}^{ni}
     \end{array}
 \end{equation}
+where \(S(p/q)v_{pq}^{pq} = v_{pq}^{pq} + v_{qp}^{qp}\) denotes an index
+symmetrizer.
+Formulae for the diagonals of the one-body blocks of \(\mathbf{A}\),
+\(\mathbf{B}\), and \(\mathbf{S}\) are included in the appendix,
+\cref{sec:linear-transformation-formulas}.
 
 
-\afterpage{%
-    \clearpage
-    \centering
-    \begin{landscape}
-        \vspace*{\fill}
-        \captionof{table}{%
-            A comparison of three different solution strategies for the
-            LR-ODC-12 model for five molecules using the def2-SV(P) basis set.
-            In each case 10 eigenvectors are converged to \(10^{-5}~\au\),
-            starting from an initial expansion space of 100 guess vectors and
-            collapsing the subspace very 200 vectors.
-            The second and third columns show the number of singles and doubles
-            parameters for each system, which determine the dimensions of the
-            matrix equation, and the remaining columns give the number of
-            iterations, the run-time, and the number of low-lying roots obtained
-            for each strategy.
-            The first row for each molecule shows the results for the FD
-            preconditioner and the second row shows the results for the
-            PED preconditioner.
-            All computations were run on an
-            Intel\textsuperscript{\textregistered} Core\texttrademark\ i7-5600U
-            processor using four threads.
-        }
-        \vspace{15pt}
-        \begin{tabular}{ccccccccccccc}
-            \hline
-            \hline
-            &
-            &
-            &
-            \multicolumn{3}{c}{Full Inverse}
-            &
-            \multicolumn{3}{c}{Canonical Reduced}
-            &
-            \multicolumn{3}{c}{Symmetrized Reduced}
-            \\
-            &
-            \(n_1\)
-            &
-            \(n_2\)
-            &
-            iter
-            &
-            time (s)
-            &
-            roots
-            &
-            iter
-            &
-            time (s)
-            &
-            roots
-            &
-            iter
-            &
-            time (s)
-            &
-            roots
-            \\
-            \hline
-            \ce{H2O}
-            & 260 & 14,625
-            & 11 & 23 & 10/10 & 16 & 29 & 10/10 & 16 & 30 & 10/10
-            \\
-            &&
-            & 11 & 23 & 10/10 & 24 & 38 & 10/10 & 24 & 40 & 10/10
-            \\
-            \ce{N2}
-            & 588 & 78,351
-            & 14 & 186 & 10/10 & 17 & 213 & 9/10 & 17 & 216 & 9/10
-            \\
-            &&
-            & 10 & 156 & 10/10 & 15 & 179 & 9/10 & 15 & 202 & 9/10
-            \\
-            \ce{HCN}
-            & 644 & 94,185
-            & 15 & 251 & 9/10 & 21 & 281 & 9/10 & 21 & 331 & 9/10
-            \\
-            &&
-            & 10 & 205 & 9/10 & 18 & 252 & 9/10 & 19 & 308 & 9/10
-            \\
-            \ce{H2CO}
-            & 768 & 135,360
-            & 20 & 478 & 7/10 & 28 & 638 & 6/10 & 27 & 650 & 6/10
-            \\
-            &&
-            & 11 & 362 & 7/10 & 23 & 442 & 7/10 & 25 & 614 & 7/10
-            \\
-            \ce{C2H4}
-            & 896 & 184,800
-            & 17 & 640 & 9/10 & 25 & 874 & 9/10 & 25 & 891 & 9/10
-            \\
-            &&
-            & 10 & 500 & 9/10 & 19 & 574 & 9/10 & 20 & 722 & 9/10
-            \\
-            \hline
-            \hline
-        \end{tabular}
-        \vspace*{\fill}
-    \end{landscape}
-}
+\begin{landscape}
+    \vspace*{\fill}
+    \captionof{table}{%
+        \label{tab:davidson:benchmark}
+        A comparison of three different solution strategies for the
+        LR-ODC-12 model for five molecules using the def2-SV(P) basis set.
+        In each case 10 eigenvectors are converged to \(10^{-5}~\au\),
+        starting from an initial expansion space of 100 guess vectors and
+        collapsing the subspace very 200 vectors.
+        The second and third columns show the number of singles and doubles
+        parameters for each system, which determine the dimensions of the
+        matrix equation, and the remaining columns give the number of
+        iterations, the run-time, and the number of low-lying roots obtained
+        for each strategy.
+        The first row for each molecule shows the results for the FD
+        preconditioner and the second row shows the results for the
+        PED preconditioner.
+        All computations were run on an
+        Intel\textsuperscript{\textregistered} Core\texttrademark\ i7-5600U
+        processor using four threads.
+    }
+    \vspace{15pt}
+    \begin{tabular}{ccccccccccccc}
+        \hline
+        \hline
+        &
+        &
+        &
+        \multicolumn{3}{c}{Full Inverse}
+        &
+        \multicolumn{3}{c}{Canonical Reduced}
+        &
+        \multicolumn{3}{c}{Symmetrized Reduced}
+        \\
+        &
+        \(n_1\)
+        &
+        \(n_2\)
+        &
+        iter
+        &
+        time (s)
+        &
+        roots
+        &
+        iter
+        &
+        time (s)
+        &
+        roots
+        &
+        iter
+        &
+        time (s)
+        &
+        roots
+        \\
+        \hline
+        \ce{H2O}
+        & 260 & 14,625
+        & 11 & 23 & 10/10 & 16 & 29 & 10/10 & 16 & 30 & 10/10
+        \\
+        &&
+        & 11 & 23 & 10/10 & 24 & 38 & 10/10 & 24 & 40 & 10/10
+        \\
+        \ce{N2}
+        & 588 & 78,351
+        & 14 & 186 & 10/10 & 17 & 213 & 9/10 & 17 & 216 & 9/10
+        \\
+        &&
+        & 10 & 156 & 10/10 & 15 & 179 & 9/10 & 15 & 202 & 9/10
+        \\
+        \ce{HCN}
+        & 644 & 94,185
+        & 15 & 251 & 9/10 & 21 & 281 & 9/10 & 21 & 331 & 9/10
+        \\
+        &&
+        & 10 & 205 & 9/10 & 18 & 252 & 9/10 & 19 & 308 & 9/10
+        \\
+        \ce{H2CO}
+        & 768 & 135,360
+        & 20 & 478 & 7/10 & 28 & 638 & 6/10 & 27 & 650 & 6/10
+        \\
+        &&
+        & 11 & 362 & 7/10 & 23 & 442 & 7/10 & 25 & 614 & 7/10
+        \\
+        \ce{C2H4}
+        & 896 & 184,800
+        & 17 & 640 & 9/10 & 25 & 874 & 9/10 & 25 & 891 & 9/10
+        \\
+        &&
+        & 10 & 500 & 9/10 & 19 & 574 & 9/10 & 20 & 722 & 9/10
+        \\
+        \hline
+        \hline
+    \end{tabular}
+    \vspace*{\fill}
+\end{landscape}
 
 
+\Cref{tab:davidson:benchmark} shows the results for each solution strategy on
+five small molecules, ranging in size from water to ethylene, using the
+def2-SV(P) basis set\cite{Weigend:2005p3297} of Weigend and Ahlrichs.
+The Davidson algorithm and the LR-ODC-12 were implemented as part of a
+standalone Python code interfaced to the \textsc{Psi4}\cite{Parrish:2017p3185}
+and \textsc{Pyscf}\cite{Sun:2018pe1340} packages, which performed the integral
+evaluations.
+In this code the order of operations of the tensor contractions is optimized
+before passing the operations off to the appropriate BLAS linear algebra
+kernels, which use multithreading for performance enhancement.
+Comparing the three strategies, we see that the FI strategy consistently
+achieves the best convergence, with the CR and SR strategies requiring
+\(\sim50\%\) more iterations in most cases.
+This comes at the cost of a 2--3 times greater memory requirement which will
+require the vectors to be stored on disk for larger systems.
+This likely owes to the fact that the diagonal approximations of the
+preconditioner are more appropriate for the full transformation than the reduced
+ones, so the convergence gap could likely be closed by developing better
+preconditioners for the latter.
+The performance of the SR strategy is consistently similar or marginally worse
+than that of the CR strategy, suggesting that the symmetrization is not
+worth it.
+Comparing the rows for each strategy shows that the PED preconditioner
+consistently reduces the number of iterations to convergence with the exception
+of water, where the reduced algorithms perform slightly worse with the
+alternative preconditioner.
+The FI strategy is helped more than the reduced strategies by the PED
+preconditioner, which further widens the gap in their convergence rates.
+Taken together, these results suggest that the FI/PED combination is to be
+preferred if it can be afforded, and the CR/PED combination presents a second
+best option.
 
 
 \section{Blocking and Disk Storage in the Davidson Algorithm}
@@ -903,13 +961,14 @@ metric.
 
 \afterpage{%
     \clearpage
-    \centering
-    \includegraphics[width=\textwidth]{figures/mem_edited.pdf}
+    \includegraphics[width=0.9\textwidth]{figures/mem_edited.pdf}
     \captionof{figure}{%
-        LR-ODC-12 memory profiles for the lowest 20 states of ethylene with the
-        def2-SV(P) basis set, computed on an
+        LR-ODC-12 memory profiles for calculating the lowest 20 states of
+        ethylene with the def2-SV(P) basis set on an
         Intel\textsuperscript{\textregistered} Core\texttrademark\ i7-5600U
-        processor using four threads.
+        processor.
+        Computed using the CR equation and the FD preconditioner, with subspace
+        collapses every 200 vectors.
     }
 }
 
