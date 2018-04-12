@@ -313,11 +313,14 @@ conjugate gradient method.
     \includegraphics[width=0.9\textwidth]{figures/mem_edited.pdf}
     \captionof{figure}{%
         \label{fig:davidson:memory-profiles}
-        LR-ODC-12 memory profiles for calculating the lowest 20 states of
-        ethylene with the def2-SV(P) basis set on an
-        Intel\textsuperscript{\textregistered} Core\texttrademark\ i7-5600U
-        processor using
+        Memory profiles for calculating the lowest 20 states of ethylene with
+        the def2-SV(P) basis set on an Intel\textsuperscript{\textregistered}
+        Core\texttrademark\ i7-5600U processor using
         \cref{eq:davidson:canonical-reduced,eq:davidson:fock-diagonal} below.
+        Starts from a set of 100 guess vectors and periodically collapses the
+        expansion space to keep the number of vectors under 200.
+        The green and blue trace result from storing vectors and integral arrays
+        on disk, whereas the red and purple ones use only RAM.
     }
 }
 
@@ -325,10 +328,26 @@ conjugate gradient method.
 algorithm, as implemented for the present study.
 The red trace represents the most straight-forward implementation of
 \cref{algo:davidson}.
-Note that the images \(\mathbf{L}(\mathbf{u}_i)\) only need to be evaluated once
-and can be stored for future iterations as vectors are added to the expansion
-space.
-
+Note that the images \(\mathbf{L}(\mathbf{u}_i)\) are only evaluated once as
+these vectors are added to the expansion space and are reused on future
+iterations.
+The large spike in memory between 0 and 3 minutes in the runtime comes from the
+initial evaluation of the transformation on the guess vectors.
+This can be mitigated by breaking the expansion space into blocks of no more
+than 20 vectors, so that the guess vector evaluations have the same cost as the
+latter transformations.
+The result is depicted as the purple trace, where we see that the early memory
+spike has been smoothed at negligible cost to the runtime.
+The sawtooth shape of the red and purple traces between 3 and 18 minutes
+depicts the periodic collapse of the expansion space, which would otherwise
+continue to build indefinitely as the algorithm proceeds.
+Storing the Davidson vectors and the all-virtual integral arrays,
+\(\overline{g}_{ab}^{cd}\) and \(\mathcal{G}_{ab}^{cd}\), on disk produces the
+green trace, which irons out the sawtooth shape in the trajectory at the cost
+of some additional runtime for retrieving arrays that are stored on disk.
+Finally, the blue trace shows that the memory usage can be reduced below 1~GB by
+shrinking the block sizes even further, albeit at the cost of some additional
+I/O overhead.
 
 
 \section{The LR-ODC-12 Eigenvalue Equation}
@@ -842,106 +861,108 @@ Formulae for the diagonals of the one-body blocks of \(\mathbf{A}\),
 \(\mathbf{B}\), and \(\mathbf{S}\) are included in the appendix,
 \cref{sec:linear-transformation-formulas}.
 
-
-\begin{landscape}
-    \vspace*{\fill}
-    \captionof{table}{%
-        \label{tab:davidson:benchmark}
-        A comparison of three different solution strategies for the
-        LR-ODC-12 model for five molecules using the def2-SV(P) basis set.
-        In each case 10 eigenvectors are converged to \(10^{-5}~\au\),
-        starting from an initial expansion space of 100 guess vectors and
-        collapsing the subspace very 200 vectors.
-        The second and third columns show the number of singles and doubles
-        parameters for each system, which determine the dimensions of the
-        matrix equation, and the remaining columns give the number of
-        iterations, the run-time, and the number of low-lying roots obtained
-        for each strategy.
-        The first row for each molecule shows the results for the FD
-        preconditioner and the second row shows the results for the
-        PED preconditioner.
-        All computations were run on an
-        Intel\textsuperscript{\textregistered} Core\texttrademark\ i7-5600U
-        processor using four threads.
-    }
-    \vspace{15pt}
-    \begin{tabular}{ccccccccccccc}
-        \hline
-        \hline
-        &
-        &
-        &
-        \multicolumn{3}{c}{Full Inverse}
-        &
-        \multicolumn{3}{c}{Canonical Reduced}
-        &
-        \multicolumn{3}{c}{Symmetrized Reduced}
-        \\
-        &
-        \(n_1\)
-        &
-        \(n_2\)
-        &
-        iter
-        &
-        time (s)
-        &
-        roots
-        &
-        iter
-        &
-        time (s)
-        &
-        roots
-        &
-        iter
-        &
-        time (s)
-        &
-        roots
-        \\
-        \hline
-        \ce{H2O}
-        & 260 & 14,625
-        & 11 & 23 & 10/10 & 16 & 29 & 10/10 & 16 & 30 & 10/10
-        \\
-        &&
-        & 11 & 23 & 10/10 & 24 & 38 & 10/10 & 24 & 40 & 10/10
-        \\
-        \ce{N2}
-        & 588 & 78,351
-        & 14 & 186 & 10/10 & 17 & 213 & 9/10 & 17 & 216 & 9/10
-        \\
-        &&
-        & 10 & 156 & 10/10 & 15 & 179 & 9/10 & 15 & 202 & 9/10
-        \\
-        \ce{HCN}
-        & 644 & 94,185
-        & 15 & 251 & 9/10 & 21 & 281 & 9/10 & 21 & 331 & 9/10
-        \\
-        &&
-        & 10 & 205 & 9/10 & 18 & 252 & 9/10 & 19 & 308 & 9/10
-        \\
-        \ce{H2CO}
-        & 768 & 135,360
-        & 20 & 478 & 7/10 & 28 & 638 & 6/10 & 27 & 650 & 6/10
-        \\
-        &&
-        & 11 & 362 & 7/10 & 23 & 442 & 7/10 & 25 & 614 & 7/10
-        \\
-        \ce{C2H4}
-        & 896 & 184,800
-        & 17 & 640 & 9/10 & 25 & 874 & 9/10 & 25 & 891 & 9/10
-        \\
-        &&
-        & 10 & 500 & 9/10 & 19 & 574 & 9/10 & 20 & 722 & 9/10
-        \\
-        \hline
-        \hline
-    \end{tabular}
-    \vspace*{\fill}
-\end{landscape}
-
+\afterpage{%
+    \clearpage
+    \centering
+    \begin{landscape}
+        \vspace*{\fill}
+        \captionof{table}{%
+            \label{tab:davidson:benchmark}
+            A comparison of three different solution strategies for the
+            LR-ODC-12 model for five molecules using the def2-SV(P) basis set.
+            In each case 10 eigenvectors are converged to \(10^{-5}~\au\),
+            starting from an initial expansion space of 100 guess vectors and
+            collapsing the subspace very 200 vectors.
+            The second and third columns show the number of singles and doubles
+            parameters for each system, which determine the dimensions of the
+            matrix equation, and the remaining columns give the number of
+            iterations, the run-time, and the number of low-lying roots obtained
+            for each strategy.
+            The first row for each molecule shows the results for the FD
+            preconditioner and the second row shows the results for the
+            PED preconditioner.
+            All computations were run on an
+            Intel\textsuperscript{\textregistered} Core\texttrademark\ i7-5600U
+            processor using four threads.
+        }
+        \vspace{15pt}
+        \begin{tabular}{ccccccccccccc}
+            \hline
+            \hline
+            &
+            &
+            &
+            \multicolumn{3}{c}{Full Inverse}
+            &
+            \multicolumn{3}{c}{Canonical Reduced}
+            &
+            \multicolumn{3}{c}{Symmetrized Reduced}
+            \\
+            &
+            \(n_1\)
+            &
+            \(n_2\)
+            &
+            iter
+            &
+            time (s)
+            &
+            roots
+            &
+            iter
+            &
+            time (s)
+            &
+            roots
+            &
+            iter
+            &
+            time (s)
+            &
+            roots
+            \\
+            \hline
+            \ce{H2O}
+            & 260 & 14,625
+            & 11 & 23 & 10/10 & 16 & 29 & 10/10 & 16 & 30 & 10/10
+            \\
+            &&
+            & 11 & 23 & 10/10 & 24 & 38 & 10/10 & 24 & 40 & 10/10
+            \\
+            \ce{N2}
+            & 588 & 78,351
+            & 14 & 186 & 10/10 & 17 & 213 & 9/10 & 17 & 216 & 9/10
+            \\
+            &&
+            & 10 & 156 & 10/10 & 15 & 179 & 9/10 & 15 & 202 & 9/10
+            \\
+            \ce{HCN}
+            & 644 & 94,185
+            & 15 & 251 & 9/10 & 21 & 281 & 9/10 & 21 & 331 & 9/10
+            \\
+            &&
+            & 10 & 205 & 9/10 & 18 & 252 & 9/10 & 19 & 308 & 9/10
+            \\
+            \ce{H2CO}
+            & 768 & 135,360
+            & 20 & 478 & 7/10 & 28 & 638 & 6/10 & 27 & 650 & 6/10
+            \\
+            &&
+            & 11 & 362 & 7/10 & 23 & 442 & 7/10 & 25 & 614 & 7/10
+            \\
+            \ce{C2H4}
+            & 896 & 184,800
+            & 17 & 640 & 9/10 & 25 & 874 & 9/10 & 25 & 891 & 9/10
+            \\
+            &&
+            & 10 & 500 & 9/10 & 19 & 574 & 9/10 & 20 & 722 & 9/10
+            \\
+            \hline
+            \hline
+        \end{tabular}
+        \vspace*{\fill}
+    \end{landscape}
+}
 
 \Cref{tab:davidson:benchmark} shows the results for each solution strategy on
 five small molecules, ranging in size from water to ethylene, using the
