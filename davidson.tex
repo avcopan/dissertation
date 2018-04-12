@@ -7,14 +7,11 @@
 
 \begin{enumerate}
     \item
-        \cref{ch:response} presents a new model for electronic excited states,
-        which is based on a linear-response formulation of density cumulant
-        theory.
-    \item
-        In this model, excitation energies and transition properties are
-        computed from the eigenpairs of the energy functional's parameter
-        Hessian, with respect to a metric that arises from the time-dependence
-        of the parameter responses.
+        \cref{ch:response} presented the LR-ODC-12 model for electronic excited
+        states, where excitation energies and transition properties are computed
+        by diagonalizing the parameter Hessian of the ODC-12 energy functional,
+        with respect to a metric that arises from the time-dependence of the
+        parameter responses.
     \item
         Since number of parameters in the ODC-12 variant of density cumulant
         theory scales as
@@ -31,22 +28,20 @@
     \item
         For the common scenario where we only care about states within a narrow
         energy range, the cost of diagonalization can be drastically reduced
-        through the use of ``direct algorithms'' which allow us to compute
-        subsets of eigenvectors and eigenvalues without explicitly constructing
-        the full matrix of the linear transformation in computer memory.
+        through the use of so-called {\itshape direct algorithms} which enable
+        the determination of subsets of eigenvectors and eigenvalues without
+        explicitly constructing the matrix of a linear transformation in
+        computer memory.
     \item
         This chapter will explore the use of the Davidson
-        algorithm\cite{Liu:1978p49,Davidson:1975p87} to efficiently compute the
-        lowest-energy states of the LR-ODC-12 model.
+        algorithm\cite{Liu:1978p49,Davidson:1975p87}
+        in solving the LR-ODC-12 model.
     \item
-        After describing the generic Davidson algorithm in
-        \cref{sec:davidson:davidson} and analyzing the structure of the
-        LR-ODC-12 equations in \cref{sec:davidson:eig}, I will present several
-        strategies for solving the LR-ODC-12 model in
-        \cref{sec:davidson:strategies},
-        along with a benchmark study of their convergence characteristics for
-        several small molecules:
-        \ce{H2O}, \ce{N2}, \ce{HCN}, \ce{H2CO}, \ce{C2H4}.
+        After describing the algorithm and discussing the structure of the
+        LR-ODC-12 eigenvalue equations in
+        \cref{sec:davidson:davidson,sec:davidson:eig}, I will present several
+        strategies for solving the LR-ODC-12 model along with a benchmark study
+        of their convergence characteristics in \cref{sec:davidson:strategies}.
     \item
         Finally, in \cref{sec:davidson:disk} I will discuss how to reduce memory
         consumption in the Davidson algorithm by partitioning the expansion
@@ -55,6 +50,49 @@
 
 \section{The Davidson Algorithm}
 \label{sec:davidson:davidson}
+
+P1
+\begin{enumerate}
+    \item
+        Direct algorithms represent linear transformations as functions mapping
+        vectors
+        \(
+            \mathbf{v}
+        \)
+        in their domain to vectors
+        \(
+            \mathbf{L}(\mathbf{v})
+        \)
+        in their codomain, rather than as coefficient arrays
+        \(
+            [L_{ij}]
+            =
+            [\mathbf{e}_i \cdot \mathbf{L}(\mathbf{e}_j)]
+        \)
+        over a complete basis.
+    \item
+        That is, the result of the transformation is determined {\itshape
+        directly}, without explicitly forming its matrix representation in
+        computer memory.
+    \item
+        The Davidson algorithm applies this technique in the context of a matrix
+        diagonalization, by progressively growing a basis
+        \(
+            \{\mathbf{u}_1, \ldots,\mathbf{u}_d\}
+        \)
+        to span the lowest or highest eigenvectors of a matrix to some threshold
+        of accuracy.
+    \item
+        For a transformation on \(\mathbb{R}^n\), this allows us to reduce our
+        computational effort from \(\mathcal{O}(n^3)\) to \(\mathcal{O}(n^2 d)\)
+        or even less when \(\mathbf{L}\) is constructed from lower-dimensional
+        arrays.
+    \item
+        Memory requirements are reduced from \(\mathcal{O}(n^2)\) to
+        \(\mathcal{O}(nd)\) in the Davidson algorithm, so that as long as the
+        dimension of the transformation is large relative to the desired number
+        of roots we can gain considerable savings.
+\end{enumerate}
 
 \begin{algorithm}
     \caption{%
@@ -198,46 +236,6 @@
     \end{algorithmic}
 \end{algorithm}
 
-P1
-\begin{enumerate}
-    \item
-        Direct algorithms like the Davidson algorithm represent a linear
-        transformation as a function
-        \(
-            \mathbf{L}(\cdot)
-        \)
-        mapping vectors in its domain to vectors in its codomain, rather than as
-        an array of coefficients
-        \(
-            [L_{ij}]
-            =
-            [\mathbf{e}_i \cdot \mathbf{L}(\mathbf{e}_j)]
-        \)
-        over a complete basis.
-    \item
-        That is, the result of the transformation is determined {\itshape
-        directly}, without explicitly forming its matrix representation in
-        computer memory.
-    \item
-        The Davidson algorithm applies this technique in the context of a matrix
-        diagonalization, by progressively growing a basis
-        \(
-            \{\mathbf{u}_1, \ldots,\mathbf{u}_d\}
-        \)
-        to span the lowest or highest eigenvectors of a matrix to some threshold
-        of accuracy.
-    \item
-        For a transformation on \(\mathbb{R}^n\), this allows us to reduce our
-        computational effort from \(\mathcal{O}(n^3)\) to at most
-        \(\mathcal{O}(n^2 d)\), and often much less if \(\mathbf{L}\) is
-        constructed from lower-dimensional arrays.
-    \item
-        Our memory storage requirements are reduced from \(\mathcal{O}(n^2)\) to
-        \(\mathcal{O}(nd)\), so as long as the number of roots is much smaller
-        than the dimension of the space we can easily satisfy \(d \ll n\) and
-        gain considerable savings.
-\end{enumerate}
-
 \noindent
 P2
 \begin{enumerate}
@@ -247,17 +245,15 @@ P2
         eigenvectors of a generalized eigenvalue problem, which may or may not
         be symmetric.
     \item
-        The general strategy of the algorithm is quite simple.
+        The general strategy of the algorithm is as follows.
     \item
-        We first expand our transformations in the reduced expansion space as,
-        for example,
+        We expand our transformations in the reduced expansion space,
         \(
             [L_{ij}^\mathrm{sub}]
             =
             [\mathbf{u}_i\cdot \mathbf{L}(\mathbf{u}_j)]
-        \).
-    \item
-        The eigenvalue equation is then solved in this subspace
+        \),
+        and solve the eigenvalue equation in this subspace.
         \begin{equation}
             \mathbf{L}^\mathrm{sub}
             \mathbf{v}_j^\mathrm{sub}
@@ -267,13 +263,13 @@ P2
             \mathbf{v}_j^\mathrm{sub}
         \end{equation}
     \item
-        In the full space our trial solution is given by
+        Expanding this trial solution in the full space as
         \(
             \mathbf{v}_j^\mathrm{trial}
             =
             \mathbf{U}\mathbf{v}_j^\mathrm{sub}
         \),
-        and the correction vector
+        the correction vector
         \(
             \mathbf{d}_j
             =
@@ -281,8 +277,9 @@ P2
             -
             \mathbf{v}_j
         \)
-        to the exact solution can be approximated as
+        taking us to the exact solution can be approximated as
         \begin{equation}
+            \label{eq:davidson:davidson-step}
             \mathbf{d}_j
             \approx
             -
@@ -299,14 +296,14 @@ P2
             (\mathbf{L} - \lambda_j^\mathrm{trial}\mathbf{G})
             \mathbf{v}_j^\mathrm{trial}
         \end{equation}
-        where \(\mathbf{r}_j\) is the residual vector and the preconditioner
+        where \(\mathbf{r}_j\) is termed the residual vector and
         \(
             (
                 \tilde{\mathbf{L}} - \lambda^\mathrm{trial}\tilde{\mathbf{G}}
             )^{-1}
         \)
-        is constructed from diagonal approximations of \(\mathbf{L}\) and
-        \(\mathbf{G}\).
+        is called the preconditioner, which is constructed from diagonal
+        approximations to \(\mathbf{L}\) and \(\mathbf{G}\).
     \item
         This can be motivated as an approximate solution to the following
         identity.
@@ -324,45 +321,45 @@ P2
             )
         \end{equation}
     \item
-        Similar algorithms can be formulated for other large matrix equations,
-        such as the linear equation \(\mathbf{L}\mathbf{x}=\mathbf{b}\) which
-        leads to a variant of the conjugate gradient method.
-\end{enumerate}
-
-\noindent
-P3
-\begin{enumerate}
+        These correction vectors are used to iteratively grow the expansion
+        space until it spans the desired eigenvector, \(\mathbf{v}_j\).
     \item
-        A key assumption is that the matrices are diagonally dominant.
+        A key assumption of this algorithm is that the matrices are diagonally
+        dominant, otherwise the diagonal approximation in
+        \cref{eq:davidson:davidson-step} breaks down and the procedure will
+        fail to converge on the desired roots.
     \item
         Efficient implementations of the Davidson algorithm will compute images
-        \(
-            \mathbf{L}(\mathbf{u}_i)
-        \)
-        only for the new expansion vectors and store these for future
-        iterations.
+        \(\mathbf{L}(\mathbf{u}_i)\) only for the new expansion vectors and
+        store these for future iterations.
     \item
-        When the expansion space becomes large, we can replace the expansion
-        vectors with the current trial vectors to keep the memory requirements
-        manageable.
+        When the expansion space becomes large, one can replace the expansion
+        vectors with the current set of trial vectors in order to keep the
+        memory requirements manageable, which is known as a subspace collapse.
     \item
-        Frequent collapses every second or third iteration can be used to keep
-        I/O requirements to a minimum, at the cost of slower
-        convergence.\cite{Leininger:2001p1574}
+        For very large matrices, frequent collapses every second or third
+        iteration can be used to keep I/O requirements to a minimum, at the cost
+        of slower convergence.\cite{Leininger:2001p1574}
+    \item
+        This approach is quite general and can be adapted to other large matrix
+        problems, such as the linear equation
+        \(\mathbf{L}\mathbf{x}=\mathbf{b}\), where it yields a variant of the
+        conjugate gradient method.
 \end{enumerate}
+
 
 \section{The LR-ODC-12 Eigenvalue Equation}
 \label{sec:davidson:eig}
 
 The LR-ODC-12 eigenvalue equation has a two-by-two block structure which
-describes the independent variation of the state parameters and their complex
+describes the independent variation of the parameters and their complex
 conjugates.
 \begin{equation}
     \label{eq:linear-response-eigenvalue-equation}
-    \mathbf{E}(\mathbf{z}_k)
+    \mathbf{E}\mathbf{z}_k
     =
     \omega_k
-    \mathbf{M}(\mathbf{z}_k)
+    \mathbf{M}\mathbf{z}_k
     ,
     \quad
     \mathbf{E}
@@ -390,12 +387,10 @@ conjugates.
 \end{equation}
 This block symmetry leads to a paired system of eigenvalues,
 \(
-    \omega_{\pm k}
-    =
-    \pm\omega_k
+    \{\pm\omega_k\}
 \).
 The submatrices in \cref{eq:linear-response-eigenvalue-equation} are further
-blocked according to whether they describe variations with respect to one-body
+blocked according to whether they describe variations of the one-body
 (\(\mathbf{t}_1\)) or two-body (\(\mathbf{t}_2\)) parameters.
 \begin{equation}
     \label{eq:conjugate-blocks}
@@ -427,8 +422,56 @@ blocked according to whether they describe variations with respect to one-body
         \mathbf{x}_{k,2}
     \end{pmatrix}
 \end{equation}
+Following Ref.~\citenum{Oddershede:1984p33}, we can can add and subtract the
+block rows of \cref{eq:linear-response-eigenvalue-equation} to arrive at the
+following pair of equations (assuming real coefficients).
+\begin{equation}
+    \label{eq:a-plus-b}
+    (\mathbf{A} + \mathbf{B})
+    (\mathbf{x}_k + \mathbf{y}_k)
+    =
+    \omega_k
+    \mathbf{S}
+    (\mathbf{x}_k - \mathbf{y}_k)
+\end{equation}
+\begin{equation}
+    \label{eq:a-minus-b}
+    (\mathbf{A} - \mathbf{B})
+    (\mathbf{x}_k - \mathbf{y}_k)
+    =
+    \omega_k
+    \mathbf{S}
+    (\mathbf{x}_k + \mathbf{y}_k)
+\end{equation}
+Multiplying both equations by
+\(
+    \mathbf{S}^{-1}
+\)
+and substituting one into the other yields the following non-symmetric
+eigenvalue equation for the squares of the excitation energies, reducing the
+dimension of the transformation by a factor of two.
+\begin{equation}
+    \label{eq:davidson:reduced-eigenvalue-equation}
+    \mathbf{S}^{-1}
+    (
+        \mathbf{A} - \mathbf{B}
+    )
+    \mathbf{S}^{-1}
+    (
+        \mathbf{A} + \mathbf{B}
+    )
+    (\mathbf{x}_k + \mathbf{y}_k)
+    =
+    \omega_k^2
+    (\mathbf{x}_k + \mathbf{y}_k)
+\end{equation}
+Solving this equation only gives us the sum \(\mathbf{x}_k + \mathbf{y}_k\), not
+the individual blocks, but these can be recovered by using \cref{eq:a-plus-b} to
+compute \(\mathbf{x}_k - \mathbf{y}_k\), so we can still calculate transition
+from the reduced eigenvalue equation.
 
-The bottleneck is in the diagonal two-body Hessian.
+The bottleneck in evaluating these transformations is in the diagonal two-body
+Hessian, \(\mathbf{A}_{22}\).
 The image of an arbitrary two-body vector
 \(
     \mathbf{u}_{\mu,2}
@@ -496,210 +539,23 @@ under this transformation is given by
         u_{\mu,cd}^{kl}
     \end{array}
 \end{equation}
-where the \(i,j,k,l,\ldots\) run over occupied spin-orbitals, \(a,b,c,d,\ldots\)
-run over virtual (un-occupied) spin-orbitals, and summation over repeated
-indices is implied.
-The bottleneck is the contraction of the \(\mathrm{v}^4\) integrals with the
-expansion vector, \(\mathrm{g}_{ab}^{cd}u_{\mu,cd}^{ij}\), which scales as
-\(\mathcal{O}(d_\mu\mathrm{o}^2\mathrm{v}^4)\) in the number of floating point
+where the \(i,j,k,l,m,n\) run over occupied spin-orbitals and \(a,b,c,d,e,f\)
+run over virtual (un-occupied) spin-orbitals with implicity summation over
+pairs of upper and lower indices.
+See \cref{ch:response} for the definitions of these intermediates.
+For reasonably sized basis sets, the rate limiting step is the contraction of
+the \(\mathrm{v}^4\) integrals with the expansion vector,
+\(\mathrm{g}_{ab}^{cd}u_{\mu,cd}^{ij}\), which scales as
+\(\mathcal{O}(d_\mu o^2v^4)\) in the number of floating point
 operations.
 This term is the rate limiting step in EOM-CCSD as well.
 The full set of linear transformation formulas for the LR-ODC-12 Hessian and
 metric blocks is given in the appendix
 (\cref{sec:linear-transformation-formulas}).
 
-
-\section{Strategies for Solving the LR-ODC-12 Model}
-\label{sec:davidson:strategies}
-
-\section{Blocking and Disk Storage in the Davidson Algorithm}
-\label{sec:davidson:disk}
-
-
-\section{The LR-ODC-12 Eigenvalue Equation}
-
-
-\section{Algorithms}
-\label{sec:algorithms}
-
-
-
-\paragraph{Strategy 1}
-One approach is to invert the eigenvalue equation, solving for the {\itshape
-largest} positive inverse eigenvalues, which is easily done by selecting the
-highest rather than the lowest roots at each step in \cref{algo:davidson}.
-\begin{equation}
-    \mathbf{M}(\mathbf{z}_k)
-    =
-    \omega_k^{-1}
-    \mathbf{E}(\mathbf{z}_k)
-\end{equation}
-This has the added advantage that the energy Hessian \(\mathbf{E}\) is generally
-positive definite, which allows us to treat the subspace diagonalizations as
-standard Hermitian eigenvalue equation with real eigenvalues and orthonormal
-eigenvectors.
-A simple, effective choice of guess vectors in this approach is to determine the
-lowest eigenvectors of the following diagonal approximation to
-\cref{eq:two-body-hessian-function-in-text}
-\begin{equation}
-    (\tilde{\mathbf{A}}_{22}(\mathbf{u}_{\mu}))_{ijab}
-    \equiv
-    -
-    (
-        \mathcal{F}_i^i
-        +
-        \mathcal{F}_j^j
-        +
-        \mathcal{F}_a^a
-        +
-        \mathcal{F}_b^b
-    )
-    u_{\mu,ab}^{ij}
-\end{equation}
-which are simply the standard unit vectors associated with the smallest diagonal
-entries.
-The virtual coefficients \(\mathcal{F}_a^a,\mathcal{F}_b^b\) in this equation
-are generally negative, so this has the form of an orbital energy difference
-like we see in Hartree-Fock theory.
-For larger systems, we manage the memory requirements of the method by keeping
-successive groups of expansion vectors and images,
-\(
-    \mathbf{U}^{(i)},
-    \mathbf{E}(\mathbf{U}^{(i)}),
-    \mathbf{M}(\mathbf{U}^{(i)})
-\),
-on disk and reading them in as needed.
-These can be further subdivided into even smaller blocks if needed.
-
-
-\paragraph{Strategy 2}
-Assuming real matrices, we can add and subtract the block rows of
-\cref{eq:linear-response-eigenvalue-equation} to arrive at the following pair of
-equations.
-\begin{equation}
-    \label{eq:a-plus-b}
-    (\mathbf{A} + \mathbf{B})
-    (\mathbf{x}_k + \mathbf{y}_k)
-    =
-    \omega_k
-    \mathbf{S}
-    (\mathbf{x}_k - \mathbf{y}_k)
-\end{equation}
-\begin{equation}
-    \label{eq:a-minus-b}
-    (\mathbf{A} - \mathbf{B})
-    (\mathbf{x}_k - \mathbf{y}_k)
-    =
-    \omega_k
-    \mathbf{S}
-    (\mathbf{x}_k + \mathbf{y}_k)
-\end{equation}
-Multiplying both equations by \(\mathbf{S}^{-1}\), we can write them as follows
-\begin{equation}
-    \mathbf{H}^+(\mathbf{c}_k^+)
-    =
-    \omega_k
-    \mathbf{c}_k^-
-\end{equation}
-\begin{equation}
-    \mathbf{H}^-(\mathbf{c}_k^-)
-    =
-    \omega_k
-    \mathbf{c}_k^+
-\end{equation}
-where we have defined the following intermediates
-\begin{equation}
-    \mathbf{H}^{\pm}
-    \equiv
-    \mathbf{S}^{-1}
-    (\mathbf{A} \pm \mathbf{B})
-\end{equation}
-\begin{equation}
-    \mathbf{c}_k^{\pm}
-    \equiv
-    \mathbf{x}_k \pm \mathbf{y}_k
-\end{equation}
-This provides a reduced eigenvalue equation for the squared excitations energies
-\begin{equation}
-    \overline{\mathbf{H}}(\mathbf{c}_k^+)
-    =
-    \omega_k^2
-    \mathbf{c}_k^+
-\end{equation}
-\begin{equation}
-    \overline{\mathbf{H}}
-    =
-    \mathbf{H}^-
-    \mathbf{H}^+
-\end{equation}
-The blocks of the generalized eigenvector can then be recovered as follows
-\begin{equation}
-    \mathbf{x}_k
-    =
-    \tfrac{1}{2}
-    (
-        \mathbf{c}_k^+
-        +
-        \omega_k^{-1}
-        \mathbf{H}^+(\mathbf{c}_k^+)
-    )
-\end{equation}
-\begin{equation}
-    \mathbf{y}_k
-    =
-    \tfrac{1}{2}
-    (
-        \mathbf{c}_k^+
-        -
-        \omega_k^{-1}
-        \mathbf{H}^+(\mathbf{c}_k^+)
-    )
-\end{equation}
-
-Which also shows that any formula can be reduced to a formula for the reduced
-eigenvalues and eigenvectors.
-For example, assuming real integral arrays (\(\mathbf{p}^*=\mathbf{p}\))
-\begin{equation}
-    \mathbf{z}_k^\dagger
-    \mathbf{v}'
-    =
-    \mathbf{c}_k^{+\dagger}
-    \mathbf{p}
-\end{equation}
-and
-\begin{equation}
-    \mathbf{z}_k^\dagger
-    \mathbf{M}
-    \mathbf{z}_k
-    =
-    \mathbf{c}_k^{+\dagger}
-    \mathbf{S}
-    \mathbf{c}_k^{-}
-    =
-    \omega_k^{-1}
-    \mathbf{c}_k^{+\dagger}
-    \mathbf{S}
-    \mathbf{H}^+
-    \mathbf{c}_k^+
-\end{equation}
-\begin{equation}
-    \lim_{\omega\rightarrow \omega_k}
-    (\omega-\omega_k)
-    \langle\!\langle \hat{V}; \hat{V} \rangle\!\rangle_\omega
-    =
-    \frac{%
-        \omega_k
-        |\mathbf{c}_k^{+\dagger} \mathbf{p}|^2
-    }{% 
-        \mathbf{c}_k^{+\dagger} 
-        (\mathbf{A} + \mathbf{B})
-        \mathbf{c}_k^+
-    }
-\end{equation}
-
-
-From \cref{eq:conjugate-blocks} we can see that computing the inverse of
-\(\mathbf{S}\) requires us to invert the orbital block of the metric.
+The reduced eigenvalue equation, \cref{eq:davidson:reduced-eigenvalue-equation},
+requires us to invert the metric, which is an identity matrix but for the
+orbital block, \(\mathbf{S}_{11}\).
 This matrix is given by
 \begin{equation}
     (\mathbf{S}_{11})_{ia,jb}
@@ -719,8 +575,10 @@ and
     \gamma_a^b
 \)
 are occupied and virtual blocks of the one-body density matrix.
-By expanding these matrices in the natural spin-orbital basis (indicated by
-prime indices) where the one-body density matrix is diagonal
+For systems of moderate size this metric could be numerically inverted, but we
+can derive a simple and inexpensive formula for the inverse by expanding the
+density matrices in the natural spin-orbital (NSO) basis where they are
+diagonal.
 \begin{equation}
     \gamma_j^i
     =
@@ -736,8 +594,7 @@ prime indices) where the one-body density matrix is diagonal
     \delta_{a'}^{b'}
     \gamma_{a'}
 \end{equation}
-we can derive the following simple and inexpensive formula for the inverse of
-the orbital metric.
+Inverting in the NSO basis and transforming back to the original basis yields
 \begin{equation}
     (\mathbf{S}_{11}^{-1})_{ia,jb}
     =
@@ -750,18 +607,226 @@ the orbital metric.
     (\mathbf{Y}^\dagger)_{b'}^b
     (\mathbf{Y})_j^{j'}
 \end{equation}
-The appropriate diagonal approximation to \(\mathbf{H}\) can simply be computed
-as the square of \(\tilde{\mathbf{A}}\), since in low order we have
-\(\mathbf{B}\approx\mathbf{0}\) and \(\mathbf{S}\approx\mathbf{1}\)
+which scales as \(\mathcal{O}(o^2v^3)\) in the number of floating point
+operations.
+The same strategy can be used to evaluate other analytic functions of the
+metric.
 
 
+\section{Strategies for Solving the LR-ODC-12 Model}
+\label{sec:davidson:strategies}
+
+\paragraph{The full inverse (FI) eigenvalue equation.}
 \begin{equation}
-    \mathbf{H}^\dagger
-    (\mathbf{S}(\mathbf{x}_k - \mathbf{y}_k))
+    \mathbf{M}(\mathbf{z}_k)
+    =
+    \omega_k^{-1}
+    \mathbf{E}(\mathbf{z}_k)
+\end{equation}
+
+\paragraph{The canonical reduced (CR) eigenvalue equation.}
+\begin{equation}
+    \mathbf{H}^-(\mathbf{H}^+(\mathbf{c}_k^+))
     =
     \omega_k^2
-    (\mathbf{S}(\mathbf{x}_k - \mathbf{y}_k))
+    \mathbf{c}_k^+
+    \qquad
+    \mathbf{H}^{\pm}
+    \equiv
+    \mathbf{S}^{-1}
+    (
+        \mathbf{A} \pm \mathbf{B}
+    )
+    \qquad
+    \mathbf{c}_k^{\pm}
+    \equiv
+    \mathbf{x}_k \pm \mathbf{y}_k
 \end{equation}
+\begin{equation}
+    \mathbf{x}_k
+    =
+    \tfrac{1}{2}
+    (
+        \mathbf{c}_k^+
+        +
+        \omega_k^{-1}
+        \mathbf{H}^+(\mathbf{c}_k^+)
+    )
+    \qquad
+    \mathbf{y}_k
+    =
+    \tfrac{1}{2}
+    (
+        \mathbf{c}_k^+
+        -
+        \omega_k^{-1}
+        \mathbf{H}^+(\mathbf{c}_k^+)
+    )
+\end{equation}
+
+\paragraph{The symmetrized reduced (SR) eigenvalue equation.}
+\begin{equation}
+    \bar{\mathbf{H}}^-(\bar{\mathbf{H}}^+(\bar{\mathbf{c}}_k^+))
+    =
+    \omega_k^2
+    \bar{\mathbf{c}}_k^+
+    \qquad
+    \bar{\mathbf{H}}^{\pm}
+    \equiv
+    \mathbf{S}^{-\frac{1}{2}}
+    (
+        \mathbf{A} \pm \mathbf{B}
+    )
+    \mathbf{S}^{-\frac{1}{2}}
+    \qquad
+    \bar{\mathbf{c}}_k^{\pm}
+    \equiv
+    \mathbf{S}^{\frac{1}{2}}
+    (\mathbf{x}_k \pm \mathbf{y}_k)
+\end{equation}
+\begin{equation}
+    \mathbf{x}_k
+    =
+    \tfrac{1}{2}
+    \mathbf{S}^{-\tfrac{1}{2}}
+    (
+        \mathbf{c}_k^+
+        +
+        \omega_k^{-1}
+        \mathbf{H}^+(\mathbf{c}_k^+)
+    )
+    \qquad
+    \mathbf{y}_k
+    =
+    \tfrac{1}{2}
+    \mathbf{S}^{-\tfrac{1}{2}}
+    (
+        \mathbf{c}_k^+
+        -
+        \omega_k^{-1}
+        \mathbf{H}^+(\mathbf{c}_k^+)
+    )
+\end{equation}
+
+
+\paragraph{The Fock diagonal (FD) preconditioner.}
+
+\begin{equation}
+    (\tilde{\mathbf{S}}_{11})_{ia,ia}
+    \equiv
+    1
+    \qquad
+    (\tilde{\mathbf{A}}_{11})_{ia,ia}
+    \equiv
+    -
+    f_i^i
+    +
+    f_a^a
+    \qquad
+    (\tilde{\mathbf{A}}_{22})_{ijab,ijab}
+    \equiv
+    -
+    \mathcal{F}_i^i
+    -
+    \mathcal{F}_j^j
+    -
+    \mathcal{F}_a^a
+    -
+    \mathcal{F}_b^b
+\end{equation}
+
+
+\paragraph{The product of exact diagonals (PED) preconditioner.}
+
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        (\tilde{\mathbf{A}}_{22})_{ijab,ijab}
+        \equiv
+        &
+        -
+        \mathcal{F}_i^i
+        -
+        \mathcal{F}_j^j
+        -
+        \mathcal{F}_a^a
+        -
+        \mathcal{F}_b^b
+        +
+        \overline{g}_{ij}^{ij}
+        +
+        \overline{g}_{ab}^{ab}
+        -
+        S(i/j|a/b)
+        \overline{g}_{ia}^{ia}
+        \\[10pt]
+        &
+        +
+        S(a/b)
+        \mathcal{G}_{af}^{ea}
+        t_{eb}^{ij}
+        t_{ij}^{fb}
+        -
+        S(a/b)
+        \mathcal{G}_{af}^{eb}
+        t_{eb}^{ij}
+        t_{ij}^{fa}
+        +
+        2
+        S(i/j|a/b)
+        \mathcal{G}_{ia}^{me}
+        t_{eb}^{ij}
+        t_{mj}^{ab}
+        \\[10pt]
+        &
+        +
+        S(i/j)
+        \mathcal{G}_{mi}^{in}
+        t_{ab}^{mj}
+        t_{nj}^{ab}
+        -
+        S(i/j)
+        \mathcal{G}_{mj}^{jn}
+        t_{ab}^{mi}
+        t_{nj}^{ab}
+    \end{array}
+\end{equation}
+
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        (\tilde{\mathbf{B}}_{22})_{ijab,ijab}
+        \equiv
+        &
+        +
+        S(a/b)
+        \mathcal{G}_{aa}^{ef}
+        t_{eb}^{ij}
+        t_{fb}^{ij}
+        -
+        S(a/b)
+        \mathcal{G}_{ba}^{ef}
+        t_{eb}^{ij}
+        t_{fb}^{ij}
+        +
+        2
+        S(i/j|a/b)
+        \mathcal{G}_{ma}^{ia}
+        t_{eb}^{ij}
+        t_{ab}^{mj}
+        \\[10pt]
+        &
+        +
+        S(i/j)
+        \mathcal{G}_{mn}^{ii}
+        t_{ab}^{mj}
+        t_{ab}^{nj}
+        -
+        S(i/j)
+        \mathcal{G}_{mn}^{ij}
+        t_{ab}^{mj}
+        t_{ab}^{ni}
+    \end{array}
+\end{equation}
+
 
 \afterpage{%
     \clearpage
@@ -769,16 +834,16 @@ as the square of \(\tilde{\mathbf{A}}\), since in low order we have
     \begin{landscape}
         \vspace*{\fill}
         \captionof{table}{%
-            A comparison of the convergence properties of three different
-            solution strategies for LR-ODC-12 for five molecules using the
-            def2-SV(P) basis set.
-            In each case we converge 10 eigenvectors to \(10^{-5}~\au\) in the
-            residual, starting from an initial expansion space of 100 guess
-            vectors and collapsing the subspace very 200 vectors.
+            A comparison of three different solution strategies for the
+            LR-ODC-12 model for five molecules, using the def2-SV(P) basis set.
+            In each case 10 eigenvectors are converged to \(10^{-5}~\au\),
+            starting from an initial expansion space of 100 guess vectors and
+            collapsing the subspace very 200 vectors.
             The second and third columns show the number of singles and doubles
             parameters for each system, which determine the dimensions of the
-            matrix equation, and in each case we give the number of iterations,
-            the run-time, and the number of low-lying roots obtained.
+            matrix equation, and the remaining columns give the the number of
+            iterations, the run-time, and the number of low-lying roots obtained
+            for each strategy.
             The first row for each molecule shows the results for the FD
             preconditioner and the second row shows the results for the
             PED preconditioner.
@@ -793,11 +858,11 @@ as the square of \(\tilde{\mathbf{A}}\), since in low order we have
             &
             &
             &
-            \multicolumn{3}{c}{strategy 1}
+            \multicolumn{3}{c}{Full Inverse}
             &
-            \multicolumn{3}{c}{strategy 2}
+            \multicolumn{3}{c}{Canonical Reduced}
             &
-            \multicolumn{3}{c}{strategy 3}
+            \multicolumn{3}{c}{Symmetrized Reduced}
             \\
             &
             \(n_1\)
@@ -864,6 +929,13 @@ as the square of \(\tilde{\mathbf{A}}\), since in low order we have
         \vspace*{\fill}
     \end{landscape}
 }
+
+
+
+
+\section{Blocking and Disk Storage in the Davidson Algorithm}
+\label{sec:davidson:disk}
+
 
 
 \begin{subappendices}
@@ -961,103 +1033,6 @@ as the square of \(\tilde{\mathbf{A}}\), since in low order we have
         \overline{g}_{ab}^{ef}
         \gamma_{ef}^{ij}
         u_{\mu,j}^b
-    \end{array}
-\end{equation}
-
-\begin{equation}
-    \begin{array}{r@{\,}l}
-        (\mathbf{A}_{22}(\mathbf{u}_{\mu,2}))_{ijab}
-        =
-        &
-        -
-        P_{(a/b)}
-        \mathcal{F}_a^c
-        u_{\mu,cb}^{ij}
-        -
-        P^{(i/j)}
-        \mathcal{F}_k^i
-        u_{\mu,ab}^{kj}
-        +
-        \tfrac{1}{2}
-        \overline{g}_{ab}^{cd}
-        u_{\mu,cd}^{ij}
-        +
-        \tfrac{1}{2}
-        \overline{g}_{kl}^{ij}
-        u_{\mu,ab}^{kl}
-        \\[5pt]
-        &
-        -
-        P_{(a/b)}^{(i/j)}
-        \overline{g}_{la}^{jc}
-        u_{\mu,cb}^{il}
-        +
-        \tfrac{1}{2}
-        P_{(a/b)}
-        \mathcal{G}_{af}^{ec}
-        t_{eb}^{ij}
-        t_{kl}^{fd*}
-        u_{\mu,cd}^{kl}
-        +
-        \tfrac{1}{2}
-        P_{(a/b)}
-        \mathcal{G}_{ka}^{me}
-        t_{eb}^{ij}
-        t_{ml}^{cd*}
-        u_{\mu,cd}^{kl}
-        \\[5pt]
-        &
-        +
-        \tfrac{1}{2}
-        P^{(i/j)}
-        \mathcal{G}_{me}^{ic}
-        t_{ab}^{mj}
-        t_{kl}^{ed*}
-        u_{\mu,cd}^{kl}
-        +
-        \tfrac{1}{2}
-        P^{(i/j)}
-        \mathcal{G}_{mk}^{in}
-        t_{ab}^{mj}
-        t_{nl}^{cd*}
-        u_{\mu,cd}^{kl}
-    \end{array}
-\end{equation}
-
-\begin{equation}
-    \begin{array}{r@{\,}l}
-        (\mathbf{B}_{22}(\mathbf{u}_{\mu,2}))_{ijab}
-        =
-        &
-        \tfrac{1}{2}
-        P_{(a/b)}
-        \mathcal{G}_{ac}^{ef}
-        t_{eb}^{ij}
-        t_{fd}^{kl}
-        u_{\mu,kl}^{cd}
-        +
-        \tfrac{1}{2}
-        P_{(a/b)}
-        \mathcal{G}_{na}^{ke}
-        t_{eb}^{ij}
-        t_{cd}^{nl}
-        u_{\mu,kl}^{cd}
-        \\[5pt]
-        &
-        +
-        \tfrac{1}{2}
-        P^{(i/j)}
-        \mathcal{G}_{mc}^{if}
-        t_{ab}^{mj}
-        t_{fd}^{kl}
-        u_{\mu,kl}^{cd}
-        +
-        \tfrac{1}{2}
-        P^{(i/j)}
-        \mathcal{G}_{mn}^{ik}
-        t_{ab}^{mj}
-        t_{cd}^{nl}
-        u_{\mu,kl}^{cd}
     \end{array}
 \end{equation}
 
@@ -1238,6 +1213,103 @@ as the square of \(\tilde{\mathbf{A}}\), since in low order we have
 \end{equation}
 
 \begin{equation}
+    \begin{array}{r@{\,}l}
+        (\mathbf{A}_{22}(\mathbf{u}_{\mu,2}))_{ijab}
+        =
+        &
+        -
+        P_{(a/b)}
+        \mathcal{F}_a^c
+        u_{\mu,cb}^{ij}
+        -
+        P^{(i/j)}
+        \mathcal{F}_k^i
+        u_{\mu,ab}^{kj}
+        +
+        \tfrac{1}{2}
+        \overline{g}_{ab}^{cd}
+        u_{\mu,cd}^{ij}
+        +
+        \tfrac{1}{2}
+        \overline{g}_{kl}^{ij}
+        u_{\mu,ab}^{kl}
+        \\[5pt]
+        &
+        -
+        P_{(a/b)}^{(i/j)}
+        \overline{g}_{la}^{jc}
+        u_{\mu,cb}^{il}
+        +
+        \tfrac{1}{2}
+        P_{(a/b)}
+        \mathcal{G}_{af}^{ec}
+        t_{eb}^{ij}
+        t_{kl}^{fd*}
+        u_{\mu,cd}^{kl}
+        +
+        \tfrac{1}{2}
+        P_{(a/b)}
+        \mathcal{G}_{ka}^{me}
+        t_{eb}^{ij}
+        t_{ml}^{cd*}
+        u_{\mu,cd}^{kl}
+        \\[5pt]
+        &
+        +
+        \tfrac{1}{2}
+        P^{(i/j)}
+        \mathcal{G}_{me}^{ic}
+        t_{ab}^{mj}
+        t_{kl}^{ed*}
+        u_{\mu,cd}^{kl}
+        +
+        \tfrac{1}{2}
+        P^{(i/j)}
+        \mathcal{G}_{mk}^{in}
+        t_{ab}^{mj}
+        t_{nl}^{cd*}
+        u_{\mu,cd}^{kl}
+    \end{array}
+\end{equation}
+
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        (\mathbf{B}_{22}(\mathbf{u}_{\mu,2}))_{ijab}
+        =
+        &
+        \tfrac{1}{2}
+        P_{(a/b)}
+        \mathcal{G}_{ac}^{ef}
+        t_{eb}^{ij}
+        t_{fd}^{kl}
+        u_{\mu,kl}^{cd}
+        +
+        \tfrac{1}{2}
+        P_{(a/b)}
+        \mathcal{G}_{na}^{ke}
+        t_{eb}^{ij}
+        t_{cd}^{nl}
+        u_{\mu,kl}^{cd}
+        \\[5pt]
+        &
+        +
+        \tfrac{1}{2}
+        P^{(i/j)}
+        \mathcal{G}_{mc}^{if}
+        t_{ab}^{mj}
+        t_{fd}^{kl}
+        u_{\mu,kl}^{cd}
+        +
+        \tfrac{1}{2}
+        P^{(i/j)}
+        \mathcal{G}_{mn}^{ik}
+        t_{ab}^{mj}
+        t_{cd}^{nl}
+        u_{\mu,kl}^{cd}
+    \end{array}
+\end{equation}
+
+\begin{equation}
     (\mathbf{S}_{11}(\mathbf{u}_{\mu,1}))_{ia}
     =
     \gamma^i_j
@@ -1271,33 +1343,92 @@ as the square of \(\tilde{\mathbf{A}}\), since in low order we have
 \end{equation}
 
 \begin{equation}
-    \tilde{\mathbf{S}}_{11}
-    \equiv
-    \tilde{\mathbf{S}}_{11}^{-1}
-    \equiv
-    \mathbf{1}_1
+    \begin{array}{r@{\,}l}
+        (\tilde{\mathbf{A}}_{22})_{ijab,ijab}
+        \equiv
+        &
+        -
+        \mathcal{F}_i^i
+        -
+        \mathcal{F}_j^j
+        -
+        \mathcal{F}_a^a
+        -
+        \mathcal{F}_b^b
+        +
+        \overline{g}_{ij}^{ij}
+        +
+        \overline{g}_{ab}^{ab}
+        -
+        S(i/j|a/b)
+        \overline{g}_{ia}^{ia}
+        \\[10pt]
+        &
+        +
+        S(a/b)
+        \mathcal{G}_{af}^{ea}
+        t_{eb}^{ij}
+        t_{ij}^{fb}
+        -
+        S(a/b)
+        \mathcal{G}_{af}^{eb}
+        t_{eb}^{ij}
+        t_{ij}^{fa}
+        +
+        2
+        S(i/j|a/b)
+        \mathcal{G}_{ia}^{me}
+        t_{eb}^{ij}
+        t_{mj}^{ab}
+        \\[10pt]
+        &
+        +
+        S(i/j)
+        \mathcal{G}_{mi}^{in}
+        t_{ab}^{mj}
+        t_{nj}^{ab}
+        -
+        S(i/j)
+        \mathcal{G}_{mj}^{jn}
+        t_{ab}^{mi}
+        t_{nj}^{ab}
+    \end{array}
 \end{equation}
 
 \begin{equation}
-    (\tilde{\mathbf{A}}_{11})_{ia,ia}
-    \equiv
-    -
-    f_i^i
-    +
-    f_a^a
-\end{equation}
-
-\begin{equation}
-    (\tilde{\mathbf{A}}_{22})_{ijab,ijab}
-    \equiv
-    -
-    \mathcal{F}_i^i
-    -
-    \mathcal{F}_j^j
-    -
-    \mathcal{F}_a^a
-    -
-    \mathcal{F}_b^b
+    \begin{array}{r@{\,}l}
+        (\tilde{\mathbf{B}}_{22})_{ijab,ijab}
+        \equiv
+        &
+        +
+        S(a/b)
+        \mathcal{G}_{aa}^{ef}
+        t_{eb}^{ij}
+        t_{fb}^{ij}
+        -
+        S(a/b)
+        \mathcal{G}_{ba}^{ef}
+        t_{eb}^{ij}
+        t_{fb}^{ij}
+        +
+        2
+        S(i/j|a/b)
+        \mathcal{G}_{ma}^{ia}
+        t_{eb}^{ij}
+        t_{ab}^{mj}
+        \\[10pt]
+        &
+        +
+        S(i/j)
+        \mathcal{G}_{mn}^{ii}
+        t_{ab}^{mj}
+        t_{ab}^{nj}
+        -
+        S(i/j)
+        \mathcal{G}_{mn}^{ij}
+        t_{ab}^{mj}
+        t_{ab}^{ni}
+    \end{array}
 \end{equation}
 
 \end{subappendices}
