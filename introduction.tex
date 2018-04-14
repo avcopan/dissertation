@@ -12,12 +12,13 @@ From the standpoint of Pauli at the end of 1925, solving the spectrum of
 hydrogen\cite{Pauli:1926p336} with Heisenberg's new matrix
 mechanics,\cite{Heisenberg:1925p879} chemical matter was described by nimble,
 negatively-charged electrons orbiting heavy, positively-charged nuclei.  This
-theory would be conceptually clarified over the following months by
+theory would be conceptually clarified over the following weeks by
 Schr\"odinger's development of wave mechanics,
 \cite{Schrodinger:1926p361,Schrodinger:1926p489,Schrodinger:1926p734}
 which described the possible states of electrons in a molecule as eigenfunctions
 of the quantum-mechanical Hamiltonian, oscillating in time with a frequency
 proportional to their energy.
+In atomic units:
 \begin{equation}
     \Psi(t)
     =
@@ -28,9 +29,8 @@ proportional to their energy.
     \Psi
     =
     E
-    \Psi
+    \Psi.
 \end{equation}
-(Note that we are using atomic units.)
 Crudely speaking, this Hamiltonian is derived from its classical counterpart by
 replacing its momentum variables with del operators divided by the unit
 imaginary,
@@ -60,7 +60,7 @@ operator
 \(
     \hat{g}_{ij}
 \)
-describes the Coulombic repulsion between two electrons.
+describes the electrostatic repulsion between electrons \(i\) and \(j\).
 \begin{equation}
     \hat{h}_i
     \equiv
@@ -74,22 +74,22 @@ describes the Coulombic repulsion between two electrons.
     \equiv
     \frac{1}{|\mathbf{r}_i - \mathbf{r}_j|}
 \end{equation}
-The vector space containing the eigenfunctions of a given Hamiltonian is its
-Hilbert space, \(\mathcal{H}\), which in this case is the space of square
-integrable functions of \(n\) position variables,
+The vector space containing the eigenfunctions of a Hamiltonian is its Hilbert
+space, \(\mathcal{H}\), which in this case is the space of square integrable
+functions of \(n\) position variables,
 \(
     L^2(\mathbb{R}^{3n})
 \),
 one for each electron in the molecule.
-Since this space is infinite-dimensional, the only way to make progress in most
-cases is to determine a basis that approximately spans the states of interest.
+Since this space is infinite-dimensional, the only way to make progress in
+general is to determine a basis that approximately spans the states of interest.
 Here we are helped by the fact that a function of \(n\) position variables can
 be written as a linear combination of products
 \begin{equation}
     \Psi(\mathbf{r}_1, \dots, \mathbf{r}_n)
     =
     \sum_{p_1\cdots p_n}
-    c_{p_1\cdots p_n}
+    c_{p_1\cdots p_n}\,
     \phi_{p_1}(\mathbf{r}_1)
     \cdots
     \phi_{p_n}(\mathbf{r}_n)
@@ -97,7 +97,7 @@ be written as a linear combination of products
 where the one-electron functions or {\itshape orbitals} in this expansion span a
 one-electron Hilbert space,
 \(
-    \mathcal{H}_1
+    \mathcal{H}_i
     =
     L^2(\mathbb{R}^3)
 \).
@@ -108,33 +108,36 @@ product of the Hilbert spaces for its constituent particles.
     =
     \mathcal{H}_1
     \otimes
-    \mathcal{H}_1
+    \mathcal{H}_2
     \otimes
     \cdots
+    \otimes
+    \mathcal{H}_n
 \end{equation}
 This enables a general strategy for bootstrapping the electronic structure
 problem:
 \begin{enumerate}
     \item
+        \label{item:atomic-orbitals}
         The states of a single electron orbiting a single nucleus are
         analytically known products of Laguerre polynomials and spherical
         Harmonics, and the energy of these 1s, 2s, 2p, \dots\ atomic orbitals
         increases with the number of nodes.
     \item
         \label{item:mean-field}
-        Treating the other electrons in a molecule as fields which partially
-        shield the nuclear charges, the states of individual electrons in a
-        molecule are well described as linear combinations of atomic
+        Treating the other electrons in a molecule as static fields which
+        partially shield the nuclear charges, the states of individual electrons
+        in a molecule are well described as linear combinations of atomic
         one-electron functions centered on each nucleus.
-    \item
         The dominant contributions to these molecular orbitals come from atomic
         orbitals with a similar energy, so that the lowest energy molecular
         orbital typically looks like the 1s orbital of the nucleus with the
-        highest charge, with very little contribution from, say, the 42g orbital
-        of another atom.
+        greatest charge, with very little contribution from, say, the 42g
+        orbital of another atom.
         The higher energy states are linear combinations of higher energy atomic
         orbitals with increasing numbers of nodes.
     \item
+        \label{item:full-ci}
         Finally, the total electronic wavefunction is described by a linear
         combination of products of these molecular orbitals, and the electronic
         ground-state will be spanned to a good approximation by products of the
@@ -143,12 +146,161 @@ problem:
         mean-field approximation of step~\ref{item:mean-field} furnishes a good
         description of their motions, the wavefunction will be heavily dominated
         by a single one of these products.
-        From a statistical perspective, this means that the densities of
-        electron probability density approximately separates into a product of
-        one-electron distributions, because the molecular orbitals are {\itshape
+        From a statistical perspective, this means that the electron probability
+        density of the wavefunction approximately separates into a product of
+        one-electron densities, because the molecular orbitals are {\itshape
         weakly correlated}.
 \end{enumerate}
+Step~\ref{item:full-ci} yields a matrix eigenvalue equation in the orbital
+product basis.
+\begin{equation}
+    \mathbf{H}\mathbf{c}
+    =
+    E\mathbf{c}
+    \qquad
+    (\mathbf{H})_{PQ}
+    =
+    \langle \phi_{p_1}\cdots \phi_{p_n}|
+    \hat{H}
+    |\phi_{q_1}\cdots \phi_{q_n} \rangle
+\end{equation}
+In the limit of a complete expansion, this matrix equation is exactly equivalent
+to the Schr\"odinger equation and the coefficients of the solution vector
+correspond to the components of the wavefunction along our product functions,
+\(
+    (\mathbf{c})_P
+    =
+    \langle \phi_{p_1}\cdots \phi_{p_n}|\Psi\rangle
+\).
+In order to stack the deck in favor of an individual product in the expansion,
+we can determine the molecular orbitals in step~\ref{item:mean-field} to
+minimize its Hamiltonian (i.e.~energy) expectation value
+\begin{equation}
+    \label{eq:introduction:orbital-product-expectation-value}
+    \langle \phi_1\cdots \phi_n|
+    \hat{H}
+    |\phi_1\cdots \phi_n \rangle
+    =
+    \sum_{i=1}^\mathrm{orbitals}
+    h_i^i
+    +
+    \sum_{i<j}^{\substack{\mathrm{orbital}\\\mathrm{pairs}}}
+    g_{ij}^{ij}
+\end{equation}
+where we have defined the all-important {\itshape one- and two-electron
+integrals}.
+\begin{equation}
+    h_p^q
+    \equiv
+    \langle\phi_p|\hat{h}_1|\phi_q\rangle
+    =
+    \int_{\mathbb{R}^3}
+    d^3\mathbf{r}_1\,
+    \phi_p^*(\mathbf{r}_1)
+    \hat{h}_1
+    \phi_q(\mathbf{r}_1)
+\end{equation}
+\begin{equation}
+    g_{pq}^{rs}
+    \equiv
+    \langle\phi_p\phi_q|\hat{g}_{12}|\phi_r\phi_s\rangle
+    =
+    \int_{\mathbb{R}^6}
+    d^3\mathbf{r}_1
+    d^3\mathbf{r}_2\,
+    \phi_p^*(\mathbf{r}_1)
+    \phi_q^*(\mathbf{r}_2)
+    \hat{g}_{12}
+    \phi_r(\mathbf{r}_1)
+    \phi_s(\mathbf{r}_2)
+\end{equation}
+According to the variational principle for Hermitian operators, the
+minimum-energy orbital product will be the best statistically uncorrelated
+approximation to the ground-state wavefunction.
+For an orthonormal orbital basis, this minimization is equivalent to an
+effective Schr\"odinger equation for one-electron states
+\begin{equation}
+    \label{eq:introduction:mean-field-orbitals}
+    (
+        \hat{h}_1
+        +
+        \hat{v}_1
+    )
+    \phi_i(\mathbf{r}_1)
+    =
+    \epsilon_i\,
+    \phi_i(\mathbf{r}_1)
+\end{equation}
+where \(\hat{v}_1\) is the mean electrostatic field of the other electrons in
+the molecule.
+\begin{equation}
+    \hat{v}_1
+    \equiv
+    \sum_{j\neq i}
+    \int_{\mathbb{R}^3}
+    d\mathbf{r}_2\,
+    \frac{%
+        \phi_j^*(\mathbf{r}_2)\phi_j(\mathbf{r}_2)
+    }{%
+        |\mathbf{r}_1 - \mathbf{r}_2|
+    }
+\end{equation}
+This is the mean-field approximation described in step~\ref{item:mean-field}
+above.
+We complete the bootstrapping cycle by expanding these unknown molecular
+orbitals in the basis of the atomic orbitals, \(\{\chi_\mu\}\), described in
+step~\ref{item:atomic-orbitals}
+\begin{equation}
+    \phi_i(\mathbf{r}_1)
+    =
+    \sum_\mu
+    d_{\mu i}\,
+    \chi_\mu(\mathbf{r}_1)
+\end{equation}
+which turns \cref{eq:introduction:mean-field-orbitals} into a generalized
+eigenvalue equation
+\begin{equation}
+    \label{eq:introduction:self-consistent-field-equations}
+    (
+        \mathbf{h}
+        +
+        \mathbf{v}
+    )
+    \mathbf{d}_i
+    =
+    \epsilon_i
+    \mathbf{s}\,
+    \mathbf{d}_i
+\end{equation}
+where \((\mathbf{d}_i)_\mu=d_{\mu i}\) is a vector of the unknown orbital
+coefficients, and we have defined the following integral matrices.
+\begin{equation}
+    (\mathbf{s})_{\mu\nu}
+    \equiv
+    \langle\chi_\mu|\chi_\nu\rangle
+    \quad
+    (\mathbf{h})_{\mu\nu}
+    \equiv
+    \langle\chi_\mu|\hat{h}_1|\chi_\nu\rangle
+    \quad
+    (\mathbf{v})_{\mu\nu}
+    \equiv
+    \langle\chi_\mu|\hat{v}_1|\chi_\nu\rangle
+    =
+    \sum_{j\neq i}
+    \langle\chi_\mu\phi_j|\hat{g}_{12}|\chi_\nu\phi_j\rangle
+\end{equation}
+The overlap matrix \(\mathbf{s}\) is not an identity matrix, because the
+atom-centered 1s, 2s, 2p, \dots\ orbitals are generally not orthogonal.
+This is an unusual eigenvalue problem, because the electron field integrals in
+\(\mathbf{v}\) themselves depend on the unknown molecular orbitals.
+In practice, this is solved by starting with an initial guess for the orbitals
+and repeatedly solving \cref{eq:introduction:self-consistent-field-equations}
+until it spits back the current set, at which point we have determined the
+{\itshape self-consistent field} for a given chemical system.
 
+
+\section{Spin and Exchange Symmetry}
 
 
 \subsection{Na\"ive Electronic Structure Theory}
