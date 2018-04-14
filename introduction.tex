@@ -4,152 +4,151 @@
     Introduction and Literature Review
 }
 
-\section{Electronic Structure Theory}
+\section{Naive Electronic Structure Theory}
 
+As an entry point to electronic structure theory, let us begin by forgetting
+what we know about electrons from the standard model of particle physics.
+From the standpoint of Pauli at the end of 1925, solving the spectrum of
+hydrogen\cite{Pauli:1926p336} with Heisenberg's new matrix
+mechanics,\cite{Heisenberg:1925p879} chemical matter was described by nimble,
+negatively-charged electrons orbiting heavy, positively-charged nuclei.  This
+theory would be conceptually clarified over the following months by
+Schr\"odinger's development of wave mechanics,
+\cite{Schrodinger:1926p361,Schrodinger:1926p489,Schrodinger:1926p734}
+which described the possible states of electrons in a molecule as eigenfunctions
+of the quantum-mechanical Hamiltonian, oscillating in time with a frequency
+proportional to their energy.
+\begin{equation}
+    \Psi(t)
+    =
+    \Psi
+    e^{-iEt}
+    \qquad
+    \hat{H}
+    \Psi
+    =
+    E
+    \Psi
+\end{equation}
+(Note that we are using atomic units.)
+Crudely speaking, this Hamiltonian is derived from its classical counterpart by
+replacing its momentum variables with del operators divided by the unit
+imaginary,
+\(
+    \hat{\mathbf{p}}
+    =
+    \frac{1}{i}
+    \nabla
+\).
+It can be written as a sum over one- and two-electron terms
+\begin{equation}
+    \hat{H}
+    =
+    \sum_i^\text{electrons}
+    \hat{h}_i
+    +
+    \sum_{i<j}^{\substack{\text{electron}\\\text{pairs}}}
+    \hat{g}_{ij}
+\end{equation}
+where the one-electron operator
+\(
+    \hat{h}_i
+\)
+describes the kinetic energy of the \(i^\text{th}\) electron and its
+electrostatic attraction to the nuclei (Coulomb's law), and the two-electron
+operator
+\(
+    \hat{g}_{ij}
+\)
+describes the Coulombic repulsion between two electrons.
+\begin{equation}
+    \hat{h}_i
+    \equiv
+    \tfrac{1}{2}
+    \hat{\mathbf{p}}_i^2
+    -
+    \sum_A^\text{nuclei}
+    \frac{Z_A}{|\mathbf{r}_A - \mathbf{r}_i|}
+    \qquad
+    \hat{g}_{ij}
+    \equiv
+    \frac{1}{|\mathbf{r}_i - \mathbf{r}_j|}
+\end{equation}
+The vector space containing the eigenfunctions of a given Hamiltonian is its
+Hilbert space, \(\mathcal{H}\), which in this case is the space of square
+integrable functions of \(n\) position variables,
+\(
+    L^2(\mathbb{R}^{3n})
+\),
+one for each electron in the molecule.
+Since this space is infinite-dimensional, the only way to make progress in most
+cases is to determine a basis that approximately spans the states of interest.
+Here we are helped by the fact that a function of \(n\) position variables can
+be written as a linear combination of products
+\begin{equation}
+    \Psi(\mathbf{r}_1, \dots, \mathbf{r}_n)
+    =
+    \sum_{p_1\cdots p_n}
+    c_{p_1\cdots p_n}
+    \phi_{p_1}(\mathbf{r}_1)
+    \cdots
+    \phi_{p_n}(\mathbf{r}_n)
+\end{equation}
+where the one-electron functions or {\itshape orbitals} in this expansion span a
+one-electron Hilbert space,
+\(
+    \mathcal{H}_1
+    =
+    L^2(\mathbb{R}^3)
+\).
+More generally, the Hilbert space of a system is always given by a tensor
+product of the Hilbert spaces for its constituent particles.
+\begin{equation}
+    \mathcal{H}
+    =
+    \mathcal{H}_1
+    \otimes
+    \mathcal{H}_1
+    \otimes
+    \cdots
+\end{equation}
+This enables a general strategy for bootstrapping the electronic structure
+problem:
 \begin{enumerate}
     \item
-        As an in-road to electronic structure theory, let us first approach the
-        subject na\"ively, forgetting what we know about electrons from the
-        standard model of particle physics.
+        The states of a single electron orbiting a single nucleus are
+        analytically known products of Laguerre polynomials and spherical
+        Harmonics, and the energy of these 1s, 2s, 2p, \dots\ atomic orbitals
+        increases with the number of nodes.
     \item
-        From the standpoint of Pauli solving the spectrum of hydrogen with
-        Heisenberg's new matrix mechanics (Heisenberg:1925p879) at the end of
-        1925,(Pauli:1926p336) chemical matter was described by nimble,
-        negatively-charged electrons orbiting heavy, positively-charged nuclei.
+        \label{item:mean-field}
+        Treating the other electrons in a molecule as fields which partially
+        shield the nuclear charges, the states of individual electrons in a
+        molecule are well described as linear combinations of atomic
+        one-electron functions centered on each nucleus.
     \item
-        This theory would be conceptually clarified over the following months by
-        Schr\"odinger's development of wave mechanics
-        (Schrodinger:1926p361,Schrodinger:1926p489,Schrodinger:1926p734).
+        The dominant contributions to these molecular orbitals come from atomic
+        orbitals with a similar energy, so that the lowest energy molecular
+        orbital typically looks like the 1s orbital of the nucleus with the
+        highest charge, with very little contribution from, say, the 42g orbital
+        of another atom.
+        The higher energy states are linear combinations of higher energy atomic
+        orbitals with increasing numbers of nodes.
     \item
-        Schr\"odinger's new theory described the possible states of electrons in
-        a molecule as eigenfunctions of the quantum-mechanical Hamiltonian,
-        oscillating in time with a frequency proportional to their energy.
-        \begin{equation}
-            \Psi(t)
-            =
-            \Psi
-            e^{-iEt}
-            \qquad
-            \hat{H}
-            \Psi
-            =
-            E
-            \Psi
-        \end{equation}
-    \item
-        Crudely put, this Hamiltonian is derived from its classical counterpart
-        by replacing its momentum variables with operators,
-        \(
-            \hat{\mathbf{p}}_i
-            =
-            -i
-            \nabla_i
-        \).
-        It can be written as a sum over one- and two-electron terms
-        \begin{equation}
-            \hat{H}
-            =
-            \sum_i^\text{electrons}
-            \hat{h}_i
-            +
-            \sum_{i<j}^{\substack{\text{electron}\\\text{pairs}}}
-            \hat{g}_{ij}
-        \end{equation}
-        where the one-electron operator
-        \(
-            \hat{h}_i
-        \)
-        describes the kinetic energy of the \(i^\text{th}\) electron and its
-        electrostatic attraction to the nuclei (Coulomb's law), and the
-        two-electron operator
-        \(
-            \hat{g}_{ij}
-        \)
-        describes the Coulombic repulsion between two electrons.
-        \begin{equation}
-            \hat{h}_i
-            \equiv
-            \tfrac{1}{2}
-            \hat{\mathbf{p}}_i^2
-            -
-            \sum_A^\text{nuclei}
-            \frac{Z_A}{|\mathbf{r}_A - \mathbf{r}_i|}
-            \qquad
-            \hat{g}_{ij}
-            \equiv
-            \frac{1}{|\mathbf{r}_i - \mathbf{r}_j|}
-        \end{equation}
-    \item
-        The vector space containing the eigenfunctions of a given Hamiltonian is
-        the Hilbert space, \(\mathcal{H}\), which in this case is the space of
-        square integrable functions of \(n\) position variables,
-        \(
-            L^2(\mathbb{R}^{3n})
-        \),
-        one for each electron in the molecule.
-    \item
-        Since this space is infinite-dimensional, the only way to make progress
-        in most cases is to determine a basis that approximately spans the
-        states of interest.
-    \item
-        We are helped in this regard by the fact that a function of \(n\)
-        position variables can always be written as a linear combination of
-        products
-        \begin{equation}
-            \Psi(\mathbf{r}_1, \dots, \mathbf{r}_n)
-            =
-            \sum_{p_1\cdots p_n}
-            c_{p_1\cdots p_n}
-            \phi_{p_1}(\mathbf{r}_1)
-            \cdots
-            \phi_{p_n}(\mathbf{r}_n)
-        \end{equation}
-        where the one-electron functions or {\itshape orbitals} in this
-        expansion span a one-electron Hilbert space,
-        \(
-            \mathcal{H}_1
-            =
-            L^2(\mathbb{R}^3)
-        \).
-    \item
-        More generally, the Hilbert space of system is always given by a tensor
-        product of the Hilbert spaces for its constituent particles.
-        \begin{equation}
-            \mathcal{H}
-            =
-            \mathcal{H}_1
-            \otimes
-            \mathcal{H}_1
-            \otimes
-            \cdots
-        \end{equation}
-    \item
-        This gives us a route for boot-strapping the electronic structure
-        problem:
-        \begin{enumerate}
-            \item
-                The states of a single electron orbiting a single nucleus are
-                analytically known products of Laguerre polynomials and
-                spherical Harmonics, and the energy of these 1s, 2s, 2p, \dots
-                states increases with the number of nodes.
-            \item
-                Treating the other electrons in a molecule as a fields which
-                partly shield the nuclear charges, the one-electron states of a
-                molecule are well described as linear combinations of atomic
-                one-electron functions centered on each atom.
-            \item
-                The dominant contributions to these {\itshape molecular
-                orbitals} come from atomic orbitals with a similar energy, so
-                that the lowest energy molecular orbital typically looks like
-                the 1s orbital of the nucleus with the highest charge, with very
-                little contribution from, say, the 48g orbital of another atom.
-            \item
-                Finally, the total electronic wavefunction is described by a
-                linear combination of products of these molecular orbitals, and
-                the electronic ground-state will be spanned to a good
-                approximation by products of the low-energy molecular orbitals.
-        \end{enumerate}
+        Finally, the total electronic wavefunction is described by a linear
+        combination of products of these molecular orbitals, and the electronic
+        ground-state will be spanned to a good approximation by products of the
+        low-energy molecular orbitals.
+        When the molecular orbitals are weakly interacting, so that the
+        mean-field approximation of step~\ref{item:mean-field} furnishes a good
+        description of their motions, the wavefunction will be heavily dominated
+        by a single one of these products.
+        From a statistical perspective, this means that the densities of
+        electron probability density approximately separates into a product of
+        one-electron distributions, because the molecular orbitals are {\itshape
+        weakly correlated}.
 \end{enumerate}
+
 
 
 \subsection{Na\"ive Electronic Structure Theory}
