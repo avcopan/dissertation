@@ -292,64 +292,79 @@ coefficients, and we have defined the following integral matrices.
 \end{equation}
 The overlap matrix \(\mathbf{s}\) is not an identity matrix, because the
 atom-centered 1s, 2s, 2p, \dots\ orbitals are generally not orthogonal.
-This is an unusual eigenvalue problem, because the electron field integrals in
-\(\mathbf{v}\) themselves depend on the unknown molecular orbitals.
-In practice, this is solved by starting with an initial guess for the orbitals
-and repeatedly solving \cref{eq:introduction:self-consistent-field-equations}
-until it spits back the current set, at which point we have determined the
-{\itshape self-consistent field} for a given chemical system.
+This is an unusual eigenvalue problem, because the matrix of this effective
+one-particle Hamiltonian itself depends on the solutions, i.e.~the molecular
+orbital set \(\{\phi_j\}\).
+In practice, this is solved by iteratively feeding the solutions back into
+\(\mathbf{v}\) and repeatedly solving
+\cref{eq:introduction:self-consistent-field-equations} until we arrive at a
+self-consistent field for our chemical system.
 
 
 \section{Spin and Exchange Symmetry}
 
+\noindent
+Stern-Gerlach experiment\cite{Gerlach:1922p349}
 
-\subsection{Na\"ive Electronic Structure Theory}
+\noindent
+Spin\cite{Pauli:1925p373}
+\begin{quote}
+    Closed energy configurations, contribute nothing to the magnetic moment or
+    angular momentum of the atom.
+    In particular, in alkali metals the angular momentum values of the atom and
+    its energy changes in the presence of an external magnetic field are
+    appropriately interpreted as the sole working of the optically active
+    electron, and the same situation is thought to be the case in the
+    observations of the anomalous Zeeman effect.
+    From this standpoint, the doublet structure of the alkali spectra, as well
+    as the breakdown of Larmor's theorem, must therefore come from some
+    intrinsic, classically non-describable type of two-valuedness that is a
+    characteristic of the optically active electron.
+\end{quote}
 
-\subsection{Spin}
+\noindent
+Goudsmit-Uhlenbeck\cite{Uhlenbeck:1926p264}
 
-\subsection{Antisymmetry}
+\noindent
+Pauli exclusion\cite{Pauli:1925p756}
+\begin{quote}
+    By considering the case of strong magnetic fields we can reduce
+    [the earlier observation] that the number of electrons in a completed
+    subgroup is the same as the number of corresponding terms of the Zeeman
+    effect of the alkali spectra, to the following more general rule about the
+    occurrence of equivalent electrons in an atom:
+    There can never be two or more equivalent electrons in an atom for which in
+    strong fields the values of all quantum numbers \(n, l, k, m_l\) (or,
+    equivalently, \(n, l, m_l, m_s\)) are the same.
+    If an electron is present in the atom for which these quantum numbers (in an
+    external field) have definite values, this state is ``occupied.''
+    \dots
+    We cannot give a further justification for this rule, but it seems to be a
+    very plausible one.
+\end{quote}
 
-\subsection{Fock Space}
+\noindent
+Exchange symmetry\cite{Heisenberg:1926p411}
+\begin{quote}
+    The aspects of de Broglie's theory of waves that lead to Bose-Einstein
+    statistics\cite{Bose:1924p178,Einstein:1924p261,Einstein:1925p3} appear to
+    have no analogue in quantum mechanics;
+    Ad hoc rules like Pauli's ban on equivalent orbitals have no expression in
+    the mathematical formalism of quantum mechanics as it stands.
+    \dots
+    Finally there is one known difficulty in the quantitative interpretation of
+    spectra that we should remind ourselves of:
+    The splitting of singlet and triplet states in the spectra of the alkaline
+    earth metals and in helium is too big by an order of magnitude to be
+    explained as a difference in the magentic interaction energies of two
+    spinning electrons.
+\end{quote}
 
-\subsection{Wavefunction Methods}
+\section{Modern Electronic Structure Theory}
 
-\section{Density Cumulants}
-
-\subsection{Generating Functions}
-
-\subsection{Generalized Normal Ordering}
 
 \section{Prospectus}
 
-\subsection{History}
-
-\subsection{Contents}
-
-
-
-The general strategy of many-body quantum mechanics:
-\begin{enumerate}
-    \item
-        Determine the Hilbert spaces for the individual particles in your
-        system, ideally by solving an effective one-body problem for the
-        stationary states.
-    \item
-        The Hilbert space for the many-body system is the tensor-product of
-        one-particle Hilbert spaces, i.e.~the many-body states are spanned by
-        all possible products of one-particle states.
-    \item
-        Solve for the many-body wavefunction in the basis one or more of these
-        product functions.
-        If the particles are approximately decoupled, and the one-body basis is
-        carefully chosen, one may be able to describe the wavefunction to a good
-        approximation using only one or a few product functions.
-    \item
-        If one or more particles are highly coupled, one may need to include
-        larger expansions, such as all possible combinations of states in a
-        given energy range, in order to achieve even qualitative accuracy.
-\end{enumerate}
-
-\section{One-Electron States}
 
 Hydrogen or silver or alkali metals
 \begin{equation}
@@ -376,10 +391,6 @@ Hydrogen or silver or alkali metals
     =
     L^2(\mathbb{R}^3)
 \end{equation}
-Assume the motion of the nuclei is infinitely slow on the time-scale of
-electronic motion (Born-Oppenheimer approximation).\\
-Assume the electron only sees an average field describing the shielding due to
-the other electrons (mean-field approximation).
 
 \subsection{Symmetry}
 
@@ -405,44 +416,6 @@ Free electrons: plane waves
 Molecules and crystals are described by symmetry adapted combinations of these
 functions
 
-\subsection{Naive \(n\)-Electron States and the Mean Field}
-The mean field of the electrons could be derived by analyzing the full
-Schr\"odinger equation
-\begin{equation}
-    \hat{H}
-    |\Psi\rangle
-    =
-    E
-    |\Psi\rangle
-    \qquad
-    \hat{H}_1
-    =
-    \sum_{i=1}^n
-    \hat{h}_i
-    +
-    \sum_{i=1}^n
-    \sum_{j=i+1}^n
-    \hat{g}_{ij}
-    \qquad
-    \hat{g}_{ij}
-    =
-    \frac{1}{|\hat{\mathbf{r}}_i-\hat{\mathbf{r}}_j|}
-\end{equation}
-\begin{equation}
-    \mathcal{H}_n
-    =
-    \mathcal{H}_1
-    \otimes
-    \cdots
-    \otimes
-    \mathcal{H}_1
-\end{equation}
-
-Mean field is described by assuming statistically independent electrons.
-
-Discuss how symmetries combine for the \(n\)-electron state.
-
-\section{Spin and Pauli Exclusion}
 
 Goudsmit-Uhlenbeck (Uhlenbeck:1926p264) give us spin, which is a constant intrinsic to the electron
 as a particle
