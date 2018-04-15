@@ -8,11 +8,11 @@
 
 As an entry point to electronic structure theory, let us begin by forgetting
 what we know about electrons from the standard model of particle physics.
-From the standpoint of Pauli at the end of 1925, solving the spectrum of
-hydrogen\cite{Pauli:1926p336} with Heisenberg's new matrix
-mechanics,\cite{Heisenberg:1925p879} chemical matter was described by nimble,
-negatively-charged electrons orbiting heavy, positively-charged nuclei.  This
-theory would be conceptually clarified over the following weeks by
+From the standpoint of Heisenberg and others developing the new quantum theory
+in 1925\cite{Heisenberg:1925p879} chemical matter was described by nimble,
+negatively-charged electrons orbiting heavy, positively-charged nuclei, albeit
+with several outstanding mysteries indicating that there was more to the story.
+This theory would be conceptually clarified in the following year by
 Schr\"odinger's development of wave mechanics,
 \cite{Schrodinger:1926p361,Schrodinger:1926p489,Schrodinger:1926p734}
 which described the possible states of electrons in a molecule as eigenfunctions
@@ -32,8 +32,8 @@ In atomic units:
     \Psi.
 \end{equation}
 Crudely speaking, this Hamiltonian is derived from its classical counterpart by
-replacing its momentum variables with del operators divided by the unit
-imaginary,
+replacing its momentum variables with del operators divided by the imaginary
+unit,
 \(
     \hat{\mathbf{p}}
     =
@@ -55,7 +55,7 @@ where the one-electron operator
     \hat{h}_i
 \)
 describes the kinetic energy of the \(i^\text{th}\) electron and its
-electrostatic attraction to the nuclei (Coulomb's law), and the two-electron
+electrostatic (Coulomb's law) attraction to the nuclei, and the two-electron
 operator
 \(
     \hat{g}_{ij}
@@ -97,7 +97,7 @@ be written as a linear combination of products
 where the one-electron functions or {\itshape orbitals} in this expansion span a
 one-electron Hilbert space,
 \(
-    \mathcal{H}_i
+    \mathcal{H}_\mathrm{e}
     =
     L^2(\mathbb{R}^3)
 \).
@@ -106,13 +106,11 @@ product of the Hilbert spaces for its constituent particles.
 \begin{equation}
     \mathcal{H}
     =
-    \mathcal{H}_1
+    \mathcal{H}_\mathrm{e}
     \otimes
-    \mathcal{H}_2
+    \mathcal{H}_\mathrm{e}
     \otimes
     \cdots
-    \otimes
-    \mathcal{H}_n
 \end{equation}
 This enables a general strategy for bootstrapping the electronic structure
 problem:
@@ -151,8 +149,7 @@ problem:
         one-electron densities, because the molecular orbitals are {\itshape
         weakly correlated}.
 \end{enumerate}
-Step~\ref{item:full-ci} yields a matrix eigenvalue equation in the orbital
-product basis.
+In the end, we are left with a matrix eigenvalue equation in the product basis.
 \begin{equation}
     \mathbf{H}\mathbf{c}
     =
@@ -172,9 +169,9 @@ correspond to the components of the wavefunction along our product functions,
     =
     \langle \phi_{p_1}\cdots \phi_{p_n}|\Psi\rangle
 \).
-In order to stack the deck in favor of an individual product in the expansion,
-we can determine the molecular orbitals in step~\ref{item:mean-field} to
-minimize its Hamiltonian (i.e.~energy) expectation value
+In order to stack the deck in favor of one product in the expansion, we can
+determine the molecular orbitals in step~\ref{item:mean-field} to minimize its
+energy expectation value
 \begin{equation}
     \label{eq:introduction:orbital-product-expectation-value}
     \langle \phi_1\cdots \phi_n|
@@ -214,9 +211,9 @@ integrals}.
     \phi_r(\mathbf{r}_1)
     \phi_s(\mathbf{r}_2)
 \end{equation}
-According to the variational principle for Hermitian operators, the
-minimum-energy orbital product will be the best statistically uncorrelated
-approximation to the ground-state wavefunction.
+According to the variational principle for Hermitian operators, minimizing this
+expectation value yields the best single-product approximation to the
+ground-state wavefunction.
 For an orthonormal orbital basis, this minimization is equivalent to an
 effective Schr\"odinger equation for one-electron states
 \begin{equation}
@@ -248,153 +245,133 @@ the molecule.
 This is the mean-field approximation described in step~\ref{item:mean-field}
 above.
 We complete the bootstrapping cycle by expanding these unknown molecular
-orbitals in the basis of the atomic orbitals, \(\{\chi_\mu\}\), described in
-step~\ref{item:atomic-orbitals}
-\begin{equation}
-    \phi_i(\mathbf{r}_1)
-    =
-    \sum_\mu
-    d_{\mu i}\,
-    \chi_\mu(\mathbf{r}_1)
-\end{equation}
-which turns \cref{eq:introduction:mean-field-orbitals} into a generalized
-eigenvalue equation
-\begin{equation}
-    \label{eq:introduction:self-consistent-field-equations}
-    (
-        \mathbf{h}
-        +
-        \mathbf{v}
-    )
-    \mathbf{d}_i
-    =
-    \epsilon_i
-    \mathbf{s}\,
-    \mathbf{d}_i
-\end{equation}
-where \((\mathbf{d}_i)_\mu=d_{\mu i}\) is a vector of the unknown orbital
-coefficients, and we have defined the following integral matrices.
-\begin{equation}
-    (\mathbf{s})_{\mu\nu}
-    \equiv
-    \langle\chi_\mu|\chi_\nu\rangle
-    \quad
-    (\mathbf{h})_{\mu\nu}
-    \equiv
-    \langle\chi_\mu|\hat{h}_1|\chi_\nu\rangle
-    \quad
-    (\mathbf{v})_{\mu\nu}
-    \equiv
-    \langle\chi_\mu|\hat{v}_1|\chi_\nu\rangle
-    =
-    \sum_{j\neq i}
-    \langle\chi_\mu\phi_j|\hat{g}_{12}|\chi_\nu\phi_j\rangle
-\end{equation}
-The overlap matrix \(\mathbf{s}\) is not an identity matrix, because the
-atom-centered 1s, 2s, 2p, \dots\ orbitals are generally not orthogonal.
-This is an unusual eigenvalue problem, because the matrix of this effective
-one-particle Hamiltonian itself depends on the solutions, i.e.~the molecular
-orbital set \(\{\phi_j\}\).
-In practice, this is solved by iteratively feeding the solutions back into
-\(\mathbf{v}\) and repeatedly solving
-\cref{eq:introduction:self-consistent-field-equations} until we arrive at a
-self-consistent field for our chemical system.
+orbitals in the basis of the atomic orbitals described in
+step~\ref{item:atomic-orbitals} and solving for the expansion coefficients.
+
+\begin{enumerate}
+    \item
+        The general strategy we have just outlined\dots
+    \item
+        The essential simplicity of this approach is sometimes obscured by the
+        need to consider spin and exchange symmetry, which we turn to next.
+\end{enumerate}
 
 
-\section{Spin and Exchange Symmetry}
+\section{Spin}
 
-\noindent
-Stern-Gerlach experiment\cite{Gerlach:1922p349}
+\begin{enumerate}
+    \item
+        The end of 1925 saw the resolution of one of the outstanding mysteries
+        of the new quantum mechanics, with Goudsmit and Uhlenbeck's theory of
+        electron spin.\cite{Uhlenbeck:1925p953}
+    \item
+        The need for an additional quantum number had already been understood by
+        Pauli in his analysis of the alkali metal spectra:
+        \begin{quote}
+            Closed energy configurations, contribute nothing to the magnetic
+            moment or angular momentum of the atom.
+            In particular, in alkali metals the angular momentum values of the
+            atom, and its energy changes in the presence of an external magnetic
+            field, are appropriately interpreted as the sole working of the
+            optically active electron, and the same situation is thought to be
+            the case in the observations of the anomalous Zeeman effect.
+            \emph{%
+                From this standpoint, the doublet structure of the alkali
+                spectra, as well as the breakdown of Larmor's theorem, must
+                therefore come from some intrinsic, classically non-describable
+                type of two-valuedness that is a characteristic of the optically
+                active electron.
+            }
+            (Translated from Ref.~\citenum{Pauli:1925p373} with emphasis added.)
+        \end{quote}
+    \item
+        In hindsight, the Stern-Gerlach experiment\cite{Gerlach:1922p349} of
+        1922 had already shown that the 5s electron of the silver atom displayed
+        half-integer angular momentum projections, \(\pm \tfrac{1}{2}\), rather
+        the integral ones \(0, \pm1, \dots, \pm l\) as would arise from the
+        angular momentum of spatial orbits.
+    \item
+        In other words, the one-particle states were eigenfunctions of an
+        additional angular momentum operator
+        \begin{equation}
+            \hat{s}_z
+            \psi
+            =
+            \pm
+            \tfrac{1}{2}
+            \psi
+        \end{equation}
+        whose eigenfunctions cannot exist in \(L^2(\mathbb{R}^3)\).
+    \item
+        The additional ``spinor'' component of the one-electron states could be
+        represented using vectors in \(\mathbb{C}^2\)
+        \begin{equation}
+            \hat{s}_z
+            =
+            \frac{1}{2}
+            \begin{pmatrix}
+                1 & \hphantom{+}0 \\
+                0 & -1
+            \end{pmatrix}
+            \qquad
+            \alpha
+            =
+            \begin{pmatrix}
+                1 \\ 0
+            \end{pmatrix}
+            \qquad
+            \beta
+            =
+            \begin{pmatrix}
+                0 \\ 1
+            \end{pmatrix}
+        \end{equation}
+        where \(\alpha\) denotes the ``spin-up'' state and \(\beta\) denotes the
+        ``spin-down'' state.
+    \item
+        \begin{equation}
+            \psi(\mathbf{r}, \sigma)
+            =
+            \phi(\mathbf{r})
+            \omega_\sigma
+            \qquad
+            \omega_\sigma
+            \equiv
+            \left\{
+                \begin{array}{cl}
+                    \alpha_{\sigma}
+                    &
+                    \text{if spin projection is \(+1/2\)}
+                    \\[10pt]
+                    \beta_{\sigma}
+                    &
+                    \text{if spin projection is \(+1/2\)}
+                \end{array}
+            \right.
+        \end{equation}
+        one or zero dependong on whether \(\sigma\) refers to the first or
+        second vector component
+        \begin{equation}
+            \mathcal{H}_\mathrm{e}
+            =
+            L^2(\mathbb{R}^3)
+            \otimes
+            \mathbb{C}^2
+        \end{equation}
+\end{enumerate}
 
-\noindent
-Spin\cite{Pauli:1925p373}
-\begin{quote}
-    Closed energy configurations, contribute nothing to the magnetic moment or
-    angular momentum of the atom.
-    In particular, in alkali metals the angular momentum values of the atom and
-    its energy changes in the presence of an external magnetic field are
-    appropriately interpreted as the sole working of the optically active
-    electron, and the same situation is thought to be the case in the
-    observations of the anomalous Zeeman effect.
-    From this standpoint, the doublet structure of the alkali spectra, as well
-    as the breakdown of Larmor's theorem, must therefore come from some
-    intrinsic, classically non-describable type of two-valuedness that is a
-    characteristic of the optically active electron.
-\end{quote}
 
-\begin{equation}
-    \hat{s}_z
-    \psi
-    =
-    \pm
-    \tfrac{1}{2}
-    \psi
-\end{equation}
+\section{Antisymmetry}
 
-\begin{equation}
-    \hat{s}_z
-    =
-    \frac{1}{2}
-    \begin{pmatrix}
-        1 & \hphantom{+}0 \\
-        0 & -1
-    \end{pmatrix}
-    \qquad
-    \alpha
-    =
-    \begin{pmatrix}
-        1 \\ 0
-    \end{pmatrix}
-    \qquad
-    \beta
-    =
-    \begin{pmatrix}
-        0 \\ 1
-    \end{pmatrix}
-\end{equation}
-
-\begin{equation}
-    \mathcal{H}_1
-    =
-    L^2(\mathbb{R}^3)
-    \otimes
-    \mathbb{C}^2
-\end{equation}
-
-\begin{equation}
-    \psi(\mathbf{r}, \sigma)
-    =
-    \phi(\mathbf{r})
-    \omega_\sigma
-    \qquad
-    \omega_\sigma
-    \equiv
-    \left\{
-        \begin{array}{cl}
-            \alpha_{\sigma}
-            &
-            \text{if spin projection is \(+1/2\)}
-            \\[10pt]
-            \beta_{\sigma}
-            &
-            \text{if spin projection is \(+1/2\)}
-        \end{array}
-    \right.
-\end{equation}
-one or zero dependong on whether \(\sigma\) refers to the first or second vector
-component
-
-\noindent
-Goudsmit-Uhlenbeck\cite{Uhlenbeck:1926p264}
 
 \noindent
 Pauli exclusion\cite{Pauli:1925p756}
 \begin{quote}
-    By considering the case of strong magnetic fields we can reduce
-    [the earlier observation] that the number of electrons in a completed
-    subgroup is the same as the number of corresponding terms of the Zeeman
-    effect of the alkali spectra, to the following more general rule about the
-    occurrence of equivalent electrons in an atom:
+    By considering the case of strong magnetic fields we can reduce [earlier
+    observations] that the number of electrons in a completed subgroup is the
+    same as the number of corresponding terms of the Zeeman effect of the alkali
+    spectra, to the following more general rule about the occurrence of
+    equivalent electrons in an atom:
     There can never be two or more equivalent electrons in an atom for which in
     strong fields the values of all quantum numbers \(n, l, k, m_l\) (or,
     equivalently, \(n, l, m_l, m_s\)) are the same.
