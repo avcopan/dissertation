@@ -194,7 +194,7 @@ integrals}.
     \equiv
     \langle\phi_p|\hat{h}_1|\phi_q\rangle
     =
-    \int_{\mathbb{R}^3}
+    \int
     d^3\mathbf{r}_1\,
     \phi_p^*(\mathbf{r}_1)
     \hat{h}_1
@@ -205,7 +205,7 @@ integrals}.
     \equiv
     \langle\phi_p\phi_q|\hat{g}_{12}|\phi_r\phi_s\rangle
     =
-    \int_{\mathbb{R}^6}
+    \int
     d^3\mathbf{r}_1
     d^3\mathbf{r}_2\,
     \phi_p^*(\mathbf{r}_1)
@@ -237,7 +237,7 @@ the molecule.
     \hat{v}_1
     \equiv
     \sum_{j\neq i}
-    \int_{\mathbb{R}^3}
+    \int
     d\mathbf{r}_2\,
     \frac{%
         \phi_j^*(\mathbf{r}_2)\phi_j(\mathbf{r}_2)
@@ -424,18 +424,52 @@ Exchange symmetry\cite{Heisenberg:1926p411}
 
 
 \begin{equation}
-    \Phi(1, \ldots, n)
+    \Phi_{p_1\cdots p_n}(1, \ldots, n)
     =
+    \tfrac{1}{\sqrt{n!}}
     \sum_{\pi}
     (-)^\pi
-    \psi_1(\pi(1))
+    \psi_{p_1}(\pi_1)
     \cdots
-    \psi_n(\pi(n))
+    \psi_{p_n}(\pi_n)
 \end{equation}
 
 
 
 \section{Modern Electronic Structure Theory}
+
+\begin{equation}
+    a_p
+    \Psi(1, \ldots, n)
+    \equiv
+    \sqrt{n}
+    \int
+    d(1)\,
+    \psi_p^*(1)
+    \Psi(1, \ldots, n)
+\end{equation}
+
+\begin{equation}
+    1_n
+    =
+    \tfrac{1}{\sqrt{n}}
+    \sum_p
+    \psi_p(1)\,
+    a_p
+\end{equation}
+
+\begin{equation}
+    \langle\Psi|\hat{H}|\Psi\rangle
+    =
+    \sum_{pq}
+    h_p^q\,
+    \langle\Psi|a_p^\dagger a_q|\Psi\rangle
+    +
+    \tfrac{1}{2}
+    \sum_{pqrs}
+    g_{pq}^{rs}\,
+    \langle\Psi|a_p^\dagger a_q^\dagger a_s a_r|\Psi\rangle
+\end{equation}
 
 
 \section{Prospectus}
