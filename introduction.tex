@@ -10,13 +10,12 @@ As an entry point to electronic structure theory, let us begin by forgetting
 what we know about electrons from the standard model of particle physics.
 From the standpoint of Heisenberg and others developing the new quantum theory
 in 1925\cite{Heisenberg:1925p879} chemical matter was described by nimble,
-negatively-charged electrons orbiting heavy, positively-charged nuclei, albeit
-with several outstanding mysteries indicating that there was more to the story.
+negatively-charged electrons orbiting heavy, positively-charged nuclei.
 This theory would be conceptually clarified in the following year by
 Schr\"odinger's development of wave mechanics,
-\cite{Schrodinger:1926p361,Schrodinger:1926p489,Schrodinger:1926p734}
-which described the possible states of electrons in a molecule as eigenfunctions
-of the quantum-mechanical Hamiltonian, oscillating in time with a frequency
+\cite{Schrodinger:1926p361,Schrodinger:1926p489,Schrodinger:1926p734} which
+described the possible states of electrons in a molecule as eigenfunctions of
+the quantum-mechanical Hamiltonian, oscillating in time with a frequency
 proportional to their energy.
 In atomic units:
 \begin{equation}
@@ -60,7 +59,7 @@ operator
 \(
     \hat{g}_{ij}
 \)
-describes the electrostatic repulsion between electrons \(i\) and \(j\).
+describes the Coulombic repulsion between electrons \(i\) and \(j\).
 \begin{equation}
     \hat{h}_i
     \equiv
@@ -74,15 +73,15 @@ describes the electrostatic repulsion between electrons \(i\) and \(j\).
     \equiv
     \frac{1}{|\mathbf{r}_i - \mathbf{r}_j|}
 \end{equation}
-The vector space containing the eigenfunctions of a Hamiltonian is its Hilbert
+The vector space containing the wavefunction \(\Psi\) is the system's Hilbert
 space, \(\mathcal{H}\), which in this case is the space of square integrable
 functions of \(n\) position variables,
 \(
     L^2(\mathbb{R}^{3n})
 \),
 one for each electron in the molecule.
-Since this space is infinite-dimensional, the only way to make progress in
-general is to determine a basis that approximately spans the states of interest.
+Since this space is infinite-dimensional, the only way forward in most cases is
+to determine a basis that approximately spans the states of interest.
 Here we are helped by the fact that a function of \(n\) position variables can
 be written as a linear combination of products
 \begin{equation}
@@ -112,15 +111,19 @@ product of the Hilbert spaces for its constituent particles.
     \otimes
     \cdots
 \end{equation}
+In words, this says that the states of a system are spanned by all possible
+combinations of the states its components exhibit in isolation.
 This enables a general strategy for bootstrapping the electronic structure
 problem:
 \begin{enumerate}
     \item
         \label{item:atomic-orbitals}
-        The states of a single electron orbiting a single nucleus are
-        analytically known products of Laguerre polynomials and spherical
-        Harmonics, and the energy of these 1s, 2s, 2p, \dots\ atomic orbitals
-        increases with the number of nodes.
+        The states of a single electron orbiting a single nucleus are determined
+        by the spherical symmetry of the nuclear potential to have a degenerate
+        shell structure where the energy of the state increases with the number
+        of nodal surfaces in the function.
+        These 1s, 2s, 2p, \dots\ atomic orbitals have analytically known
+        functional forms.
     \item
         \label{item:mean-field}
         Treating the other electrons in a molecule as static fields which
@@ -140,16 +143,16 @@ problem:
         combination of products of these molecular orbitals, and the electronic
         ground-state will be spanned to a good approximation by products of the
         low-energy molecular orbitals.
-        When the molecular orbitals are weakly interacting, so that the
-        mean-field approximation of step~\ref{item:mean-field} furnishes a good
-        description of their motions, the wavefunction will be heavily dominated
-        by a single one of these products.
+        When the molecular orbitals are weakly interacting, the mean-field
+        approximation of step~\ref{item:mean-field} furnishes a good description
+        of their motions, and the wavefunction will be heavily dominated by a
+        single one of these products.
         From a statistical perspective, this means that the electron probability
         density of the wavefunction approximately separates into a product of
         one-electron densities, because the molecular orbitals are {\itshape
         weakly correlated}.
 \end{enumerate}
-In the end, we are left with a matrix eigenvalue equation in the product basis.
+At the end of this procedure, we have a matrix equation in the product basis.
 \begin{equation}
     \mathbf{H}\mathbf{c}
     =
@@ -161,14 +164,10 @@ In the end, we are left with a matrix eigenvalue equation in the product basis.
     \hat{H}
     |\phi_{q_1}\cdots \phi_{q_n} \rangle
 \end{equation}
-In the limit of a complete expansion, this matrix equation is exactly equivalent
-to the Schr\"odinger equation and the coefficients of the solution vector
-correspond to the components of the wavefunction along our product functions,
-\(
-    (\mathbf{c})_P
-    =
-    \langle \phi_{p_1}\cdots \phi_{p_n}|\Psi\rangle
-\).
+In the limit of a complete expansion, this eigenvalue equation is exactly
+equivalent to the Schr\"odinger equation and the coefficients of the solution
+vector correspond to the components of the wavefunction along our product
+functions.
 In order to stack the deck in favor of one product in the expansion, we can
 determine the molecular orbitals in step~\ref{item:mean-field} to minimize its
 energy expectation value
@@ -211,11 +210,8 @@ integrals}.
     \phi_r(\mathbf{r}_1)
     \phi_s(\mathbf{r}_2)
 \end{equation}
-According to the variational principle for Hermitian operators, minimizing this
-expectation value yields the best single-product approximation to the
-ground-state wavefunction.
-For an orthonormal orbital basis, this minimization is equivalent to an
-effective Schr\"odinger equation for one-electron states
+For an orthonormal orbital basis, this minimization leads to an effective
+Schr\"odinger equation for one-electron states
 \begin{equation}
     \label{eq:introduction:mean-field-orbitals}
     (
@@ -248,117 +244,113 @@ We complete the bootstrapping cycle by expanding these unknown molecular
 orbitals in the basis of the atomic orbitals described in
 step~\ref{item:atomic-orbitals} and solving for the expansion coefficients.
 
-\begin{enumerate}
-    \item
-        The general strategy we have just outlined\dots
-    \item
-        The essential simplicity of this approach is sometimes obscured by the
-        need to consider spin and exchange symmetry, which we turn to next.
-\end{enumerate}
+The general strategy we have just outlined carries over into modern electronic
+structure theory, but it is missing two essential ingredients: the spin of the
+electron, and the antisymmetric permutational symmetry of electrons as
+indistinguishable particles.
+We turn to these next.
 
 
 \section{Spin}
 
-\begin{enumerate}
-    \item
-        The end of 1925 saw the resolution of one of the outstanding mysteries
-        of the new quantum mechanics, with Goudsmit and Uhlenbeck's theory of
-        electron spin.\cite{Uhlenbeck:1925p953}
-    \item
-        The need for an additional quantum number had already been understood by
-        Pauli in his analysis of the alkali metal spectra:
-        \begin{quote}
-            Closed energy configurations, contribute nothing to the magnetic
-            moment or angular momentum of the atom.
-            In particular, in alkali metals the angular momentum values of the
-            atom, and its energy changes in the presence of an external magnetic
-            field, are appropriately interpreted as the sole working of the
-            optically active electron, and the same situation is thought to be
-            the case in the observations of the anomalous Zeeman effect.
-            \emph{%
-                From this standpoint, the doublet structure of the alkali
-                spectra, as well as the breakdown of Larmor's theorem, must
-                therefore come from some intrinsic, classically non-describable
-                type of two-valuedness that is a characteristic of the optically
-                active electron.
-            }
-            (Translated from Ref.~\citenum{Pauli:1925p373} with emphasis added.)
-        \end{quote}
-    \item
-        In hindsight, the Stern-Gerlach experiment\cite{Gerlach:1922p349} of
-        1922 had already shown that the 5s electron of the silver atom displayed
-        half-integer angular momentum projections, \(\pm \tfrac{1}{2}\), rather
-        the integral ones \(0, \pm1, \dots, \pm l\) as would arise from the
-        angular momentum of spatial orbits.
-    \item
-        In other words, the one-particle states were eigenfunctions of an
-        additional angular momentum operator
-        \begin{equation}
-            \hat{s}_z
-            \psi
-            =
-            \pm
-            \tfrac{1}{2}
-            \psi
-        \end{equation}
-        whose eigenfunctions cannot exist in \(L^2(\mathbb{R}^3)\).
-    \item
-        The additional ``spinor'' component of the one-electron states could be
-        represented using vectors in \(\mathbb{C}^2\)
-        \begin{equation}
-            \hat{s}_z
-            =
-            \frac{1}{2}
-            \begin{pmatrix}
-                1 & \hphantom{+}0 \\
-                0 & -1
-            \end{pmatrix}
-            \qquad
-            \alpha
-            =
-            \begin{pmatrix}
-                1 \\ 0
-            \end{pmatrix}
-            \qquad
-            \beta
-            =
-            \begin{pmatrix}
-                0 \\ 1
-            \end{pmatrix}
-        \end{equation}
-        where \(\alpha\) denotes the ``spin-up'' state and \(\beta\) denotes the
-        ``spin-down'' state.
-    \item
-        \begin{equation}
-            \psi(\mathbf{r}, \sigma)
-            =
-            \phi(\mathbf{r})
-            \omega_\sigma
-            \qquad
-            \omega_\sigma
-            \equiv
-            \left\{
-                \begin{array}{cl}
-                    \alpha_{\sigma}
-                    &
-                    \text{if spin projection is \(+1/2\)}
-                    \\[10pt]
-                    \beta_{\sigma}
-                    &
-                    \text{if spin projection is \(+1/2\)}
-                \end{array}
-            \right.
-        \end{equation}
-        one or zero dependong on whether \(\sigma\) refers to the first or
-        second vector component
-        \begin{equation}
-            \mathcal{H}_\mathrm{e}
-            =
-            L^2(\mathbb{R}^3)
-            \otimes
-            \mathbb{C}^2
-        \end{equation}
-\end{enumerate}
+The non-relativistic theory of one-electron states was in a sense completed with
+Pauli's publication solution of the spectrum of hydrogen at the start of
+1926.\cite{Pauli:1926p336}
+His work concludes with a discussion of the recent work by Goudsmit and
+Uhlenbeck\cite{Uhlenbeck:1925p953} showing that the anomalous Zeeman splitting
+of the alkali metals could be explained by positing an intrinsic source of
+angular momentum and magnetism for the electron besides that generated by its
+orbital motion about the nucleus.
+This was the electron's spin.
+The need for such a theory had already been understood by Pauli in his analysis
+of alkali metal spectra earlier in the previous year:
+\begin{quote}
+    In alkali metals the angular momentum values of the atom, and its energy
+    changes in the presence of an external magnetic field, are appropriately
+    interpreted as the sole working of the optically active electron, and the
+    same situation is thought to be the case in the observations of the
+    anomalous Zeeman effect.
+    \emph{%
+        From this standpoint, the doublet structure of the alkali
+        spectra, as well as the breakdown of Larmor's theorem, must
+        therefore come from some intrinsic, classically non-describable
+        type of two-valuedness that is a characteristic of the optically
+        active electron.
+    }
+    (Translated from Ref.~\citenum{Pauli:1925p373} with emphasis added.)
+\end{quote}
+In hindsight, the Stern-Gerlach experiment\cite{Gerlach:1922p349} had already
+shown in 1922 that the 5s electron of the silver atom was quantized into two
+magnetic states, whereas the new quantum theory predicted an odd number of
+magnetic states (\(0, \pm1, \pm2, \dots\)) for the spatial orbits of a charged
+particle.
+This new source of angular momentum was characterized by half-integer values
+whose eigenfunctions cannot exist in \(L^2(\mathbb{R}^3)\).
+\begin{equation}
+    \hat{s}_z
+    \psi
+    =
+    \pm
+    \tfrac{1}{2}
+    \psi
+\end{equation}
+The new ``spinor'' component of the electron's state is represented in
+\(\mathbb{C}^2\) as
+\begin{equation}
+    \hat{s}_z
+    =
+    \frac{1}{2}
+    \begin{pmatrix}
+        1 & \hphantom{+}0 \\
+        0 & -1
+    \end{pmatrix}
+    \qquad
+    \alpha
+    =
+    \begin{pmatrix}
+        1 \\ 0
+    \end{pmatrix}
+    \qquad
+    \beta
+    =
+    \begin{pmatrix}
+        0 \\ 1
+    \end{pmatrix}
+\end{equation}
+where \(\alpha\) is the ``spin-up'' state and \(\beta\) is the
+``spin-down'' state, and the states of individual electrons are described not by
+orbitals but by spin-orbitals:
+\begin{equation}
+    \psi(\mathbf{r}, \sigma)
+    =
+    \phi(\mathbf{r})\,
+    \omega_\sigma
+    \qquad
+    \omega_\sigma
+    \equiv
+    \left\{
+        \begin{array}{cl}
+            \alpha_{\sigma}
+            &
+            \text{if spin projection is \(+1/2\)}
+            \\[10pt]
+            \beta_{\sigma}
+            &
+            \text{if spin projection is \(+1/2\)}
+        \end{array}
+    \right.
+\end{equation}
+which live in an extended Hilbert space,
+\(
+    \mathcal{H}_\mathrm{e}
+    =
+    L^2(\mathbb{R}^3)
+    \otimes
+    \mathbb{C}^2
+\).
+The new spin-variable \(\sigma\) refers to the first or second vector component
+of the spinor, which is 1 or 0 depending on whether the state is spin-up or
+spin-down.
 
 
 \section{Antisymmetry}
