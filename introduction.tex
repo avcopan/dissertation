@@ -5,6 +5,7 @@
 }
 
 \section{Naive Electronic Structure Theory}
+\label{sec:introduction:naive-electronic-structure}
 
 As an entry point into electronic structure theory, let us begin by forgetting
 what we know about electrons from the standard model of particle physics.
@@ -310,7 +311,7 @@ where \(\alpha\) is the ``up'' spinor and \(\beta\) is the ``down'' spinor.
 The states of individual electrons are therefore described not by orbitals but
 by {\itshape spin-orbitals}:
 \begin{equation}
-    \psi(\mathbf{r}, \sigma)
+    \psi(\mathbf{x})
     =
     \phi(\mathbf{r})\,
     \omega_\sigma
@@ -336,10 +337,16 @@ which live in an extended one-electron Hilbert space,
     L^2(\mathbb{R}^3)
     \otimes
     \mathbb{C}^2
+\),
+whose degrees of freedom are described by a pair of space and spin variables,
+\(
+    \mathbf{x}
+    \equiv
+    (\mathbf{r},\sigma)
 \).
-The new spin variable \(\sigma\) refers to the first or second vector component
-of the spinor, which is 1 or 0 depending on whether the state is spin-up or
-spin-down.
+The spin variable \(\sigma\) refers to the first or second vector component of
+the spinor, which evaluates to 1 or 0 depending on whether the state is spin-up
+or spin-down.
 
 Having completed the system of quantum numbers for an electron in a spherical
 potential with what would eventually be recognized as spin, Pauli was struck
@@ -390,21 +397,18 @@ and Einstein,\cite{Bose:1924p178,Einstein:1924p261,Einstein:1925p3} Heisenberg
 found that the eigenstates exist in symmetric or antisymmetric combinations, and
 that only the antisymmetric combinations are consistent with the observed
 spectrum of helium.
-That is, the electronic wavefunction appears to be antisymmetric under particle
+That is, the electronic wavefunction is evidently antisymmetric under particle
 exchange, so that the appropriate basis states are not simple products but
-antisymmetric ones\footnote{%
-    The arguments here are short-hand for the space and spin coordinates of the
-    electrons, as in \((1) \equiv (\mathbf{r}_1, \sigma_1)\).
-}
+antisymmetric ones
 \begin{equation}
-    \Phi_{p_1\cdots p_n}(1, \ldots, n)
+    \Phi_{p_1\cdots p_n}(\mathbf{x}_1, \ldots, \mathbf{x}_n)
     =
     \tfrac{1}{\sqrt{n!}}
-    \sum_{\pi}
+    \sum_\pi
     (-)^\pi
-    \psi_{p_1}(\pi_1)
+    \psi_{p_1}(\mathbf{x}_{\pi_1})
     \cdots
-    \psi_{p_n}(\pi_n)
+    \psi_{p_n}(\mathbf{x}_{\pi_n})
 \end{equation}
 where \(\pi=(\pi_1\cdots \pi_n)\) runs over permutations of the electron labels
 \((1\cdots n)\) with signature \((-)^\pi\).
@@ -451,63 +455,37 @@ helium.
 
 \section{Modern Electronic Structure Theory}
 
+
 \begin{enumerate}
     \item
         The general framework set forth by Heisenberg remains the basis for
-        non-relativistic electronic structure theory, in that our goal is to
-        solve the Schr\"odinger equation in the basis of antisymmetric
-        spin-orbital products.
-        \begin{equation}
-            \Psi(1, \ldots, n)
-            =
-            \sum_{p_1<\cdots<p_n}
-            c_{p_1\cdots p_n}
-            \Phi_{p_1\cdots p_n}(1, \ldots, n)
-        \end{equation}
+        non-relativistic electronic structure theory.
     \item
-        However, a considerable mathematical machinery has been developed to
-        allow for a more natural way of dealing with the antisymmetry of these
-        functions.
+        Following the bootstrapping approach described in
+        \cref{sec:introduction:naive-electronic-structure}, we proceed by
+        expanding the spin-orbitals in terms of atomic orbitals and solving for
+        the minimum energy antisymmetric orbital product before expanding the
+        wavefunction.
     \item
-        Notice that antisymmetry implies that the Hilbert space for a
-        many-electron system is actually smaller than we thought.
-        Namely, the wavefunction exists in a subspace
-        \begin{equation}
-            \mathcal{H}_{n\mathrm{e}}
-            =
-            P(
-                \underset{\text{$n$ times}}{%
-                    \mathcal{H}_\mathrm{e}
-                    \otimes\cdots
-                    \otimes
-                    \mathcal{H}_\mathrm{e}
-                }
-            )
-        \end{equation}
-        where \(P\) denotes the projection onto the span of the antisymmetric
-        products.
+        Conceptually simplified by Fock, ``Configuration Space and Second
+        Quantization''\cite{Fock:1932p622}
     \item
-        We can define a map from the \(n\)-electron Hilbert space to the
-        \(n-1\)-electron Hilbert space as an integral operator
         \begin{equation}
-            \hat{a}_p
-            \Psi(1, \ldots, n)
+            (\hat{a}_p\Psi)(\mathbf{x}_2, \ldots, \mathbf{x}_n)
             \equiv
             \sqrt{n}
             \int
-            d(1)\,
-            \psi_p^*(1)\,
-            \Psi(1, \ldots, n)
+            d^4\mathbf{x}'\,
+            \psi_p^*(\mathbf{x}')\,
+            \Psi(\mathbf{x}', \mathbf{x}_2, \ldots, \mathbf{x}_n)
         \end{equation}
-        which enables a resolution of the identity along the first coordinate.
         \begin{equation}
-            \Psi(1, \ldots, n)
+            \Psi(\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n)
             =
             \tfrac{1}{\sqrt{n}}
             \sum_p
-            \psi_p(1)\,
-            \hat{a}_p
-            \Psi(1, \ldots, n)
+            \psi_p(\mathbf{x}_1)\,
+            (\hat{a}_p\Psi)(\mathbf{x}_2, \ldots, \mathbf{x}_n)
         \end{equation}
     \item
         Substituting this expansion into the energy expectation value of the
@@ -545,17 +523,19 @@ helium.
             a_p^\dagger a_q^\dagger a_s a_r
         \end{equation}
     \item
+        Occupation number representation
 \end{enumerate}
 
 
-\section{Cumulants of the Electron Density}
+
+\section{Electronic Density Cumulants}
 
 \begin{equation}
     \langle\Psi|Q|\Psi\rangle
     =
     \sum_{k=1}^n
     \sum_{\Pi}^{\mathrm{Part}(Q, k)}
-    (-)^{\mathrm{sgn}(\Pi)}
+    (-)^{\Pi}
     \langle\Psi|\Pi_1|\Psi\rangle_\mathrm{c}
     \cdots
     \langle\Psi|\Pi_k|\Psi\rangle_\mathrm{c}
@@ -568,7 +548,7 @@ helium.
     (-)^{k+1}
     (k-1)!
     \sum_{\Pi}^{\mathrm{Part}(Q, k)}
-    (-)^{\mathrm{sgn}(\Pi)}
+    (-)^{\Pi}
     \langle\Psi|\Pi_1|\Psi\rangle
     \cdots
     \langle\Psi|\Pi_k|\Psi\rangle
@@ -600,32 +580,19 @@ helium.
 \end{equation}
 
 \begin{equation}
-    \begin{array}{r@{\,}l}
-        \gamma^{pqrs}_{tuvw}
-        =&
-        \lambda^{pqrs}_{tuvw}
-        +
-        P_{(tuv/w)}^{(pqr/s)}
-        \lambda^{pqr}_{tuv}
-        \gamma^s_w
-        +
-        P_{(tu/vw)}
-        \lambda^{pq}_{tu}
-        \lambda^{rs}_{vw}
-        \\[5pt]
-        &
-        +
-        P_{(tu/v/w)}^{(pq/rs)}
-        \lambda^{pq}_{tu}
-        \gamma^r_v
-        \gamma^s_w
-        +
-        P_{(t/u/v/w)}
-        \gamma^p_t
-        \gamma^q_u
-        \gamma^r_v
-        \gamma^s_w
-    \end{array}
+    \lambda^{pqr}_{stu}
+    =
+    \gamma^{pqr}_{stu}
+    -
+    P^{(pq/r)}_{(st/u)}
+    \gamma^{pq}_{st}
+    \gamma^r_u
+    +
+    2
+    P_{(s/t/u)}
+    \gamma^p_s
+    \gamma^q_t
+    \gamma^r_u
 \end{equation}
 
 
