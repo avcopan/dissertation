@@ -284,8 +284,8 @@ whose eigenfunctions cannot exist in \(L^2(\mathbb{R}^3)\).
     \tfrac{1}{2}
     \psi
 \end{equation}
-The new ``spinor'' part of the electron's state can be expressed in a
-two-component complex vector space as
+The new ``spinor'' part of the electron's state lives in a two-component vector
+space
 \begin{equation}
     \hat{s}_z
     =
@@ -321,11 +321,11 @@ by {\itshape spin-orbitals}:
         \begin{array}{cl}
             \alpha_{\sigma}
             &
-            \text{if the spin projection is \(+1/2\)}
+            \text{if the spin projection is \(+\tfrac{1}{2}\)}
             \\[10pt]
             \beta_{\sigma}
             &
-            \text{if the spin projection is \(-1/2\)}
+            \text{if the spin projection is \(-\tfrac{1}{2}\)}
         \end{array}
     \right.
 \end{equation}
@@ -360,7 +360,7 @@ with a curious observation:
     very plausible one.\cite{Pauli:1925p756}
 \end{quote}
 This ``housing office for equivalent orbits''\cite{Mehra:1982} would remain a
-mystery until Heisenberg's work on two-electron systems in the following year.
+mystery until Heisenberg's work on two-electron systems the following year.
 
 
 \section{Antisymmetry}
@@ -393,8 +393,8 @@ spectrum of helium.
 That is, the electronic wavefunction appears to be antisymmetric under particle
 exchange, so that the appropriate basis states are not simple products but
 antisymmetric ones\footnote{%
-    The arguments are short-hand for electron space and spin coordinates, as in
-    \((1) \equiv (\mathbf{r}_1, \sigma_1)\).
+    The arguments here are short-hand for the space and spin coordinates of the
+    electrons, as in \((1) \equiv (\mathbf{r}_1, \sigma_1)\).
 }
 \begin{equation}
     \Phi_{p_1\cdots p_n}(1, \ldots, n)
@@ -406,8 +406,8 @@ antisymmetric ones\footnote{%
     \cdots
     \psi_{p_n}(\pi_n)
 \end{equation}
-where \(\pi=(\pi_1\cdots \pi_n)\) runs over permutations of \((1\cdots n)\) with
-signature \((-)^\pi\).
+where \(\pi=(\pi_1\cdots \pi_n)\) runs over permutations of the electron labels
+\((1\cdots n)\) with signature \((-)^\pi\).
 Whenever the same orbital appears twice in such an expansion the function
 vanishes, so this provided a mathematical basis for Pauli exclusion.
 The energy of the antisymmetric product state has the form
@@ -421,11 +421,13 @@ The energy of the antisymmetric product state has the form
     h_i^i
     +
     \sum_{i<j}^{\substack{\mathrm{orbital}\\\mathrm{pairs}}}
-    (
-        g_{ij}^{ij}
-        -
-        g_{ij}^{ji}
-    )
+    \overline{g}_{ij}^{ij}
+    \qquad
+    \overline{g}_{ij}^{ij}
+    \equiv
+    g_{ij}^{ij}
+    -
+    g_{ij}^{ji}
 \end{equation}
 where only the exchange integrals
 \(
@@ -433,8 +435,9 @@ where only the exchange integrals
     =
     \langle \psi_i\psi_j|\hat{g}_{12}|\psi_j\psi_i\rangle
 \)
-are new.
-These exchange ``interactions'' between electrons in orbitals \(i\) and \(j\)
+are new from the single-product expectation value
+(\cref{eq:introduction:orbital-product-expectation-value}).
+These ``exchange interactions'' between electrons in orbitals \(i\) and \(j\)
 serve to lower the energy by cancelling out part of the Coulomb repulsion where
 the orbitals overlap.
 Moreover, the orthogonality of opposite spinors means that this effect only
@@ -450,44 +453,179 @@ helium.
 
 \begin{enumerate}
     \item
-        Heisenberg's project to lay out a framework for many-body electronic
-        structure theory basically succeeded, but the asymmetric product
-        functions were cumbersome to work with.
+        The general framework set forth by Heisenberg remains the basis for
+        non-relativistic electronic structure theory, in that our goal is to
+        solve the Schr\"odinger equation in the basis of antisymmetric
+        spin-orbital products.
+        \begin{equation}
+            \Psi(1, \ldots, n)
+            =
+            \sum_{p_1<\cdots<p_n}
+            c_{p_1\cdots p_n}
+            \Phi_{p_1\cdots p_n}(1, \ldots, n)
+        \end{equation}
     \item
-        Nowadays\dots
+        However, a considerable mathematical machinery has been developed to
+        allow for a more natural way of dealing with the antisymmetry of these
+        functions.
+    \item
+        Notice that antisymmetry implies that the Hilbert space for a
+        many-electron system is actually smaller than we thought.
+        Namely, the wavefunction exists in a subspace
+        \begin{equation}
+            \mathcal{H}_{n\mathrm{e}}
+            =
+            P(
+                \underset{\text{$n$ times}}{%
+                    \mathcal{H}_\mathrm{e}
+                    \otimes\cdots
+                    \otimes
+                    \mathcal{H}_\mathrm{e}
+                }
+            )
+        \end{equation}
+        where \(P\) denotes the projection onto the span of the antisymmetric
+        products.
+    \item
+        We can define a map from the \(n\)-electron Hilbert space to the
+        \(n-1\)-electron Hilbert space as an integral operator
+        \begin{equation}
+            \hat{a}_p
+            \Psi(1, \ldots, n)
+            \equiv
+            \sqrt{n}
+            \int
+            d(1)\,
+            \psi_p^*(1)\,
+            \Psi(1, \ldots, n)
+        \end{equation}
+        which enables a resolution of the identity along the first coordinate.
+        \begin{equation}
+            \Psi(1, \ldots, n)
+            =
+            \tfrac{1}{\sqrt{n}}
+            \sum_p
+            \psi_p(1)\,
+            \hat{a}_p
+            \Psi(1, \ldots, n)
+        \end{equation}
+    \item
+        Substituting this expansion into the energy expectation value of the
+        wavefunction
+        \begin{equation}
+            \langle\Psi|\hat{H}|\Psi\rangle
+            =
+            \sum_{pq}
+            h_p^q\,
+            \langle a_p\Psi| a_q\Psi\rangle
+            +
+            \tfrac{1}{4}
+            \sum_{pqrs}
+            \overline{g}_{pq}^{rs}\,
+            \langle a_q a_p\Psi| a_s a_r\Psi\rangle
+        \end{equation}
+    \item
+        Restricted to \(\mathcal{H}_{n\mathrm{e}}\)
+        \begin{equation}
+            \hat{H}
+            =
+            h_p^q\,
+            a^p_q
+            +
+            \tfrac{1}{4}
+            \overline{g}_{pq}^{rs}
+            a^{pq}_{rs}
+            \qquad
+            a^p_q
+            \equiv
+            a_p^\dagger a_q
+            \qquad
+            a^{pq}_{rs}
+            \equiv
+            a_p^\dagger a_q^\dagger a_s a_r
+        \end{equation}
+    \item
 \end{enumerate}
 
+
+\section{Cumulants of the Electron Density}
+
 \begin{equation}
-    a_p
-    \Psi(1, \ldots, n)
+    \langle\Psi|Q|\Psi\rangle
+    =
+    \sum_{k=1}^n
+    \sum_{\Pi}^{\mathrm{Part}(Q, k)}
+    (-)^{\mathrm{sgn}(\Pi)}
+    \langle\Psi|\Pi_1|\Psi\rangle_\mathrm{c}
+    \cdots
+    \langle\Psi|\Pi_k|\Psi\rangle_\mathrm{c}
+\end{equation}
+
+\begin{equation}
+    \langle\Psi|Q|\Psi\rangle_\mathrm{c}
+    =
+    \sum_{k=1}^n
+    (-)^{k+1}
+    (k-1)!
+    \sum_{\Pi}^{\mathrm{Part}(Q, k)}
+    (-)^{\mathrm{sgn}(\Pi)}
+    \langle\Psi|\Pi_1|\Psi\rangle
+    \cdots
+    \langle\Psi|\Pi_k|\Psi\rangle
+\end{equation}
+
+\begin{equation}
+    \gamma^{p_1\cdots p_n}_{q_1\cdots q_n}
     \equiv
-    \sqrt{n}
-    \int
-    d(1)\,
-    \psi_p^*(1)
-    \Psi(1, \ldots, n)
+    \langle\Psi|a^{p_1\cdots p_n}_{q_1\cdots q_n}|\Psi\rangle
+    \qquad
+    \lambda^{p_1\cdots p_n}_{q_1\cdots q_n}
+    \equiv
+    \langle\Psi|a^{p_1\cdots p_n}_{q_1\cdots q_n}|\Psi\rangle_\mathrm{c}
 \end{equation}
 
 \begin{equation}
-    1_n
+    \gamma^{pqr}_{stu}
     =
-    \tfrac{1}{\sqrt{n}}
-    \sum_p
-    \psi_p(1)\,
-    a_p
-\end{equation}
-
-\begin{equation}
-    \langle\Psi|\hat{H}|\Psi\rangle
-    =
-    \sum_{pq}
-    h_p^q\,
-    \langle\Psi|a_p^\dagger a_q|\Psi\rangle
+    \lambda^{pqr}_{stu}
     +
-    \tfrac{1}{2}
-    \sum_{pqrs}
-    g_{pq}^{rs}\,
-    \langle\Psi|a_p^\dagger a_q^\dagger a_s a_r|\Psi\rangle
+    P^{(pq/r)}_{(st/u)}
+    \lambda^{pq}_{st}
+    \gamma^r_u
+    +
+    P_{(s/t/u)}
+    \gamma^p_s
+    \gamma^q_t
+    \gamma^r_u
+\end{equation}
+
+\begin{equation}
+    \begin{array}{r@{\,}l}
+        \gamma^{pqrs}_{tuvw}
+        =&
+        \lambda^{pqrs}_{tuvw}
+        +
+        P_{(tuv/w)}^{(pqr/s)}
+        \lambda^{pqr}_{tuv}
+        \gamma^s_w
+        +
+        P_{(tu/vw)}
+        \lambda^{pq}_{tu}
+        \lambda^{rs}_{vw}
+        \\[5pt]
+        &
+        +
+        P_{(tu/v/w)}^{(pq/rs)}
+        \lambda^{pq}_{tu}
+        \gamma^r_v
+        \gamma^s_w
+        +
+        P_{(t/u/v/w)}
+        \gamma^p_t
+        \gamma^q_u
+        \gamma^r_v
+        \gamma^s_w
+    \end{array}
 \end{equation}
 
 
