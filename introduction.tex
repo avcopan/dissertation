@@ -6,7 +6,7 @@
 
 \section{Naive Electronic Structure Theory}
 
-As an entry point to electronic structure theory, let us begin by forgetting
+As an entry point into electronic structure theory, let us begin by forgetting
 what we know about electrons from the standard model of particle physics.
 From the standpoint of Heisenberg and others developing the new quantum theory
 in 1925\cite{Heisenberg:1925p879} chemical matter was described by nimble,
@@ -74,7 +74,7 @@ describes the Coulombic repulsion between electrons \(i\) and \(j\).
     \frac{1}{|\mathbf{r}_i - \mathbf{r}_j|}
 \end{equation}
 The vector space containing the wavefunction \(\Psi\) is the system's Hilbert
-space, \(\mathcal{H}\), which in this case is the space of square integrable
+space, \(\mathcal{H}\), which in our case is the space of square integrable
 functions of \(n\) position variables,
 \(
     L^2(\mathbb{R}^{3n})
@@ -112,18 +112,17 @@ product of the Hilbert spaces for its constituent particles.
     \cdots
 \end{equation}
 In words, this says that the states of a system are spanned by all possible
-combinations of the states its components exhibit in isolation.
+combinations of the states that its components exhibit in isolation.
 This enables a general strategy for bootstrapping the electronic structure
 problem:
 \begin{enumerate}
     \item
         \label{item:atomic-orbitals}
         The states of a single electron orbiting a single nucleus are determined
-        by the spherical symmetry of the nuclear potential to have a degenerate
-        shell structure where the energy of the state increases with the number
-        of nodal surfaces in the function.
+        by the spherical symmetry of the nuclear potential.
         These 1s, 2s, 2p, \dots\ atomic orbitals have analytically known
-        functional forms.
+        functional forms, and their energy increases with the number of nodal
+        surfaces in the function.
     \item
         \label{item:mean-field}
         Treating the other electrons in a molecule as static fields which
@@ -131,10 +130,10 @@ problem:
         in a molecule are well described as linear combinations of atomic
         one-electron functions centered on each nucleus.
         The dominant contributions to these molecular orbitals come from atomic
-        orbitals with a similar energy, so that the lowest energy molecular
-        orbital typically looks like the 1s orbital of the nucleus with the
-        greatest charge, with very little contribution from, say, the 42g
-        orbital of another atom.
+        orbitals with a similar energy, so that the lowest-energy molecular
+        orbital typically looks like the 1s orbital of the nucleus of greatest
+        charge, with very little contribution from, say, the 42g orbital of
+        another atom.
         The higher energy states are linear combinations of higher energy atomic
         orbitals with increasing numbers of nodes.
     \item
@@ -144,13 +143,13 @@ problem:
         ground-state will be spanned to a good approximation by products of the
         low-energy molecular orbitals.
         When the molecular orbitals are weakly interacting, the mean-field
-        approximation of step~\ref{item:mean-field} furnishes a good description
-        of their motions, and the wavefunction will be heavily dominated by a
-        single one of these products.
+        approximation described in step~\ref{item:mean-field} furnishes a good
+        description of their motions, and the wavefunction will be heavily
+        dominated by a single one of these products.
         From a statistical perspective, this means that the electron probability
         density of the wavefunction approximately separates into a product of
-        one-electron densities, because the molecular orbitals are {\itshape
-        weakly correlated}.
+        one-electron densities, because the electronic state is {\itshape weakly
+        correlated}.
 \end{enumerate}
 At the end of this procedure, we have a matrix equation in the product basis.
 \begin{equation}
@@ -231,15 +230,13 @@ the molecule.
     \equiv
     \sum_{j\neq i}
     \int
-    d\mathbf{r}_2\,
+    d^3\mathbf{r}_2\,
     \frac{%
         \phi_j^*(\mathbf{r}_2)\phi_j(\mathbf{r}_2)
     }{%
         |\mathbf{r}_1 - \mathbf{r}_2|
     }
 \end{equation}
-This is the mean-field approximation described in step~\ref{item:mean-field}
-above.
 We complete the bootstrapping cycle by expanding these unknown molecular
 orbitals in the basis of the atomic orbitals described in
 step~\ref{item:atomic-orbitals} and solving for the expansion coefficients.
@@ -248,42 +245,36 @@ The general strategy we have just outlined carries over into modern electronic
 structure theory, but it is missing two essential ingredients: the spin of the
 electron, and the antisymmetric permutational symmetry of electrons as
 indistinguishable particles.
-We turn to these next.
 
 
 \section{Spin}
 
-The non-relativistic theory of one-electron states was in a sense completed with
-Pauli's publication solution of the spectrum of hydrogen at the start of
-1926.\cite{Pauli:1926p336}
+The non-relativistic theory of one-electron states was completed with Pauli's
+solution of the hydrogen spectrum at the start of 1926.\cite{Pauli:1926p336}
 His work concludes with a discussion of the recent work by Goudsmit and
 Uhlenbeck\cite{Uhlenbeck:1925p953} showing that the anomalous Zeeman splitting
-of the alkali metals could be explained by positing an intrinsic source of
-angular momentum and magnetism for the electron besides that generated by its
-orbital motion about the nucleus.
+of alkali metals could be explained by positing an intrinsic source of angular
+momentum and magnetism for the electron besides that generated by its orbital
+motion about the nucleus.
 This was the electron's spin.
-The need for this additional quantum number had already been understood by Pauli
-in his analysis of alkali metal spectra at the end of 1924:
+The need for this quantum number had already been understood by Pauli in his
+analysis of alkali metal spectra at the end of 1924:
 \begin{quote}
     In alkali metals the angular momentum values of the atom, and its energy
     changes in the presence of an external magnetic field, are appropriately
     interpreted as the sole working of the optically active electron, and the
-    same situation is thought to be the case in the observations of the
-    anomalous Zeeman effect.
-    \emph{%
-        From this standpoint, the doublet structure of the alkali
-        spectra, as well as the breakdown of Larmor's theorem, must
-        therefore come from some intrinsic, classically non-describable
-        type of two-valuedness that is a characteristic of the optically
-        active electron.%
-    }\footnote{%
-        Translated from Ref.~\citenum{Pauli:1925p373} with emphasis added.
-    }
+    same situation is thought to be the case in observations of the anomalous
+    Zeeman effect.
+    From this standpoint, the doublet structure of the alkali
+    spectra, as well as the breakdown of Larmor's theorem, must
+    therefore come from some intrinsic, classically non-describable
+    type of two-valuedness that is a characteristic of the optically
+    active electron.\cite{Pauli:1925p373}
 \end{quote}
 In hindsight, the Stern-Gerlach experiment\cite{Gerlach:1922p349} had already
 shown in 1922 that the 5s electron of the silver atom was quantized into two
-magnetic states, whereas the new quantum theory predicted an odd number of these
-(\(0, \pm1, \pm2, \dots\)) for the spatial orbits of a charged particle.
+magnetic states, whereas the new quantum theory predicted an odd number of
+states (\(0, \pm1, \pm2, \dots\)) for the spatial orbits of a charged particle.
 This new source of angular momentum was characterized by half-integer values
 whose eigenfunctions cannot exist in \(L^2(\mathbb{R}^3)\).
 \begin{equation}
@@ -294,15 +285,14 @@ whose eigenfunctions cannot exist in \(L^2(\mathbb{R}^3)\).
     \tfrac{1}{2}
     \psi
 \end{equation}
-The new ``spinor'' component of the electron's state is represented in
-\(\mathbb{C}^2\) as
+The new ``spinor'' part of the electron's state can be expressed in a
+two-component complex vector space as
 \begin{equation}
     \hat{s}_z
     =
-    \frac{1}{2}
     \begin{pmatrix}
-        1 & \hphantom{+}0 \\
-        0 & -1
+        \tfrac{1}{2} & \hphantom{+}0 \\
+        0 & -\tfrac{1}{2}
     \end{pmatrix}
     \qquad
     \alpha
@@ -317,9 +307,9 @@ The new ``spinor'' component of the electron's state is represented in
         0 \\ 1
     \end{pmatrix}
 \end{equation}
-where \(\alpha\) is the ``spin-up'' state and \(\beta\) is the
-``spin-down'' state, and the states of individual electrons are described not by
-orbitals but by {\itshape spin-orbitals}:
+where \(\alpha\) is the ``spin-up'' state and \(\beta\) is the ``spin-down''
+state, so that the states of individual electrons are described not by orbitals
+but by {\itshape spin-orbitals}:
 \begin{equation}
     \psi(\mathbf{r}, \sigma)
     =
@@ -332,15 +322,15 @@ orbitals but by {\itshape spin-orbitals}:
         \begin{array}{cl}
             \alpha_{\sigma}
             &
-            \text{if spin projection is \(+1/2\)}
+            \text{if the spin projection is \(+1/2\)}
             \\[10pt]
             \beta_{\sigma}
             &
-            \text{if spin projection is \(+1/2\)}
+            \text{if the spin projection is \(-1/2\)}
         \end{array}
     \right.
 \end{equation}
-which live in an extended Hilbert space,
+which live in an extended one-electron Hilbert space,
 \(
     \mathcal{H}_\mathrm{e}
     =
@@ -353,57 +343,61 @@ of the spinor, which is 1 or 0 depending on whether the state is spin-up or
 spin-down.
 
 Having completed the system of quantum numbers for an electron in a spherical
-potential with what would eventually be recognized as the spin projection, Pauli
-was struck with a curious observation, which he discussed in January of 1925:
+potential with what would eventually be recognized as spin, Pauli was struck
+with a curious observation, which he discussed in January of 1925:
 \begin{quote}
     By considering the case of strong magnetic fields we can reduce [earlier
     observations], that the number of electrons in a completed subgroup is the
     same as the number of corresponding terms in the Zeeman effect of the alkali
     spectra, to the following more general rule about the occurrence of
     equivalent electrons in an atom:
-    {\itshape
-        There can never be two or more equivalent electrons in an atom for which
-        in strong fields the values of all quantum numbers \(n, l, k, m_l\) (or,
-        equivalently, \(n, l, m_l, m_s\)) are the same.
-        If an electron is present in the atom for which these quantum numbers
-        (in an external field) have definite values, this state is ``occupied.''
-    }
+    There can never be two or more equivalent electrons in an atom for which
+    in strong fields the values of all quantum numbers \(n, l, k, m_l\) (or,
+    equivalently, \(n, l, m_l, m_s\)) are the same.
+    If an electron is present in the atom for which these quantum numbers
+    (in an external field) have definite values, this state is ``occupied.''
     \dots\
     We cannot give a further justification for this rule, but it seems to be a
-    very plausible one.\footnote{%
-        Translated from Ref.~\citenum{Pauli:1925p756} with emphasis added.
-    }
+    very plausible one.\cite{Pauli:1925p756}
 \end{quote}
 This ``housing office for equivalent orbits''\cite{Mehra:1982} would remain a
 mystery until Heisenberg began studying two-electron systems in earnest with the
-new quantum mechanics in 1926.
+new quantum mechanics in the following year.
 
 
-\section{Indistinguishability}
+\section{Antisymmetry}
 
 In June of 1926, Heisenberg published an article on {\itshape The Many-Body
-Problem and Resonance in Quantum Mechanics}\cite{Heisenberg:1926p411} in which
-he aimed to ``lay the foundations for a quantum mechanical treatment of
-many-body systems.''
-He sought to reconcile three outstanding problems in quantum theory as it stood:
+Problem and Resonance in Quantum Mechanics} in which he aimed to ``lay the
+foundations for a quantum mechanical treatment of many-body
+systems.''\cite{Heisenberg:1926p411}
+He sought to reconcile three outstanding problems in the quantum theory of
+electrons:
 \begin{quote}
     [1.] The aspects of de Broglie's theory of waves that lead to Bose-Einstein
     statistics appear to have no analogue in quantum mechanics;
-    [2.] Ad hoc rules like Pauli's ban on equivalent orbitals have no expression
-    in the mathematical formalism of quantum mechanics as formulated\dots\ 
+    [2.] Ad hoc rules like Pauli's ban on equivalent orbitals cannot be
+    expressed in the mathematical formalism of quantum mechanics as it
+    exists\dots\ 
     [3.] Finally there is one known difficulty in the quantitative
     interpretation of spectra that we should remind ourselves of:
     The splitting of singlet and triplet states in the spectra of the alkaline
     earth metals and in helium is too big by an order of magnitude to be
-    explained as a difference in the magentic interaction energies of two
-    rotating electrons.\footnote{%
-        Translated from Ref.~\citenum{Heisenberg:1926p411}.
-    }
+    explained as a difference in the magnetic interaction energies of two
+    rotating electrons.\cite{Heisenberg:1926p411}
 \end{quote}
-
-Bose-Einstein\cite{Bose:1924p178,Einstein:1924p261,Einstein:1925p3}
-
-
+By considering two quantum harmonic oscillators and coupling them as
+indistinguishable particles, in line with the statistical considerations of Bose
+and Einstein,\cite{Bose:1924p178,Einstein:1924p261,Einstein:1925p3} Heisenberg
+found that the eigenstates exist as symmetric or antisymmetric combinations, and
+that only the antisymmetric combinations were consistent with the observed
+spectrum of helium.
+That is, the electronic wavefunction must be antisymmetric under particle
+exchange, so that the appropriate basis states are not simple products but
+antisymmetric ones\footnote{%
+    These arguments are short-hand for electron space and spin coordinates, as
+    in \((1) \leftrightarrow (\mathbf{r}_1, \sigma_1)\).
+}
 \begin{equation}
     \Phi_{p_1\cdots p_n}(1, \ldots, n)
     =
@@ -414,7 +408,44 @@ Bose-Einstein\cite{Bose:1924p178,Einstein:1924p261,Einstein:1925p3}
     \cdots
     \psi_{p_n}(\pi_n)
 \end{equation}
-
+where \(\pi=(\pi_1\cdots \pi_n)\) runs over permutations of \((1\cdots n)\) with
+signature \((-)^\pi\).
+Whenever the same orbital appears twice in such an expansion the function
+vanishes, so this move provided a mathematical basis for Pauli exclusion.
+The energy of the antisymmetric product state has the form
+\begin{equation}
+    \label{eq:introduction:determinant-expectation-value}
+    \langle \Phi_{1\cdots n}|
+    \hat{H}
+    |\Phi_{1\cdots n} \rangle
+    =
+    \sum_{i=1}^\mathrm{orbitals}
+    h_i^i
+    +
+    \sum_{i<j}^{\substack{\mathrm{orbital}\\\mathrm{pairs}}}
+    (
+        g_{ij}^{ij}
+        -
+        g_{ij}^{ji}
+    )
+\end{equation}
+where only the so-called exchange integrals
+\(
+    g_{ij}^{ji}
+    =
+    \langle \psi_i\psi_j|\hat{g}_{12}|\psi_j\psi_i\rangle
+\)
+are new.
+These exchange interactions between electrons in orbitals \(i\) and \(j\) serve
+to lower the energy by cancelling out part of the Coulomb repulsion where the
+orbitals overlap.
+The orthogonality of opposite spinors means that this effect only takes place
+between electrons of the same spin, and thereby lowers the energy of higher spin
+states relative to lower ones of the same configuration, as had been observed by
+Hund.\cite{Hund:1925p345}
+Thus the new theory could explain the ``large force of unknown
+origin''\cite{Mehra:1982} that was lowering the energy of the triplet states in
+helium.
 
 
 \section{Modern Electronic Structure Theory}
@@ -455,220 +486,3 @@ Bose-Einstein\cite{Bose:1924p178,Einstein:1924p261,Einstein:1925p3}
 
 \section{Prospectus}
 
-
-
-\newpage
-Hydrogen or silver or alkali metals
-\begin{equation}
-    (\hat{h} + \hat{v}_\mathrm{e})
-    |\psi\rangle
-    =
-    \epsilon
-    |\psi\rangle
-    \qquad
-    \hat{h}
-    =
-    \tfrac{1}{2}
-    \hat{\mathbf{p}}^2
-    +
-    \hat{v}_\mathrm{n}
-    \qquad
-    \hat{v}_\mathrm{n}
-    =
-    \sum_a^{\mathrm{nuclei}}
-    \frac{q_a}{|\mathbf{r}_a-\hat{\mathbf{r}}|}
-\end{equation}
-\begin{equation}
-    \mathcal{H}
-    =
-    L^2(\mathbb{R}^3)
-\end{equation}
-
-\subsection{Symmetry}
-
-Symmetry properties of the potential give us spatial symmetries
-\begin{equation}
-    \hat{o}
-    |\psi\rangle
-    =
-    o
-    |\psi\rangle
-\end{equation}
-point groups and lattice groups.
-For one electron atoms the O(3) symmetries are described by the conservation of
-angular momentum, \(\hat{\mathbf{j}}^2\) and \(\hat{j}_z\).
-
-\noindent
-Atoms: angular momentum (s, p, d)
-
-\noindent
-Free electrons: plane waves
-
-\noindent
-Molecules and crystals are described by symmetry adapted combinations of these
-functions
-
-
-Goudsmit-Uhlenbeck (Uhlenbeck:1926p264) give us spin, which is a constant intrinsic to the electron
-as a particle
-\begin{equation}
-    \hat{s}^2
-    |\psi\rangle
-    =
-    \tfrac{3}{4}
-    |\psi\rangle
-\end{equation}
-
-The earlier Stern-Gerlach experiment (Gerlach:1922p349) showed in hindsight that
-spin can be oriented up or down along a given axis
-\begin{equation}
-    \hat{s}_z
-    |\psi\rangle
-    =
-    \pm
-    \tfrac{1}{2}
-    |\psi\rangle
-\end{equation}
-
-\begin{equation}
-    \hat{s}_z
-    =
-    \tfrac{1}{2}
-    (
-        |\alpha\rangle\langle\alpha|
-        -
-        |\beta\rangle\langle\beta|
-    )
-\end{equation}
-
-\begin{equation}
-    \mathcal{H}
-    =
-    L^2(\mathbb{R}^3)
-    \otimes
-    \mathrm{SU}(2)
-\end{equation}
-
-
-Two problems led to particle stats: the anomalous Zeeman effect, and the absence
-of electron {\itshape bunching}.
-In an orbital picture, you would expect all of the electrons to fall in the
-lowest energy state, such that the ground state is qualitatively described by a
-product
-\begin{equation}
-    \Psi_0(1,\ldots,n)
-    \approx
-    \psi_0(1)
-    \cdots
-    \psi_0(n)
-\end{equation}
-which is indeed what you find for bosons.
-
-Paul describing spin before people knew what it was (Pauli:1925p373):
-``The closed energy configurations contribute nothing to the magnetic moment or
-angular momentum of the atom.
-In particular, in alkali metals the angular momentum values of the atom and its
-energy changes in the presence of an external magnetic field are appropriately
-interpreted as the sole working of the optically active electron, and the same
-situation is thought to be the case in the observations of the anomalous Zeeman
-effect.
-From this standpoint, the doublet structure of the alkali spectra, as well as
-the breakdown of Larmor's theorem, must therefore come from some intrinsic,
-classically non-describable type of two-valuedness that is a characteristic of
-the optically active electron's state.''
-Pauli proposed this without proposing any model for this extra degree of
-freedom.
-That was the contribution of Uhlenbeck and Goudsmit in 1926.
-
-
-Pauli exlusion (Pauli:1925p756):
-``By considering the case of strong magnetic fields we can reduce [E.~C.]
-Stoner's result, that the number of electrons in a completed subgroup [of an
-atom] is the same as the number of the corresponding terms of the Zeeman effect
-of the alkali spectra, to the following more general rule about the occurrence
-of equivalent electrons in an atom:
-{\itshape
-    There can never be two or more equivalent electrons in an atom for which in
-    strong fields the values of all quantum numbers \(n, k_1, k_2, m_1\) (or,
-    equivalently \(n, k_1, m_1, m_2\)) are  the same.
-    If an electron is present in the atom for which these quantum numbers (in an
-    external field) have definite values, this state is ``occupied.''%
-}
-\dots We cannot give a further justification for this rule, but it seems to be a
-very plausible one.
-It refers, as mentioned, first of all to the case of strong field.
-However, from thermodynamic arguments (the invariance of statistic weights under
-adiabatic transformations of the system) it follows that the number of
-stationary states of an atom must be the same in strong and weak fields for
-given values of the number \(k_1\) and \(k_2\) of the separate electrons and a
-value of \(\overline{m_1}=\sum m_1\) for the whole atom.''
-
-This is in contrast to photons in stimulated emission, where they are all forced
-to occupy the same state.
-
-\subsection{Antisymmetry}
-
-Heisenberg to Pauli (May 5, 1926) on the connection between Pauli exclusion and
-the singlet triplet gap in helium (Mehra:1982):
-{\itshape
-    I want to write to you that I have found a rather decisive argument that
-    your exclusion of equivalent orbitals is connected with the singlet-triplet
-    separation [in helium].
-}
-
-Heisenberg to Born (May 26, 1926) on the challenge of calculating the energy
-states of helium (Mehra:1982):
-{\itshape
-    The large separation between the singlet and triplet systems could not be
-    explained by a magnetic interaction of the spinning electrons; one had
-    therefore to assume with Hund a large force of unknown origin between the
-    magnets [Hund's rule].
-}
-\\
-He explains everything by qualitative arguments in his paper on ``The Many-Body
-Problem and Resonance in Quantum Mechanics'' (Heisenberg:1926p411), which
-{\itshape
-    aims to lay the groundwork for a quantum-mechanical treatment of the
-    many-body problem.
-}
-\\
-He is the first to propose the form of the Slater determinant.
-
-
-
-\section{Fock Space}
-
-\begin{equation}
-    \hat{H}
-    =
-    \sum_{i=1}^n
-    \hat{h}(i)
-    +
-    \sum_{i=1}^n
-    \sum_{j=i+1}^n
-    \hat{g}(i,j)
-\end{equation}
-
-\begin{equation}
-    \hat{g}(i,j)
-    =
-    \frac{1}{|\hat{\mathbf{r}}_i-\hat{\mathbf{r}}_j|}
-\end{equation}
-
-\begin{equation}
-    \mathcal{H}^n
-    =
-    \mathcal{H}(1)\otimes\cdots\otimes\mathcal{H}(n)
-\end{equation}
-
-\begin{equation}
-    |\Psi\rangle
-    =
-    \sum_{p_1\cdots p_n}
-    c_{p_1\cdots p_n}
-    |\psi_{p_1}\rangle
-    \otimes
-    \cdots
-    \otimes
-    |\psi_{p_n}\rangle
-\end{equation}
