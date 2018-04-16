@@ -73,9 +73,9 @@ describes the Coulombic repulsion between electrons \(i\) and \(j\).
     \equiv
     \frac{1}{|\mathbf{r}_i - \mathbf{r}_j|}
 \end{equation}
-The vector space containing the wavefunction \(\Psi\) is the system's Hilbert
-space, \(\mathcal{H}\), which in our case is the space of square integrable
-functions of \(n\) position variables,
+The vector space containing the wavefunction is the system's Hilbert space,
+\(\mathcal{H}\), which in our case is the space of square integrable functions
+of \(n\) position variables,
 \(
     L^2(\mathbb{R}^{3n})
 \),
@@ -127,13 +127,13 @@ problem:
         \label{item:mean-field}
         Treating the other electrons in a molecule as static fields which
         partially shield the nuclear charges, the states of individual electrons
-        in a molecule are well described as linear combinations of atomic
+        in a molecule can be described as linear combinations of atomic
         one-electron functions centered on each nucleus.
         The dominant contributions to these molecular orbitals come from atomic
         orbitals with a similar energy, so that the lowest-energy molecular
-        orbital typically looks like the 1s orbital of the nucleus of greatest
-        charge, with very little contribution from, say, the 42g orbital of
-        another atom.
+        orbital typically looks like a 1s orbital centered on the nucleus of
+        greatest charge, with very little contribution from, say, the 42g
+        orbital of another nuclear center.
         The higher energy states are linear combinations of higher energy atomic
         orbitals with increasing numbers of nodes.
     \item
@@ -148,8 +148,8 @@ problem:
         dominated by a single one of these products.
         From a statistical perspective, this means that the electron probability
         density of the wavefunction approximately separates into a product of
-        one-electron densities, because the electronic state is {\itshape weakly
-        correlated}.
+        one-electron densities, because the orbitals are {\itshape weakly
+        correlated} for this state.
 \end{enumerate}
 At the end of this procedure, we have a matrix equation in the product basis.
 \begin{equation}
@@ -168,7 +168,7 @@ equivalent to the Schr\"odinger equation and the coefficients of the solution
 vector correspond to the components of the wavefunction along our product
 functions.
 In order to stack the deck in favor of one product in the expansion, we can
-determine the molecular orbitals in step~\ref{item:mean-field} to minimize its
+determine the molecular orbitals in step~\ref{item:mean-field} to minimize the
 energy expectation value
 \begin{equation}
     \label{eq:introduction:orbital-product-expectation-value}
@@ -182,8 +182,7 @@ energy expectation value
     \sum_{i<j}^{\substack{\mathrm{orbital}\\\mathrm{pairs}}}
     g_{ij}^{ij}
 \end{equation}
-where we have defined the all-important {\itshape one- and two-electron
-integrals}.
+where we have defined the ubiquitous {\itshape one- and two-electron integrals}.
 \begin{equation}
     h_p^q
     \equiv
@@ -307,9 +306,9 @@ two-component complex vector space as
         0 \\ 1
     \end{pmatrix}
 \end{equation}
-where \(\alpha\) is the ``spin-up'' state and \(\beta\) is the ``spin-down''
-state, so that the states of individual electrons are described not by orbitals
-but by {\itshape spin-orbitals}:
+where \(\alpha\) is the ``up'' spinor and \(\beta\) is the ``down'' spinor.
+The states of individual electrons are therefore described not by orbitals but
+by {\itshape spin-orbitals}:
 \begin{equation}
     \psi(\mathbf{r}, \sigma)
     =
@@ -344,7 +343,7 @@ spin-down.
 
 Having completed the system of quantum numbers for an electron in a spherical
 potential with what would eventually be recognized as spin, Pauli was struck
-with a curious observation, which he discussed in January of 1925:
+with a curious observation:
 \begin{quote}
     By considering the case of strong magnetic fields we can reduce [earlier
     observations], that the number of electrons in a completed subgroup is the
@@ -361,8 +360,7 @@ with a curious observation, which he discussed in January of 1925:
     very plausible one.\cite{Pauli:1925p756}
 \end{quote}
 This ``housing office for equivalent orbits''\cite{Mehra:1982} would remain a
-mystery until Heisenberg began studying two-electron systems in earnest with the
-new quantum mechanics in the following year.
+mystery until Heisenberg's work on two-electron systems in the following year.
 
 
 \section{Antisymmetry}
@@ -372,31 +370,31 @@ Problem and Resonance in Quantum Mechanics} in which he aimed to ``lay the
 foundations for a quantum mechanical treatment of many-body
 systems.''\cite{Heisenberg:1926p411}
 He sought to reconcile three outstanding problems in the quantum theory of
-electrons:
+electrons.
+In his words:
 \begin{quote}
     [1.] The aspects of de Broglie's theory of waves that lead to Bose-Einstein
     statistics appear to have no analogue in quantum mechanics;
     [2.] Ad hoc rules like Pauli's ban on equivalent orbitals cannot be
-    expressed in the mathematical formalism of quantum mechanics as it
-    exists\dots\ 
+    expressed in the current mathematical formalism of quantum mechanics\dots\ 
     [3.] Finally there is one known difficulty in the quantitative
     interpretation of spectra that we should remind ourselves of:
     The splitting of singlet and triplet states in the spectra of the alkaline
     earth metals and in helium is too big by an order of magnitude to be
     explained as a difference in the magnetic interaction energies of two
-    rotating electrons.\cite{Heisenberg:1926p411}
+    spinning electrons.\cite{Heisenberg:1926p411}
 \end{quote}
 By considering two quantum harmonic oscillators and coupling them as
 indistinguishable particles, in line with the statistical considerations of Bose
 and Einstein,\cite{Bose:1924p178,Einstein:1924p261,Einstein:1925p3} Heisenberg
-found that the eigenstates exist as symmetric or antisymmetric combinations, and
-that only the antisymmetric combinations were consistent with the observed
+found that the eigenstates exist in symmetric or antisymmetric combinations, and
+that only the antisymmetric combinations are consistent with the observed
 spectrum of helium.
-That is, the electronic wavefunction must be antisymmetric under particle
+That is, the electronic wavefunction appears to be antisymmetric under particle
 exchange, so that the appropriate basis states are not simple products but
 antisymmetric ones\footnote{%
-    These arguments are short-hand for electron space and spin coordinates, as
-    in \((1) \leftrightarrow (\mathbf{r}_1, \sigma_1)\).
+    The arguments are short-hand for electron space and spin coordinates, as in
+    \((1) \equiv (\mathbf{r}_1, \sigma_1)\).
 }
 \begin{equation}
     \Phi_{p_1\cdots p_n}(1, \ldots, n)
@@ -411,7 +409,7 @@ antisymmetric ones\footnote{%
 where \(\pi=(\pi_1\cdots \pi_n)\) runs over permutations of \((1\cdots n)\) with
 signature \((-)^\pi\).
 Whenever the same orbital appears twice in such an expansion the function
-vanishes, so this move provided a mathematical basis for Pauli exclusion.
+vanishes, so this provided a mathematical basis for Pauli exclusion.
 The energy of the antisymmetric product state has the form
 \begin{equation}
     \label{eq:introduction:determinant-expectation-value}
@@ -429,26 +427,35 @@ The energy of the antisymmetric product state has the form
         g_{ij}^{ji}
     )
 \end{equation}
-where only the so-called exchange integrals
+where only the exchange integrals
 \(
     g_{ij}^{ji}
     =
     \langle \psi_i\psi_j|\hat{g}_{12}|\psi_j\psi_i\rangle
 \)
 are new.
-These exchange interactions between electrons in orbitals \(i\) and \(j\) serve
-to lower the energy by cancelling out part of the Coulomb repulsion where the
-orbitals overlap.
-The orthogonality of opposite spinors means that this effect only takes place
-between electrons of the same spin, and thereby lowers the energy of higher spin
-states relative to lower ones of the same configuration, as had been observed by
-Hund.\cite{Hund:1925p345}
-Thus the new theory could explain the ``large force of unknown
+These exchange ``interactions'' between electrons in orbitals \(i\) and \(j\)
+serve to lower the energy by cancelling out part of the Coulomb repulsion where
+the orbitals overlap.
+Moreover, the orthogonality of opposite spinors means that this effect only
+takes place between electrons of the same spin, and thereby lowers the energy of
+high-spin states relative to low-spin ones of the same configuration, as had
+been observed by Hund.\cite{Hund:1925p345}
+Thus the new theory could also explain the ``large force of unknown
 origin''\cite{Mehra:1982} that was lowering the energy of the triplet states in
 helium.
 
 
 \section{Modern Electronic Structure Theory}
+
+\begin{enumerate}
+    \item
+        Heisenberg's project to lay out a framework for many-body electronic
+        structure theory basically succeeded, but the asymmetric product
+        functions were cumbersome to work with.
+    \item
+        Nowadays\dots
+\end{enumerate}
 
 \begin{equation}
     a_p
