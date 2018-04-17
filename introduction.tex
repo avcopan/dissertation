@@ -398,9 +398,9 @@ consistent with the spectroscopic observations for helium.
 This suggested the intriguing possibility that, as a rule, the electronic
 wavefunction was antisymmetric under particle exchange, and symmetric electron
 wavefunctions simply ``are not realized in nature.''\cite{Heisenberg:1926p411}
-In this case the appropriate basis state for the many-electron wavefunction
-would be not the orbital product, which places each electron into its own
-distinguishable orbit, but the following antisymmetrized function:
+Then the appropriate basis state for the many-electron wavefunction would not be
+the orbital product, which places each electron into its own distinct orbit, but
+the determinant function:
 \begin{equation}
     \Phi_{p_1\cdots p_n}(\mathbf{x}_1, \ldots, \mathbf{x}_n)
     =
@@ -413,8 +413,8 @@ distinguishable orbit, but the following antisymmetrized function:
 \end{equation}
 where \(\pi=(\pi_1\cdots \pi_n)\) is a permutation of the electron labels
 \((1\cdots n)\) and \((-)^\pi\) is its signature.
-Whenever the same orbital appears twice in this expansion the function vanishes,
-so this provided a mathematical basis for Pauli exclusion.
+Whenever the same orbital appears twice in this expansion the determinant
+vanishes, so this provided a mathematical basis for Pauli exclusion.
 The energy of the antisymmetric product state has the form
 \begin{equation}
     \label{eq:introduction:determinant-expectation-value}
@@ -434,21 +434,21 @@ The energy of the antisymmetric product state has the form
     -
     g_{ij}^{ji}
 \end{equation}
-where only the exchange integrals
+which is the same as the product expectation value of
+\cref{eq:introduction:orbital-product-expectation-value} except for the new
+integrals
 \(
     g_{ij}^{ji}
     =
     \langle \psi_i\psi_j|\hat{g}_{12}|\psi_j\psi_i\rangle
-\)
-are new from the single-product expectation value
-(\cref{eq:introduction:orbital-product-expectation-value}).
+\).
 These ``exchange interactions'' between electrons in orbitals \(i\) and \(j\)
 serve to lower the energy by cancelling out part of the Coulomb repulsion where
-the orbitals overlap.
-Moreover, the orthogonality of opposite spinors means that this effect only
-takes place between electrons of the same spin, and thereby lowers the energy of
-high-spin states relative to low-spin ones of the same configuration, as had
-been observed by Hund.\cite{Hund:1925p345}
+they overlap.
+The orthogonality of opposite spinors means that this effect only takes place
+between electrons of the same spin, lowering the energy of high-spin states
+relative to low-spin ones of the same configuration, as had been observed by
+Hund.\cite{Hund:1925p345}
 Thus the new theory could also explain the ``large force of unknown
 origin''\cite{Mehra:1982} that was lowering the energy of the triplet states in
 helium.
@@ -456,177 +456,162 @@ helium.
 
 \section{Modern Electronic Structure Theory}
 
+Heisenberg's insights laid the foundation for a quantum mechanical treatment of
+many-electron systems,\cite{Heisenberg:1926p411} but the determinant functions
+needed to describe these antisymmetric states were difficult to work with.
+This challenge was addressed in a 1932 article by Vladimir Fock, which developed
+a new mathematical framework for indistinguishable particles that he called
+{\itshape second quantization}.\cite{Fock:1932p622}
+Building on earlier work by Dirac,\cite{Dirac:1927p243} the new formalism
+replaced the opaque combinatorial arguments of the previous ``first quantized''
+formalism with transparent algebraic manipulations.
+Center stage in the new approach was the annihilation operator:
+\begin{equation}
+    (\hat{a}_p\Psi)(\mathbf{x}_2, \ldots, \mathbf{x}_n)
+    \equiv
+    \sqrt{n}
+    \int
+    d^4\mathbf{x}'\,
+    \psi_p^*(\mathbf{x}')\,
+    \Psi(\mathbf{x}', \mathbf{x}_2, \ldots, \mathbf{x}_n)
+\end{equation}
+the meaning of which becomes clear when we apply it to a determinant.
+\begin{equation}
+    \hat{a}_{p_k}
+    \Phi_{p_1\cdots p_k \cdots p_n}
+    =
+    (-)^{k-1}
+    \Phi_{p_1\cdots p_{k-1} p_{k+1}\cdots p_n}
+\end{equation}
+The adjoints of these annihilation operators act as {\itshape creation
+operators}
+\begin{equation}
+    \hat{a}_{p_k}^\dagger
+    \Phi_{p_1\cdots p_{k-1} p_{k+1}\cdots p_n}
+    =
+    (-)^{k-1}
+    \Phi_{p_1\cdots p_k\cdots p_n}
+\end{equation}
+and stringing these all together allows us to define an {\itshape excitation
+operator}
+\begin{equation}
+    \hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}
+    \equiv
+    \hat{a}_{p_1}^\dagger
+    \cdots
+    \hat{a}_{p_h}^\dagger
+    \hat{a}_{q_h}
+    \cdots
+    \hat{a}_{q_1}
+\end{equation}
+whereby we can expand the wavefunction in terms of single, double, triple, etc.\
+excitations of the mean-field reference determinant
+\begin{equation}
+    \Psi
+    =
+    \left(
+        c_0
+        \hat{1}
+        +
+        c_a^i
+        \hat{a}^a_i
+        +
+        (\tfrac{1}{2})^2
+        c_{ab}^{ij}
+        \hat{a}^{ab}_{ij}
+        +
+        (\tfrac{1}{3!})^2
+        c_{abc}^{ijk}
+        \hat{a}^{abc}_{ijk}
+        +
+        \cdots
+    \right)
+    \Phi
+\end{equation}
+where \(i, j, k\) count over states which are occupied in the determinant, \(a,
+b, c\) count over unoccupied states, and we have adopted the Einstein summation
+convention for summing over repeated indices.
+This approach lends itself to defining new functional forms for the expansion,
+such as the coupled-cluster exponential.
+\begin{equation}
+    \Psi
+    =
+    \exp(\hat{T})
+    \Phi
+    \qquad
+    \hat{T}
+    \equiv
+    t_a^i
+    \hat{a}^a_i
+    +
+    (\tfrac{1}{2})^2
+    t_{ab}^{ij}
+    \hat{a}^{ab}_{ij}
+    +
+    (\tfrac{1}{3!})^2
+    t_{abc}^{ijk}
+    \hat{a}^{abc}_{ijk}
+    +
+    \cdots
+\end{equation}
+Finally, by substituting the following decomposition
+\begin{equation}
+    \Psi(\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n)
+    =
+    \tfrac{1}{\sqrt{n}}
+    \sum_p
+    \psi_p(\mathbf{x}_1)\,
+    (\hat{a}_p\Psi)(\mathbf{x}_2, \ldots, \mathbf{x}_n)
+\end{equation}
+into a general antisymmetric matrix element of the Hamiltonian, we find that the
+restriction of \(\hat{H}\) to antisymmetric states can be expressed in the
+following form.
+\begin{equation}
+    \hat{H}
+    =
+    h_p^q\,
+    \hat{a}^p_q
+    +
+    \tfrac{1}{4}
+    \overline{g}_{pq}^{rs}\,
+    \hat{a}^{pq}_{rs}
+\end{equation}
+
+
+
+\section{Density Cumulants}
+
 \begin{enumerate}
     \item
-        Heisenberg's insights did in fact ``lay the foundations for a quantum
-        mechanical treatment of many-body systems,''\cite{Heisenberg:1926p411}
-        but the antisymmetrized product states were quite difficult to work
-        with.
-    \item
-        To ease this difficulty, Vladimir Fock developed a new mathematical
-        framework for indistinguishable particles 1932, which he called
-        {\itshape second quantization}.\cite{Fock:1932p622}
-    \item
-        Extending earlier work by Dirac,\cite{Dirac:1927p243} the new formalism
-        replaced the opaque combinatorial arguments of ``first quantization''
-        with transparent algebraic manipulations.
-    \item
-        Center stage in the new approach was the annihilation operator, which
-        maps \(n\)-electron functions to \((n-1)\)-electron functions by
-        integration with a spin-orbital
-        \begin{equation}
-            (\hat{a}_p\Psi)(\mathbf{x}_2, \ldots, \mathbf{x}_n)
-            \equiv
-            \sqrt{n}
-            \int
-            d^4\mathbf{x}'\,
-            \psi_p^*(\mathbf{x}')\,
-            \Psi(\mathbf{x}', \mathbf{x}_2, \ldots, \mathbf{x}_n)
-        \end{equation}
-    \item
-        This enables the following decomposition
-        \begin{equation}
-            \Psi(\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n)
-            =
-            \tfrac{1}{\sqrt{n}}
-            \sum_p
-            \psi_p(\mathbf{x}_1)\,
-            (\hat{a}_p\Psi)(\mathbf{x}_2, \ldots, \mathbf{x}_n)
-        \end{equation}
-        which can be substituted into the energy expectation value of an
-        arbitrary antisymmetric state to give the following.
-        \begin{equation}
-            \label{eq:introduction:density-matrix-energy}
-            \langle\Psi|\hat{H}|\Psi\rangle
-            =
-            \sum_{pq}
-            h_p^q\,
-            \langle \Psi| \hat{a}_p^\dagger \hat{a}_q|\Psi\rangle
-            +
-            \tfrac{1}{4}
-            \sum_{pqrs}
-            \overline{g}_{pq}^{rs}\,
-            \langle \Psi|
-            \hat{a}_p^\dagger \hat{a}_q^\dagger \hat{a}_s \hat{a}_r
-            |\Psi\rangle
-        \end{equation}
-    \item
-        The meaning of this operation becomes clear when we apply to an
-        antisymmetric product state containing the corresponding spin-orbital:
-        \begin{equation}
-            \hat{a}_{p_k}
-            \Phi_{p_1\cdots p_k \cdots p_n}
-            =
-            (-)^{k-1}
-            \Phi_{p_1\cdots p_{k-1} p_{k+1}\cdots p_n}
-        \end{equation}
-        i.e.\ it deletes the orbital and renormalizes the state.
-    \item
-        Restricted to the space of antisymmetric functions, the annihilation
-        operators are found to anticommute.
-        \begin{equation}
-            \hat{a}_p \hat{a}_q
-            =
-            -
-            \hat{a}_q \hat{a}_p
-        \end{equation}
-    \item
-        By considering inner products with an annihilated state, we find that
-        the adjoint of an annihilation operator constitutes a {\itshape creation
-        operator}.
-        \begin{equation}
-            \hat{a}_{p_k}^\dagger
-            \Phi_{p_1\cdots p_{k-1} p_{k+1}\cdots p_n}
-            =
-            (-)^{k-1}
-            \Phi_{p_1\cdots p_k\cdots p_n}
-        \end{equation}
-    \item
-        Creation and annihilation operators anticommute with each other except
-        for the special case where they create and annihilate the same orbital,
-        in which case the anticommutator acts as the identity.
-        \begin{equation}
-            \hat{a}_p \hat{a}_q^\dagger
-            =
-            -
-            \hat{a}_q^\dagger \hat{a}_p
-            +
-            \delta_{pq}
-        \end{equation}
-    \item
-        The full power of the method starts to come into view when we recognize
-        that the decomposition of \cref{eq:introduction:density-matrix-energy}
-        holds for matrix elements of arbitrary antisymmetric states and
-        therefore the Hamiltonian can be expressed as
+        The second quantized Hamiltonian shows that the energy is determined by
+        two unknown arrays
         \begin{equation}
             \hat{H}
             =
-            \sum_{pq}
-            h_p^q\,
-            \hat{a}_p^\dagger
-            \hat{a}_q
+            h_p^q
+            \gamma^p_q
             +
             \tfrac{1}{4}
-            \sum_{pqrs}
-            \overline{g}_{pq}^{rs}\,
-            \hat{a}_p^\dagger
-            \hat{a}_q^\dagger
-            \hat{a}_s
-            \hat{a}_r
+            \overline{g}_{pq}^{rs}
+            \gamma^{pq}_{rs}
+            \qquad
+            \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
+            \equiv
+            \langle\Psi|a^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle
         \end{equation}
-        in the antisymmetric subspace of \(\mathcal{H}\).
+        which are the one- and two-body reduced density matrices.
     \item
-        \begin{equation}
-            \Psi
-            =
-            \hat{\Omega}\,
-            \Phi
-            \qquad
-            \hat{\Omega}
-            \equiv
-            c_0
-            \hat{1}
-            +
-            \sum_{\substack{a\\i}}
-            c_a^i\,
-            \hat{a}_a^\dagger
-            \hat{a}_i
-            +
-            \sum_{\substack{a<b\\i<j}}
-            c_{ab}^{ij}\,
-            \hat{a}_a^\dagger
-            \hat{a}_b^\dagger
-            \hat{a}_j
-            \hat{a}_i
-            +
-            \cdots
-        \end{equation}
-        \begin{equation}
-            \hat{\Omega}
-            =
-            \exp(\hat{T})
-            \qquad
-            \hat{T}
-            \equiv
-            \sum_{\substack{a\\i}}
-            t_a^i\,
-            \hat{a}_a^\dagger
-            \hat{a}_i
-            +
-            \sum_{\substack{a<b\\i<j}}
-            t_{ab}^{ij}\,
-            \hat{a}_a^\dagger
-            \hat{a}_b^\dagger
-            \hat{a}_j
-            \hat{a}_i
-            +
-            \cdots
-        \end{equation}
+        Particularly important is the correct decomposition of the RDMs into
+        connected contributions\dots
+    \item
+        Truncated CI is known to produce artifactual unlinked terms which spoil
+        the qualitative behavior of the energy\dots
+    \item
+        These connected contributions correspond to what are known in statistics
+        as cumulants\dots
+    \item
+        Three electron expressions as an example\dots
 \end{enumerate}
-
-
-
-\section{Electronic Density Cumulants}
 
 \begin{equation}
     \langle\Psi|Q|\Psi\rangle
@@ -653,9 +638,6 @@ helium.
 \end{equation}
 
 \begin{equation}
-    \gamma^{p_1\cdots p_n}_{q_1\cdots q_n}
-    \equiv
-    \langle\Psi|a^{p_1\cdots p_n}_{q_1\cdots q_n}|\Psi\rangle
     \qquad
     \lambda^{p_1\cdots p_n}_{q_1\cdots q_n}
     \equiv
