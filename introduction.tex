@@ -373,12 +373,10 @@ mystery until Heisenberg's work on two-electron systems the following year.
 \section{Antisymmetry}
 
 In June of 1926, Heisenberg published an article on {\itshape The Many-Body
-Problem and Resonance in Quantum Mechanics} in which he aimed to ``lay the
-foundations for a quantum mechanical treatment of many-body
-systems.''\cite{Heisenberg:1926p411}
-He sought to reconcile three outstanding problems in the quantum theory of
-electrons.
-In his words:
+Problem and Resonance in Quantum Mechanics}, which sought to address
+foundational issues arising in his attempts to apply the new quantum theory to
+the helium atom.
+In his words, there were three outstanding problems:
 \begin{quote}
     [1.] The aspects of de Broglie's theory of waves that lead to Bose-Einstein
     statistics appear to have no analogue in quantum mechanics;
@@ -391,15 +389,18 @@ In his words:
     explained as a difference in the magnetic interaction energies of two
     spinning electrons.\cite{Heisenberg:1926p411}
 \end{quote}
-By considering two quantum harmonic oscillators and coupling them as
+By considering two quantum harmonic oscillators and treating them as
 indistinguishable particles, in line with the statistical considerations of Bose
 and Einstein,\cite{Bose:1924p178,Einstein:1924p261,Einstein:1925p3} Heisenberg
-found that the eigenstates exist in symmetric or antisymmetric combinations, and
-that only the antisymmetric combinations are consistent with the observed
-spectrum of helium.
-That is, the electronic wavefunction is evidently antisymmetric under particle
-exchange, so that the appropriate basis states are not simple products but
-antisymmetric ones
+found that the eigenstates of the coupled system could exist in symmetric or
+antisymmetric combinations, and that only the antisymmetric states were
+consistent with the spectroscopic observations for helium.
+This suggested the intriguing possibility that, as a rule, the electronic
+wavefunction was antisymmetric under particle exchange, and symmetric electron
+wavefunctions simply ``are not realized in nature.''\cite{Heisenberg:1926p411}
+In this case the appropriate basis state for the many-electron wavefunction
+would be not the orbital product, which places each electron into its own
+distinguishable orbit, but the following antisymmetrized function:
 \begin{equation}
     \Phi_{p_1\cdots p_n}(\mathbf{x}_1, \ldots, \mathbf{x}_n)
     =
@@ -410,10 +411,10 @@ antisymmetric ones
     \cdots
     \psi_{p_n}(\mathbf{x}_{\pi_n})
 \end{equation}
-where \(\pi=(\pi_1\cdots \pi_n)\) runs over permutations of the electron labels
-\((1\cdots n)\) with signature \((-)^\pi\).
-Whenever the same orbital appears twice in such an expansion the function
-vanishes, so this provided a mathematical basis for Pauli exclusion.
+where \(\pi=(\pi_1\cdots \pi_n)\) is a permutation of the electron labels
+\((1\cdots n)\) and \((-)^\pi\) is its signature.
+Whenever the same orbital appears twice in this expansion the function vanishes,
+so this provided a mathematical basis for Pauli exclusion.
 The energy of the antisymmetric product state has the form
 \begin{equation}
     \label{eq:introduction:determinant-expectation-value}
@@ -455,21 +456,24 @@ helium.
 
 \section{Modern Electronic Structure Theory}
 
-
 \begin{enumerate}
     \item
-        The general framework set forth by Heisenberg remains the basis for
-        non-relativistic electronic structure theory.
+        Heisenberg's insights did in fact ``lay the foundations for a quantum
+        mechanical treatment of many-body systems,''\cite{Heisenberg:1926p411}
+        but the antisymmetrized product states were quite difficult to work
+        with.
     \item
-        Following the bootstrapping approach described in
-        \cref{sec:introduction:naive-electronic-structure}, we proceed by
-        expanding the spin-orbitals in terms of atomic orbitals and solving for
-        the minimum energy antisymmetric orbital product before expanding the
-        wavefunction.
+        To ease this difficulty, Vladimir Fock developed a new mathematical
+        framework for indistinguishable particles 1932, which he called
+        {\itshape second quantization}.\cite{Fock:1932p622}
     \item
-        Conceptually simplified by Fock, ``Configuration Space and Second
-        Quantization''\cite{Fock:1932p622}
+        Extending earlier work by Dirac,\cite{Dirac:1927p243} the new formalism
+        replaced the opaque combinatorial arguments of ``first quantization''
+        with transparent algebraic manipulations.
     \item
+        Center stage in the new approach was the annihilation operator, which
+        maps \(n\)-electron functions to \((n-1)\)-electron functions by
+        integration with a spin-orbital
         \begin{equation}
             (\hat{a}_p\Psi)(\mathbf{x}_2, \ldots, \mathbf{x}_n)
             \equiv
@@ -479,6 +483,8 @@ helium.
             \psi_p^*(\mathbf{x}')\,
             \Psi(\mathbf{x}', \mathbf{x}_2, \ldots, \mathbf{x}_n)
         \end{equation}
+    \item
+        This enables the following decomposition
         \begin{equation}
             \Psi(\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n)
             =
@@ -487,43 +493,135 @@ helium.
             \psi_p(\mathbf{x}_1)\,
             (\hat{a}_p\Psi)(\mathbf{x}_2, \ldots, \mathbf{x}_n)
         \end{equation}
-    \item
-        Substituting this expansion into the energy expectation value of the
-        wavefunction
+        which can be substituted into the energy expectation value of an
+        arbitrary antisymmetric state to give the following.
         \begin{equation}
+            \label{eq:introduction:density-matrix-energy}
             \langle\Psi|\hat{H}|\Psi\rangle
             =
             \sum_{pq}
             h_p^q\,
-            \langle a_p\Psi| a_q\Psi\rangle
+            \langle \Psi| \hat{a}_p^\dagger \hat{a}_q|\Psi\rangle
             +
             \tfrac{1}{4}
             \sum_{pqrs}
             \overline{g}_{pq}^{rs}\,
-            \langle a_q a_p\Psi| a_s a_r\Psi\rangle
+            \langle \Psi|
+            \hat{a}_p^\dagger \hat{a}_q^\dagger \hat{a}_s \hat{a}_r
+            |\Psi\rangle
         \end{equation}
     \item
-        Restricted to \(\mathcal{H}_{n\mathrm{e}}\)
+        The meaning of this operation becomes clear when we apply to an
+        antisymmetric product state containing the corresponding spin-orbital:
+        \begin{equation}
+            \hat{a}_{p_k}
+            \Phi_{p_1\cdots p_k \cdots p_n}
+            =
+            (-)^{k-1}
+            \Phi_{p_1\cdots p_{k-1} p_{k+1}\cdots p_n}
+        \end{equation}
+        i.e.\ it deletes the orbital and renormalizes the state.
+    \item
+        Restricted to the space of antisymmetric functions, the annihilation
+        operators are found to anticommute.
+        \begin{equation}
+            \hat{a}_p \hat{a}_q
+            =
+            -
+            \hat{a}_q \hat{a}_p
+        \end{equation}
+    \item
+        By considering inner products with an annihilated state, we find that
+        the adjoint of an annihilation operator constitutes a {\itshape creation
+        operator}.
+        \begin{equation}
+            \hat{a}_{p_k}^\dagger
+            \Phi_{p_1\cdots p_{k-1} p_{k+1}\cdots p_n}
+            =
+            (-)^{k-1}
+            \Phi_{p_1\cdots p_k\cdots p_n}
+        \end{equation}
+    \item
+        Creation and annihilation operators anticommute with each other except
+        for the special case where they create and annihilate the same orbital,
+        in which case the anticommutator acts as the identity.
+        \begin{equation}
+            \hat{a}_p \hat{a}_q^\dagger
+            =
+            -
+            \hat{a}_q^\dagger \hat{a}_p
+            +
+            \delta_{pq}
+        \end{equation}
+    \item
+        The full power of the method starts to come into view when we recognize
+        that the decomposition of \cref{eq:introduction:density-matrix-energy}
+        holds for matrix elements of arbitrary antisymmetric states and
+        therefore the Hamiltonian can be expressed as
         \begin{equation}
             \hat{H}
             =
+            \sum_{pq}
             h_p^q\,
-            a^p_q
+            \hat{a}_p^\dagger
+            \hat{a}_q
             +
             \tfrac{1}{4}
-            \overline{g}_{pq}^{rs}
-            a^{pq}_{rs}
-            \qquad
-            a^p_q
-            \equiv
-            a_p^\dagger a_q
-            \qquad
-            a^{pq}_{rs}
-            \equiv
-            a_p^\dagger a_q^\dagger a_s a_r
+            \sum_{pqrs}
+            \overline{g}_{pq}^{rs}\,
+            \hat{a}_p^\dagger
+            \hat{a}_q^\dagger
+            \hat{a}_s
+            \hat{a}_r
         \end{equation}
+        in the antisymmetric subspace of \(\mathcal{H}\).
     \item
-        Occupation number representation
+        \begin{equation}
+            \Psi
+            =
+            \hat{\Omega}\,
+            \Phi
+            \qquad
+            \hat{\Omega}
+            \equiv
+            c_0
+            \hat{1}
+            +
+            \sum_{\substack{a\\i}}
+            c_a^i\,
+            \hat{a}_a^\dagger
+            \hat{a}_i
+            +
+            \sum_{\substack{a<b\\i<j}}
+            c_{ab}^{ij}\,
+            \hat{a}_a^\dagger
+            \hat{a}_b^\dagger
+            \hat{a}_j
+            \hat{a}_i
+            +
+            \cdots
+        \end{equation}
+        \begin{equation}
+            \hat{\Omega}
+            =
+            \exp(\hat{T})
+            \qquad
+            \hat{T}
+            \equiv
+            \sum_{\substack{a\\i}}
+            t_a^i\,
+            \hat{a}_a^\dagger
+            \hat{a}_i
+            +
+            \sum_{\substack{a<b\\i<j}}
+            t_{ab}^{ij}\,
+            \hat{a}_a^\dagger
+            \hat{a}_b^\dagger
+            \hat{a}_j
+            \hat{a}_i
+            +
+            \cdots
+        \end{equation}
 \end{enumerate}
 
 
