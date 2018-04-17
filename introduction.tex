@@ -507,6 +507,7 @@ operator}
 whereby we can expand the wavefunction in terms of single, double, triple, etc.\
 excitations of the mean-field reference determinant
 \begin{equation}
+    \label{eq:intro-ci-expansion}
     \Psi
     =
     \left(
@@ -576,54 +577,49 @@ following form.
     \overline{g}_{pq}^{rs}\,
     \hat{a}^{pq}_{rs}
 \end{equation}
-
-
-
-\section{Density Cumulants}
-
-\begin{enumerate}
-    \item
-        The second quantized Hamiltonian shows that the energy is determined by
-        two unknown arrays
-        \begin{equation}
-            \hat{H}
-            =
-            h_p^q
-            \gamma^p_q
-            +
-            \tfrac{1}{4}
-            \overline{g}_{pq}^{rs}
-            \gamma^{pq}_{rs}
-            \qquad
-            \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
-            \equiv
-            \langle\Psi|a^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle
-        \end{equation}
-        which are the one- and two-body reduced density matrices.
-    \item
-        Particularly important is the correct decomposition of the RDMs into
-        connected contributions\dots
-    \item
-        Truncated CI is known to produce artifactual unlinked terms which spoil
-        the qualitative behavior of the energy\dots
-    \item
-        These connected contributions correspond to what are known in statistics
-        as cumulants\dots
-    \item
-        Three electron expressions as an example\dots
-\end{enumerate}
-
+It energy expectation value with respect to a generic state is given by
 \begin{equation}
-    \langle\Psi|Q|\Psi\rangle
+    \langle\Psi|
+    \hat{H}
+    |\Psi\rangle
+    =
+    h_p^q
+    \gamma^p_q
+    +
+    \tfrac{1}{4}
+    \overline{g}_{pq}^{rs}
+    \gamma^{pq}_{rs}
+\end{equation}
+in terms of the one- and two-body reduced density matrices.
+\begin{equation}
+    \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
+    \equiv
+    \langle\Psi|a^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle
+\end{equation}
+In principle, all of the information needed to evaluate the energy is contained
+in the two-body density matrix, but the structure of this tensor is quite
+important.
+Truncating the linear expansion of \cref{eq:intro-ci-expansion} at some
+excitation level is known to produce artifactual ``unlinked'' contributions to
+the density matrix which which spoil the qualitative behavior of the energy with
+respect to system size and independent subsystems.
+The correct structure with respect to connectivity is defined by the cumulant
+expansion.\cite{McCullagh:1987}
+\begin{equation}
+    \langle\Psi|\hat{Q}|\Psi\rangle
     =
     \sum_{k=1}^n
-    \sum_{\Pi}^{\mathrm{Part}(Q, k)}
+    \sum_{\Pi}^{\mathrm{Part}(\hat{Q}, k)}
     (-)^{\Pi}
-    \langle\Psi|\Pi_1|\Psi\rangle_\mathrm{c}
+    \langle\Psi|\hat{\Pi}_1|\Psi\rangle_\mathrm{c}
     \cdots
-    \langle\Psi|\Pi_k|\Psi\rangle_\mathrm{c}
+    \langle\Psi|\hat{\Pi}_k|\Psi\rangle_\mathrm{c}
 \end{equation}
-
+Here, \(\hat{Q}\) is an excitation operator, \(\Pi\) is a partition of the
+operator string into \(k\) parts, \((-)^\Pi\) is the signature of the
+permutation, and the subscript `\(\mathrm{c}\)' denotes the connected
+contributions to the expectation value.
+The inverse relationship is given by
 \begin{equation}
     \langle\Psi|Q|\Psi\rangle_\mathrm{c}
     =
@@ -636,14 +632,14 @@ following form.
     \cdots
     \langle\Psi|\Pi_k|\Psi\rangle
 \end{equation}
-
+which defines the electronic density cumulant.
 \begin{equation}
-    \qquad
     \lambda^{p_1\cdots p_n}_{q_1\cdots q_n}
     \equiv
     \langle\Psi|a^{p_1\cdots p_n}_{q_1\cdots q_n}|\Psi\rangle_\mathrm{c}
 \end{equation}
-
+As a concrete example, the three particle-moment cumulant relations are given by
+the following.
 \begin{equation}
     \gamma^{pqr}_{stu}
     =
@@ -651,14 +647,13 @@ following form.
     +
     P^{(pq/r)}_{(st/u)}
     \lambda^{pq}_{st}
-    \gamma^r_u
+    \lambda^r_u
     +
     P_{(s/t/u)}
-    \gamma^p_s
-    \gamma^q_t
-    \gamma^r_u
+    \lambda^p_s
+    \lambda^q_t
+    \lambda^r_u
 \end{equation}
-
 \begin{equation}
     \lambda^{pqr}_{stu}
     =
@@ -678,3 +673,36 @@ following form.
 
 \section{Prospectus}
 
+Density cumulant theory (DCT) expresses the energy as a functional of the
+two-body cumulant.
+The first variant of the theory was proposed by Kutzelnigg in
+2006,\cite{Kutzelnigg:2006p171101} and was first implemented by Simmonett four
+years later.\cite{Simmonett:2010p174122}
+The theory was further developed by Sokolov, who developed several new
+variants.\cite{Sokolov:2013p024107,Sokolov:2013p204110,Sokolov:2014p074111}
+
+\cref{ch:benchmark} presents a benchmark study of the ground-state DCT variants,
+demonstrating that the best variant of the theory to date, ODC-12, consistently
+outperforms the popular CCSD method for the description of thermochemical and
+kinetic processes.
+\cref{ch:response} presents the main contribution of this work, which is the
+extension of DCT for the description of excited states via linear response
+theory.
+We present a theoretical framework for LR-DCT, derive the linear response
+working equations for the ODC-12 model, as well as the initial implementation
+and verification of the theory.
+We also present the linearized variant of our model, which is the first
+implementation of a linear response theory for the orbital-optimized linearized
+coupled-cluster doubles (OLCCD) method.
+The benchmarks of the LR-ODC-12 model compared with EOM-CCSD look very
+promising.
+For well-behaved systems, the mean absolute errors are consistently halved by
+the new method.
+For the more challenging excited states of ethylene, butadiene, and hexatriene
+the differences are more stark.
+In the most extreme case, EOM-CCSD misses the \(2{}^1\mathrm{A_g}\) state of
+hexatriene by nearly 1~eV, whereas LR-ODC-12 is within 0.15~eV of the reference
+value and predicts this states energy gap with the \(1{}^1\mathrm{B_u}\) to
+nearly 0.01~eV.
+Finally, \cref{ch:davidson} presents the algorithms that were used for our study
+of larger systems, particularly hexatriene.
