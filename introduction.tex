@@ -145,12 +145,12 @@ problem:
         low-energy molecular orbitals.
         When the molecular orbitals are weakly interacting, the mean-field
         approximation described in step~\ref{item:mean-field} furnishes a good
-        description of their motions, and the wavefunction will be heavily
-        dominated by a single one of these products.
+        description of their motions, and the ground-state wavefunction will be
+        heavily dominated by the orbital product of lowest energy.
         From a statistical perspective, this means that the electron probability
-        density of the wavefunction approximately separates into a product of
-        one-electron densities, because the orbitals are {\itshape weakly
-        correlated} for this state.
+        density of the wavefunction approximately factors into one-electron
+        densities, because the orbitals are {\itshape weakly correlated} for
+        this state.
 \end{enumerate}
 At the end of this procedure, we have a matrix equation in the product basis.
 \begin{equation}
@@ -183,7 +183,8 @@ energy expectation value
     \sum_{i<j}^{\substack{\mathrm{orbital}\\\mathrm{pairs}}}
     g_{ij}^{ij}
 \end{equation}
-where we have defined the ubiquitous {\itshape one- and two-electron integrals}.
+where we have defined the ubiquitous {\itshape one-} and {\itshape two-electron
+integrals}.
 \begin{equation}
     h_p^q
     \equiv
@@ -243,8 +244,7 @@ step~\ref{item:atomic-orbitals} and solving for the expansion coefficients.
 
 The general strategy we have just outlined carries over into modern electronic
 structure theory, but it is missing two essential ingredients: the spin of the
-electron, and the antisymmetric permutational symmetry of electrons as
-indistinguishable particles.
+electron, and the antisymmetric permutational symmetry of electrons as fermions.
 
 
 \section{Spin}
@@ -390,17 +390,18 @@ In his words, there were three outstanding problems:
     spinning electrons.\cite{Heisenberg:1926p411}
 \end{quote}
 By considering two quantum harmonic oscillators and treating them as
-indistinguishable particles, in line with the statistical considerations of Bose
-and Einstein,\cite{Bose:1924p178,Einstein:1924p261,Einstein:1925p3} Heisenberg
-found that the eigenstates of the coupled system could exist in symmetric or
-antisymmetric combinations, and that only the antisymmetric states were
-consistent with the spectroscopic observations for helium.
+indistinguishable in the surprising, quasi-metaphysical\cite{French:1988p233}
+sense discovered by Bose\cite{Bose:1924p178} and
+Einstein\cite{Einstein:1924p261} two years prior, Heisenberg found that the
+eigenstates of the coupled system could exist in symmetric or antisymmetric
+combinations, and that only the antisymmetric states were consistent with the
+spectroscopic observations for helium.
 This suggested the intriguing possibility that, as a rule, the electronic
-wavefunction was antisymmetric under particle exchange, and symmetric electron
-wavefunctions simply ``are not realized in nature.''\cite{Heisenberg:1926p411}
-Then the appropriate basis state for the many-electron wavefunction would not be
-the orbital product, which places each electron into its own distinct orbit, but
-the determinant function:
+wavefunction was antisymmetric under particle exchange, and permutationally
+symmetric electron wavefunctions simply ``are not realized in
+nature.''\cite{Heisenberg:1926p411}
+If so, the appropriate basis state would not be the orbital product, which
+places each electron into its own distinct orbit, but the determinant function:
 \begin{equation}
     \Phi_{p_1\cdots p_n}(\mathbf{x}_1, \ldots, \mathbf{x}_n)
     =
@@ -411,8 +412,8 @@ the determinant function:
     \cdots
     \psi_{p_n}(\mathbf{x}_{\pi_n})
 \end{equation}
-where \(\pi=(\pi_1\cdots \pi_n)\) is a permutation of the electron labels
-\((1\cdots n)\) and \((-)^\pi\) is its signature.
+where \(\pi=\pi_1\cdots \pi_n\) is a permutation of the electron labels
+\(1\cdots n\) and \((-)^\pi\) is its signature.
 Whenever the same orbital appears twice in this expansion the determinant
 vanishes, so this provided a mathematical basis for Pauli exclusion.
 The energy of the antisymmetric product state has the form
@@ -475,7 +476,7 @@ Center stage in the new approach was the annihilation operator:
     \psi_p^*(\mathbf{x}')\,
     \Psi(\mathbf{x}', \mathbf{x}_2, \ldots, \mathbf{x}_n)
 \end{equation}
-the meaning of which becomes clear when we apply it to a determinant.
+The meaning this operation becomes clear from its action on a determinant.
 \begin{equation}
     \hat{a}_{p_k}
     \Phi_{p_1\cdots p_k \cdots p_n}
@@ -483,8 +484,6 @@ the meaning of which becomes clear when we apply it to a determinant.
     (-)^{k-1}
     \Phi_{p_1\cdots p_{k-1} p_{k+1}\cdots p_n}
 \end{equation}
-The adjoints of these annihilation operators act as {\itshape creation
-operators}
 \begin{equation}
     \hat{a}_{p_k}^\dagger
     \Phi_{p_1\cdots p_{k-1} p_{k+1}\cdots p_n}
@@ -492,20 +491,53 @@ operators}
     (-)^{k-1}
     \Phi_{p_1\cdots p_k\cdots p_n}
 \end{equation}
-and stringing these all together allows us to define an {\itshape excitation
-operator}
 \begin{equation}
-    \hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}
-    \equiv
-    \hat{a}_{p_1}^\dagger
-    \cdots
-    \hat{a}_{p_h}^\dagger
-    \hat{a}_{q_h}
-    \cdots
-    \hat{a}_{q_1}
+    \begin{array}{c}
+        \\
+        \hat{a}^{q_1q_2\cdots}_{p_ip_j\cdots}
+        \Phi_{%
+            p_1\cdots
+            p_{i-1} p_i p_{i+1}\cdots
+            p_{j-1} p_j p_{j+1}\cdots
+            p_n
+        }
+        =
+        \Phi_{%
+            p_1\cdots
+            p_{i-1} q_1 p_{i+1}\cdots
+            p_{j-1} q_2 p_{j+1}\cdots
+            p_n
+        }
+        \\[15pt]
+        \text{
+            \hfill
+            (%
+                where
+                \(
+                    \hat{a}^{q_1\cdots q_h}_{p_1\cdots p_h}
+                    \equiv
+                    \hat{a}_{q_1}^\dagger
+                    \cdots
+                    \hat{a}_{q_h}^\dagger
+                    \hat{a}_{p_h}
+                    \cdots
+                    \hat{a}_{p_1}
+                \)%
+            )
+        }
+        \\[15pt]
+    \end{array}
 \end{equation}
-whereby we can expand the wavefunction in terms of single, double, triple, etc.\
-excitations of the mean-field reference determinant
+In words, the annihilation operator deletes a spin-orbital and renormalizes the
+state.
+Its adjoint constitutes a {\itshape creation operator} which adds a
+spin-orbital, and we can string these operators together to form an {\itshape
+excitation operator} which substitutes one set of spin-orbitals in the
+determinant with another.
+In each case, an invalid operation, such as creating an occupied state or
+annihilating an unoccupied state, causes the determinant to vanish.
+This allows us to expand the wavefunction in terms of single, double, triple,
+etc.\ excitations of some ``reference determinant''
 \begin{equation}
     \label{eq:intro-ci-expansion}
     \Psi
@@ -532,8 +564,12 @@ excitations of the mean-field reference determinant
 where \(i, j, k\) count over states which are occupied in the determinant, \(a,
 b, c\) count over unoccupied states, and we have adopted the Einstein summation
 convention for summing over repeated indices.
-This approach lends itself to defining new functional forms for the expansion,
-such as the coupled-cluster exponential.
+For weakly correlated states, the reference determinant can be chosen so that
+\(c_0 \approx 1\) and the coefficients become negligibly small for higher than
+quadruple excitations, allowing us to truncate this expansion to a good
+approximation.
+Second quantization also lends itself to defining new functional forms for the
+expansion, such as the coupled-cluster exponential.
 \begin{equation}
     \Psi
     =
@@ -594,14 +630,14 @@ in terms of the one- and two-body reduced density matrices.
 \begin{equation}
     \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
     \equiv
-    \langle\Psi|a^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle
+    \langle\Psi|\hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle
 \end{equation}
 In principle, all of the information needed to evaluate the energy is contained
 in the two-body density matrix, but the structure of this tensor is quite
 important.
 Truncating the linear expansion of \cref{eq:intro-ci-expansion} at some
 excitation level is known to produce artifactual ``unlinked'' contributions to
-the density matrix which which spoil the qualitative behavior of the energy with
+the density matrix which spoil the qualitative behavior of the energy with
 respect to system size and independent subsystems.
 The correct structure with respect to connectivity is defined by the cumulant
 expansion.\cite{McCullagh:1987}
@@ -621,24 +657,24 @@ permutation, and the subscript `\(\mathrm{c}\)' denotes the connected
 contributions to the expectation value.
 The inverse relationship is given by
 \begin{equation}
-    \langle\Psi|Q|\Psi\rangle_\mathrm{c}
+    \langle\Psi|\hat{Q}|\Psi\rangle_\mathrm{c}
     =
     \sum_{k=1}^n
     (-)^{k+1}
     (k-1)!
-    \sum_{\Pi}^{\mathrm{Part}(Q, k)}
+    \sum_{\Pi}^{\mathrm{Part}(\hat{Q}, k)}
     (-)^{\Pi}
-    \langle\Psi|\Pi_1|\Psi\rangle
+    \langle\Psi|\hat{\Pi}_1|\Psi\rangle
     \cdots
-    \langle\Psi|\Pi_k|\Psi\rangle
+    \langle\Psi|\hat{\Pi}_k|\Psi\rangle
 \end{equation}
 which defines the electronic density cumulant.
 \begin{equation}
     \lambda^{p_1\cdots p_n}_{q_1\cdots q_n}
     \equiv
-    \langle\Psi|a^{p_1\cdots p_n}_{q_1\cdots q_n}|\Psi\rangle_\mathrm{c}
+    \langle\Psi|\hat{a}^{p_1\cdots p_n}_{q_1\cdots q_n}|\Psi\rangle_\mathrm{c}
 \end{equation}
-As a concrete example, the three particle-moment cumulant relations are given by
+As a concrete example, the three-particle moment cumulant relations are given by
 the following.
 \begin{equation}
     \gamma^{pqr}_{stu}
@@ -669,6 +705,146 @@ the following.
     \gamma^q_t
     \gamma^r_u
 \end{equation}
+
+\afterpage{%
+    \clearpage
+    \centering
+    \begin{landscape}
+        \vspace*{\fill}
+        \captionof{table}{%
+            Caption
+        }
+        \small
+        \renewcommand\arraystretch{1.0}
+        \begin{tabular}{ccc}
+            \(
+                h
+            \)
+            &
+            \(
+                \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
+            \)
+            &
+            \(
+                \lambda^{p_1\cdots p_h}_{q_1\cdots q_h}
+            \)
+            \\\hline
+            1
+            &
+            \(
+                \lambda^{p_1}_{q_1}
+            \)
+            &
+            \(
+                \gamma^{p_1}_{q_1}
+            \)
+            \\
+            2
+            &
+            \(
+                \lambda^{p_1p_2}_{q_1q_2}
+                +
+                P_{(q_1/q_2)}
+                \lambda^{p_1}_{q_1}
+                \lambda^{p_2}_{q_2}
+            \)
+            &
+            \(
+                \gamma^{p_1p_2}_{q_1q_2}
+                -
+                P_{(q_1/q_2)}
+                \gamma^{p_1}_{q_1}
+                \gamma^{p_2}_{q_2}
+            \)
+            \\
+            3
+            &
+            \(
+                \lambda^{p_1p_2p_3}_{q_1q_2q_3}
+                +
+                P_{(q_1q_2/q_3)}^{(p_1p_2/p_3)}
+                \lambda^{p_1p_2}_{q_1q_2}
+                \lambda^{p_3}_{q_3}
+                +
+                P_{(q_1/q_2/q_3)}
+                \lambda^{p_1}_{q_1}
+                \lambda^{p_2}_{q_2}
+                \lambda^{p_3}_{q_3}
+            \)
+            &
+            \(
+                \gamma^{p_1p_2p_3}_{q_1q_2q_3}
+                -
+                P_{(q_1q_2/q_3)}^{(p_1p_2/p_3)}
+                \gamma^{p_1p_2}_{q_1q_2}
+                \gamma^{p_3}_{q_3}
+                +
+                2
+                P_{(q_1/q_2/q_3)}
+                \gamma^{p_1}_{q_1}
+                \gamma^{p_2}_{q_2}
+                \gamma^{p_3}_{q_3}
+            \)
+            \\[10pt]
+            4
+            &
+            \(
+                \begin{array}{c}
+                    \lambda^{p_1p_2p_3p_4}_{q_1q_2q_3q_4}
+                    +
+                    P_{(q_1q_2q_3/q_4)}^{(p_1p_2p_3/p_4)}
+                    \lambda^{p_1p_2p_3}_{q_1q_2q_3}
+                    \lambda^{p_4}_{q_4}
+                    +
+                    P_{(q_1q_2/q_3q_4)}^{(p_2/p_3p_4)}
+                    \lambda^{p_1p_2}_{q_1q_2}
+                    \lambda^{p_3p_4}_{q_3q_4}
+                    \\
+                    +
+                    P_{(q_1q_2/q_3/q_4)}^{(p_1p_2/p_3p_4)}
+                    \lambda^{p_1p_2}_{q_1q_2}
+                    \lambda^{p_3}_{q_3}
+                    \lambda^{p_4}_{q_4}
+                    +
+                    P_{(q_1/q_2/q_3/q_4)}
+                    \lambda^{p_1}_{q_1}
+                    \lambda^{p_2}_{q_2}
+                    \lambda^{p_3}_{q_3}
+                    \lambda^{p_4}_{q_4}
+                \end{array}
+            \)
+            &
+            \(
+                \begin{array}{c}
+                    \gamma^{p_1p_2p_3p_4}_{q_1q_2q_3q_4}
+                    -
+                    P_{(q_1q_2q_3/q_4)}^{(p_1p_2p_3/p_4)}
+                    \gamma^{p_1p_2p_3}_{q_1q_2q_3}
+                    \gamma^{p_4}_{q_4}
+                    +
+                    P_{(q_1q_2/q_3q_4)}^{(p_2/p_3p_4)}
+                    \gamma^{p_1p_2}_{q_1q_2}
+                    \gamma^{p_3p_4}_{q_3q_4}
+                    \\
+                    -
+                    2
+                    P_{(q_1q_2/q_3/q_4)}^{(p_1p_2/p_3p_4)}
+                    \gamma^{p_1p_2}_{q_1q_2}
+                    \gamma^{p_3}_{q_3}
+                    \gamma^{p_4}_{q_4}
+                    +
+                    6
+                    P_{(q_1/q_2/q_3/q_4)}
+                    \gamma^{p_1}_{q_1}
+                    \gamma^{p_2}_{q_2}
+                    \gamma^{p_3}_{q_3}
+                    \gamma^{p_4}_{q_4}
+                \end{array}
+            \)
+        \end{tabular}
+        \vspace*{\fill}
+    \end{landscape}
+}
 
 
 \section{Prospectus}
