@@ -18,7 +18,7 @@ Schr\"odinger's development of wave mechanics,
 described the possible states of electrons in a molecule as eigenfunctions of
 the quantum-mechanical Hamiltonian, oscillating in time with a frequency
 proportional to their energy.
-In atomic units:
+In atomic units, this reads as follows.
 \begin{equation}
     \Psi(t)
     =
@@ -31,16 +31,16 @@ In atomic units:
     E
     \Psi.
 \end{equation}
-Crudely speaking, this Hamiltonian is derived from its classical counterpart by
-replacing its momentum variables with del operators divided by the imaginary
-unit,
+Crudely speaking, the Hamiltonian operator is derived from its classical
+counterpart by replacing momentum variables with del operators divided by the
+imaginary unit,
 \(
     \hat{\mathbf{p}}
     =
     \frac{1}{i}
     \nabla
 \).
-It can be written as a sum over one- and two-electron terms
+It can be written as a sum over one and two electron terms
 \begin{equation}
     \hat{H}
     =
@@ -83,26 +83,8 @@ of \(n\) position variables,
 one for each electron in the molecule.
 Since this space is infinite-dimensional, the only way forward in most cases is
 to determine a basis that approximately spans the states of interest.
-Here we are helped by the fact that a function of \(n\) position variables can
-be written as a linear combination of products
-\begin{equation}
-    \Psi(\mathbf{r}_1, \dots, \mathbf{r}_n)
-    =
-    \sum_{p_1\cdots p_n}
-    c_{p_1\cdots p_n}\,
-    \phi_{p_1}(\mathbf{r}_1)
-    \cdots
-    \phi_{p_n}(\mathbf{r}_n)
-\end{equation}
-where the one-electron functions or {\itshape orbitals} in this expansion span a
-one-electron Hilbert space,
-\(
-    \mathcal{H}_\mathrm{e}
-    =
-    L^2(\mathbb{R}^3)
-\).
-More generally, the Hilbert space of a system is always given by a tensor
-product of the Hilbert spaces for its constituent particles.
+Here we are helped by the fact that the Hilbert space of a system is always
+given by a tensor product of the Hilbert spaces for its constituent particles.
 \begin{equation}
     \mathcal{H}
     =
@@ -111,11 +93,14 @@ product of the Hilbert spaces for its constituent particles.
     \mathcal{H}_\mathrm{e}
     \otimes
     \cdots
+    \qquad
+    \mathcal{H}_\mathrm{e}
+    =
+    L^2(\mathbb{R}^3)
 \end{equation}
 In words, this says that the states of a system are spanned by all possible
-combinations of the states that its components exhibit in isolation.
-This enables a general strategy for bootstrapping the electronic structure
-problem:
+products of one-electron states, which enables a general strategy for
+bootstrapping the electronic structure problem:
 \begin{enumerate}
     \item
         \label{item:atomic-orbitals}
@@ -166,8 +151,8 @@ At the end of this procedure, we have a matrix equation in the product basis.
 \end{equation}
 In the limit of a complete expansion, this eigenvalue equation is exactly
 equivalent to the Schr\"odinger equation and the coefficients of the solution
-vector correspond to the components of the wavefunction along our product
-functions.
+vector correspond to the components of the wavefunction along each of our
+product functions.
 In order to stack the deck in favor of one product in the expansion, we can
 determine the molecular orbitals in step~\ref{item:mean-field} to minimize the
 energy expectation value
@@ -223,10 +208,7 @@ Schr\"odinger equation for one-electron states
     =
     \epsilon_i\,
     \phi_i(\mathbf{r}_1)
-\end{equation}
-where \(\hat{v}_1\) is the mean electrostatic field of the other electrons in
-the molecule.
-\begin{equation}
+    \qquad
     \hat{v}_1
     \equiv
     \sum_{j\neq i}
@@ -238,6 +220,8 @@ the molecule.
         |\mathbf{r}_1 - \mathbf{r}_2|
     }
 \end{equation}
+where \(\hat{v}_1\) is the mean Coulombic field of the other electrons in the
+molecule.
 We complete the bootstrapping cycle by expanding these unknown molecular
 orbitals in the basis of the atomic orbitals described in
 step~\ref{item:atomic-orbitals} and solving for the expansion coefficients.
@@ -285,8 +269,8 @@ whose eigenfunctions cannot exist in \(L^2(\mathbb{R}^3)\).
     \tfrac{1}{2}
     \psi
 \end{equation}
-The new ``spinor'' part of the electron's state lives in a two-component vector
-space
+Instead, the new ``spinor'' part of the one-electron state was encoded in a
+two-component vector space
 \begin{equation}
     \hat{s}_z
     =
@@ -308,8 +292,8 @@ space
     \end{pmatrix}
 \end{equation}
 where \(\alpha\) is the ``up'' spinor and \(\beta\) is the ``down'' spinor.
-The states of individual electrons are therefore described not by orbitals but
-by {\itshape spin-orbitals}:
+The states of individual electrons therefore had to be described not by orbitals
+but by {\itshape spin-orbitals}:
 \begin{equation}
     \psi(\mathbf{x})
     =
@@ -390,13 +374,12 @@ In his words, there were three outstanding problems:
     spinning electrons.\cite{Heisenberg:1926p411}
 \end{quote}
 By considering two quantum harmonic oscillators and treating them as
-indistinguishable in the surprising, quasi-metaphysical\cite{French:1988p233}
-sense discovered by Bose\cite{Bose:1924p178} and
-Einstein\cite{Einstein:1924p261} two years prior, Heisenberg found that the
+indistinguishable in the surprising sense discovered by Bose\cite{Bose:1924p178}
+and Einstein\cite{Einstein:1924p261} two years prior, Heisenberg found that the
 eigenstates of the coupled system could exist in symmetric or antisymmetric
 combinations, and that only the antisymmetric states were consistent with the
 spectroscopic observations for helium.
-This suggested the intriguing possibility that, as a rule, the electronic
+This raised the intriguing possibility that, as a rule, the electronic
 wavefunction was antisymmetric under particle exchange, and permutationally
 symmetric electron wavefunctions simply ``are not realized in
 nature.''\cite{Heisenberg:1926p411}
@@ -412,8 +395,8 @@ places each electron into its own distinct orbit, but the determinant function:
     \cdots
     \psi_{p_n}(\mathbf{x}_{\pi_n})
 \end{equation}
-where \(\pi=\pi_1\cdots \pi_n\) is a permutation of the electron labels
-\(1\cdots n\) and \((-)^\pi\) is its signature.
+where \(\pi\) is a permutation of the electron labels \(1\cdots n\) and
+\((-)^\pi\) is its signature.
 Whenever the same orbital appears twice in this expansion the determinant
 vanishes, so this provided a mathematical basis for Pauli exclusion.
 The energy of the antisymmetric product state has the form
@@ -437,11 +420,9 @@ The energy of the antisymmetric product state has the form
 \end{equation}
 which is the same as the product expectation value of
 \cref{eq:introduction:orbital-product-expectation-value} except for the new
-integrals
+integrals of the form
 \(
     g_{ij}^{ji}
-    =
-    \langle \psi_i\psi_j|\hat{g}_{12}|\psi_j\psi_i\rangle
 \).
 These ``exchange interactions'' between electrons in orbitals \(i\) and \(j\)
 serve to lower the energy by cancelling out part of the Coulomb repulsion where
@@ -476,10 +457,10 @@ Center stage in the new approach was the annihilation operator:
     \psi_p^*(\mathbf{x}')\,
     \Psi(\mathbf{x}', \mathbf{x}_2, \ldots, \mathbf{x}_n)
 \end{equation}
-The meaning this operation becomes clear from its action on a determinant.
+whose physical meaning becomes clear from its effects on the determinant basis.
 \begin{equation}
     \hat{a}_{p_k}
-    \Phi_{p_1\cdots p_k \cdots p_n}
+    \Phi_{p_1\cdots p_n}
     =
     (-)^{k-1}
     \Phi_{p_1\cdots p_{k-1} p_{k+1}\cdots p_n}
@@ -489,7 +470,7 @@ The meaning this operation becomes clear from its action on a determinant.
     \Phi_{p_1\cdots p_{k-1} p_{k+1}\cdots p_n}
     =
     (-)^{k-1}
-    \Phi_{p_1\cdots p_k\cdots p_n}
+    \Phi_{p_1\cdots p_n}
 \end{equation}
 \begin{equation}
     \begin{array}{c}
@@ -568,29 +549,6 @@ For weakly correlated states, the reference determinant can be chosen so that
 \(c_0 \approx 1\) and the coefficients become negligibly small for higher than
 quadruple excitations, allowing us to truncate this expansion to a good
 approximation.
-Second quantization also lends itself to defining new functional forms for the
-expansion, such as the coupled-cluster exponential.
-\begin{equation}
-    \Psi
-    =
-    \exp(\hat{T})
-    \Phi
-    \qquad
-    \hat{T}
-    \equiv
-    t_a^i
-    \hat{a}^a_i
-    +
-    (\tfrac{1}{2})^2
-    t_{ab}^{ij}
-    \hat{a}^{ab}_{ij}
-    +
-    (\tfrac{1}{3!})^2
-    t_{abc}^{ijk}
-    \hat{a}^{abc}_{ijk}
-    +
-    \cdots
-\end{equation}
 Finally, by substituting the following decomposition
 \begin{equation}
     \Psi(\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n)
@@ -670,40 +628,9 @@ The inverse relationship is given by
 \end{equation}
 which defines the electronic density cumulant.
 \begin{equation}
-    \lambda^{p_1\cdots p_n}_{q_1\cdots q_n}
+    \lambda^{p_1\cdots p_h}_{q_1\cdots q_h}
     \equiv
-    \langle\Psi|\hat{a}^{p_1\cdots p_n}_{q_1\cdots q_n}|\Psi\rangle_\mathrm{c}
-\end{equation}
-As a concrete example, the three-particle moment cumulant relations are given by
-the following.
-\begin{equation}
-    \gamma^{pqr}_{stu}
-    =
-    \lambda^{pqr}_{stu}
-    +
-    P^{(pq/r)}_{(st/u)}
-    \lambda^{pq}_{st}
-    \lambda^r_u
-    +
-    P_{(s/t/u)}
-    \lambda^p_s
-    \lambda^q_t
-    \lambda^r_u
-\end{equation}
-\begin{equation}
-    \lambda^{pqr}_{stu}
-    =
-    \gamma^{pqr}_{stu}
-    -
-    P^{(pq/r)}_{(st/u)}
-    \gamma^{pq}_{st}
-    \gamma^r_u
-    +
-    2
-    P_{(s/t/u)}
-    \gamma^p_s
-    \gamma^q_t
-    \gamma^r_u
+    \langle\Psi|\hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle_\mathrm{c}
 \end{equation}
 
 \afterpage{%
@@ -712,22 +639,36 @@ the following.
     \begin{landscape}
         \vspace*{\fill}
         \captionof{table}{%
-            Caption
+            The moment-cumulant relations, where
+            \(
+                \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
+                \equiv
+                \langle\Psi|a^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle
+            \)
+            and
+            \(
+                \lambda^{p_1\cdots p_h}_{q_1\cdots q_h}
+                \equiv
+                \langle\Psi|
+                a^{p_1\cdots p_h}_{q_1\cdots q_h}
+                |\Psi\rangle_\mathrm{c}
+            \)
+            are the \(h\)-body moments and cumulants of the wavefunction
+            density and we report the expansions for \(h=1, 2, 3, 4\).
+            Here, \(P_{(R_1/R_2/\cdots/R_m)}\) denotes antisymmetrization over
+            riffle shuffle permutations of \(m\) sets of indices.
         }
         \small
         \renewcommand\arraystretch{1.0}
+        \vspace{10pt}
         \begin{tabular}{ccc}
             \(
                 h
             \)
             &
-            \(
-                \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
-            \)
+            moment (\(\gamma\))
             &
-            \(
-                \lambda^{p_1\cdots p_h}_{q_1\cdots q_h}
-            \)
+            cumulant (\(\lambda\))
             \\\hline
             1
             &
