@@ -81,10 +81,8 @@ of \(n\) position variables,
     L^2(\mathbb{R}^{3n})
 \),
 one for each electron in the molecule.
-Since this space is infinite-dimensional, the only way forward in most cases is
-to determine a basis that approximately spans the states of interest.
-Here we are helped by the fact that the Hilbert space of a system is always
-given by a tensor product of the Hilbert spaces for its constituent particles.
+We are helped by the fact that the electronic Hilbert space decomposes into a
+product of one-electron Hilbert spaces
 \begin{equation}
     \mathcal{H}
     =
@@ -98,105 +96,15 @@ given by a tensor product of the Hilbert spaces for its constituent particles.
     =
     L^2(\mathbb{R}^3)
 \end{equation}
-In words, this says that the states of a system are spanned by all possible
-products of one-electron states, which enables a general strategy for
-bootstrapping the electronic structure problem:
-\begin{enumerate}
-    \item
-        \label{item:atomic-orbitals}
-        The states of a single electron orbiting a single nucleus are determined
-        by the spherical symmetry of the nuclear potential.
-        These 1s, 2s, 2p, \dots\ atomic orbitals have analytically known
-        functional forms, and their energy increases with the number of nodal
-        surfaces in the function.
-    \item
-        \label{item:mean-field}
-        Treating the other electrons in a molecule as static fields which
-        partially shield the nuclear charges, the states of individual electrons
-        in a molecule can be described as linear combinations of atomic
-        one-electron functions centered on each nucleus.
-        The dominant contributions to these molecular orbitals come from atomic
-        orbitals with a similar energy, so that the lowest-energy molecular
-        orbital typically looks like a 1s orbital centered on the nucleus of
-        greatest charge, with very little contribution from, say, the 42g
-        orbital of another nuclear center.
-        The higher energy states are linear combinations of higher energy atomic
-        orbitals with increasing numbers of nodes.
-    \item
-        \label{item:full-ci}
-        Finally, the total electronic wavefunction is described by a linear
-        combination of products of these molecular orbitals, and the electronic
-        ground-state will be spanned to a good approximation by products of the
-        low-energy molecular orbitals.
-        When the molecular orbitals are weakly interacting, the mean-field
-        approximation described in step~\ref{item:mean-field} furnishes a good
-        description of their motions, and the ground-state wavefunction will be
-        heavily dominated by the orbital product of lowest energy.
-        From a statistical perspective, this means that the electron probability
-        density of the wavefunction approximately factors into one-electron
-        densities, because the orbitals are {\itshape weakly correlated} for
-        this state.
-\end{enumerate}
-At the end of this procedure, we have a matrix equation in the product basis.
-\begin{equation}
-    \mathbf{H}\mathbf{c}
-    =
-    E\mathbf{c}
-    \qquad
-    (\mathbf{H})_{PQ}
-    =
-    \langle \phi_{p_1}\cdots \phi_{p_n}|
-    \hat{H}
-    |\phi_{q_1}\cdots \phi_{q_n} \rangle
-\end{equation}
-In the limit of a complete expansion, this eigenvalue equation is exactly
-equivalent to the Schr\"odinger equation and the coefficients of the solution
-vector correspond to the components of the wavefunction along each of our
-product functions.
-In order to stack the deck in favor of one product in the expansion, we can
-determine the molecular orbitals in step~\ref{item:mean-field} to minimize the
-energy expectation value
-\begin{equation}
-    \label{eq:introduction:orbital-product-expectation-value}
-    \langle \phi_1\cdots \phi_n|
-    \hat{H}
-    |\phi_1\cdots \phi_n \rangle
-    =
-    \sum_{i=1}^\mathrm{orbitals}
-    h_i^i
-    +
-    \sum_{i<j}^{\substack{\mathrm{orbital}\\\mathrm{pairs}}}
-    g_{ij}^{ij}
-\end{equation}
-where we have defined the ubiquitous {\itshape one-} and {\itshape two-electron
-integrals}.
-\begin{equation}
-    h_p^q
-    \equiv
-    \langle\phi_p|\hat{h}_1|\phi_q\rangle
-    =
-    \int
-    d^3\mathbf{r}_1\,
-    \phi_p^*(\mathbf{r}_1)
-    \hat{h}_1
-    \phi_q(\mathbf{r}_1)
-\end{equation}
-\begin{equation}
-    g_{pq}^{rs}
-    \equiv
-    \langle\phi_p\phi_q|\hat{g}_{12}|\phi_r\phi_s\rangle
-    =
-    \int
-    d^3\mathbf{r}_1
-    d^3\mathbf{r}_2\,
-    \phi_p^*(\mathbf{r}_1)
-    \phi_q^*(\mathbf{r}_2)
-    \hat{g}_{12}
-    \phi_r(\mathbf{r}_1)
-    \phi_s(\mathbf{r}_2)
-\end{equation}
-For an orthonormal orbital basis, this minimization leads to an effective
-Schr\"odinger equation for one-electron states
+which allows us to expand the electronic wavefunction as a linear combination of
+products of one-electron states.
+These one-electron states of a many-electron system are known as {\itshape
+orbitals}.
+
+A convenient orbital basis for many-electron systems is the solution set of the
+following equation, which is an effective Schr\"odinger equation for one
+electron in the mean Coulombic field generated by the orbitals of other
+electrons.
 \begin{equation}
     \label{eq:introduction:mean-field-orbitals}
     (
@@ -220,11 +128,61 @@ Schr\"odinger equation for one-electron states
         |\mathbf{r}_1 - \mathbf{r}_2|
     }
 \end{equation}
-where \(\hat{v}_1\) is the mean Coulombic field of the other electrons in the
-molecule.
-We complete the bootstrapping cycle by expanding these unknown molecular
-orbitals in the basis of the atomic orbitals described in
-step~\ref{item:atomic-orbitals} and solving for the expansion coefficients.
+This equation can be shown to minimize energy of a single orbital product
+\begin{equation}
+    \label{eq:introduction:orbital-product-expectation-value}
+    \langle \phi_1\cdots \phi_n|
+    \hat{H}
+    |\phi_1\cdots \phi_n \rangle
+    =
+    \sum_{i=1}^\mathrm{orbitals}
+    h_i^i
+    +
+    \sum_{i<j}^{\substack{\mathrm{orbital}\\\mathrm{pairs}}}
+    g_{ij}^{ij}
+\end{equation}
+which is a sum over {\itshape one-} and {\itshape two-electron integrals}.
+\begin{equation}
+    h_p^q
+    \equiv
+    \int
+    d^3\mathbf{r}_1\,
+    \phi_p^*(\mathbf{r}_1)
+    \hat{h}_1
+    \phi_q(\mathbf{r}_1)
+    \qquad
+    g_{pq}^{rs}
+    \equiv
+    \int
+    d^3\mathbf{r}_1
+    d^3\mathbf{r}_2\,
+    \phi_p^*(\mathbf{r}_1)
+    \phi_q^*(\mathbf{r}_2)
+    \hat{g}_{12}
+    \phi_r(\mathbf{r}_1)
+    \phi_s(\mathbf{r}_2)
+\end{equation}
+As a result, \cref{eq:introduction:mean-field-orbitals} is most effective for
+{\itshape weakly correlated} electronic states, where the electron probability
+density approximately factors into one-electron densities.
+
+Having determined a basis for \(\mathcal{H}_e\), the Schr\"odinger equation can
+be solved to a good approximation in the basis of low-energy orbital products.
+\begin{equation}
+    \mathbf{H}\mathbf{c}
+    =
+    E\mathbf{c}
+    \qquad
+    (\mathbf{H})_{PQ}
+    =
+    \langle \phi_{p_1}\cdots \phi_{p_n}|
+    \hat{H}
+    |\phi_{q_1}\cdots \phi_{q_n} \rangle
+\end{equation}
+In the limit of a complete expansion, this matrix eigenvalue equation is exactly
+equivalent to the Schr\"odinger equation and the coefficients of the solution
+vector correspond to the components of the wavefunction along each of our
+product functions.
 
 The general strategy we have just outlined carries over into modern electronic
 structure theory, but it is missing two essential ingredients: the spin of the
@@ -571,67 +529,12 @@ following form.
     \overline{g}_{pq}^{rs}\,
     \hat{a}^{pq}_{rs}
 \end{equation}
-It energy expectation value with respect to a generic state is given by
-\begin{equation}
-    \langle\Psi|
-    \hat{H}
-    |\Psi\rangle
-    =
-    h_p^q
-    \gamma^p_q
-    +
-    \tfrac{1}{4}
-    \overline{g}_{pq}^{rs}
-    \gamma^{pq}_{rs}
-\end{equation}
-in terms of the one- and two-body reduced density matrices.
-\begin{equation}
-    \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
-    \equiv
-    \langle\Psi|\hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle
-\end{equation}
-In principle, all of the information needed to evaluate the energy is contained
-in the two-body density matrix, but the structure of this tensor is quite
-important.
-Truncating the linear expansion of \cref{eq:intro-ci-expansion} at some
-excitation level is known to produce artifactual ``unlinked'' contributions to
-the density matrix which spoil the qualitative behavior of the energy with
-respect to system size and independent subsystems.
-The correct structure with respect to connectivity is defined by the cumulant
-expansion.\cite{McCullagh:1987}
-\begin{equation}
-    \langle\Psi|\hat{Q}|\Psi\rangle
-    =
-    \sum_{k=1}^n
-    \sum_{\Pi}^{\mathrm{Part}(\hat{Q}, k)}
-    (-)^{\Pi}
-    \langle\Psi|\hat{\Pi}_1|\Psi\rangle_\mathrm{c}
-    \cdots
-    \langle\Psi|\hat{\Pi}_k|\Psi\rangle_\mathrm{c}
-\end{equation}
-Here, \(\hat{Q}\) is an excitation operator, \(\Pi\) is a partition of the
-operator string into \(k\) parts, \((-)^\Pi\) is the signature of the
-permutation, and the subscript `\(\mathrm{c}\)' denotes the connected
-contributions to the expectation value.
-The inverse relationship is given by
-\begin{equation}
-    \langle\Psi|\hat{Q}|\Psi\rangle_\mathrm{c}
-    =
-    \sum_{k=1}^n
-    (-)^{k+1}
-    (k-1)!
-    \sum_{\Pi}^{\mathrm{Part}(\hat{Q}, k)}
-    (-)^{\Pi}
-    \langle\Psi|\hat{\Pi}_1|\Psi\rangle
-    \cdots
-    \langle\Psi|\hat{\Pi}_k|\Psi\rangle
-\end{equation}
-which defines the electronic density cumulant.
-\begin{equation}
-    \lambda^{p_1\cdots p_h}_{q_1\cdots q_h}
-    \equiv
-    \langle\Psi|\hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle_\mathrm{c}
-\end{equation}
+This reduces the evaluation of Hamiltonian matrix elements to the algebra of
+creation annihilation operators, which obey simple anticommutation relationships
+that encode the permutational antisymmetry of the electrons.
+
+
+\section{Density Cumulants}
 
 \afterpage{%
     \clearpage
@@ -786,6 +689,69 @@ which defines the electronic density cumulant.
         \vspace*{\fill}
     \end{landscape}
 }
+
+It energy expectation value with respect to a generic state is given by
+\begin{equation}
+    \langle\Psi|
+    \hat{H}
+    |\Psi\rangle
+    =
+    h_p^q
+    \gamma^p_q
+    +
+    \tfrac{1}{4}
+    \overline{g}_{pq}^{rs}
+    \gamma^{pq}_{rs}
+\end{equation}
+in terms of the one- and two-body reduced density matrices.
+\begin{equation}
+    \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
+    \equiv
+    \langle\Psi|\hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle
+\end{equation}
+In principle, all of the information needed to evaluate the energy is contained
+in the two-body density matrix, but the structure of this tensor is quite
+important.
+Truncating the linear expansion of \cref{eq:intro-ci-expansion} at some
+excitation level is known to produce artifactual ``unlinked'' contributions to
+the density matrix which spoil the qualitative behavior of the energy with
+respect to system size and independent subsystems.
+The correct structure with respect to connectivity is defined by the cumulant
+expansion.\cite{McCullagh:1987}
+\begin{equation}
+    \langle\Psi|\hat{Q}|\Psi\rangle
+    =
+    \sum_{k=1}^n
+    \sum_{\Pi}^{\mathrm{Part}(\hat{Q}, k)}
+    (-)^{\Pi}
+    \langle\Psi|\hat{\Pi}_1|\Psi\rangle_\mathrm{c}
+    \cdots
+    \langle\Psi|\hat{\Pi}_k|\Psi\rangle_\mathrm{c}
+\end{equation}
+Here, \(\hat{Q}\) is an excitation operator, \(\Pi\) is a partition of the
+operator string into \(k\) parts, \((-)^\Pi\) is the signature of the
+permutation, and the subscript `\(\mathrm{c}\)' denotes the connected
+contributions to the expectation value.
+The inverse relationship is given by
+\begin{equation}
+    \langle\Psi|\hat{Q}|\Psi\rangle_\mathrm{c}
+    =
+    \sum_{k=1}^n
+    (-)^{k+1}
+    (k-1)!
+    \sum_{\Pi}^{\mathrm{Part}(\hat{Q}, k)}
+    (-)^{\Pi}
+    \langle\Psi|\hat{\Pi}_1|\Psi\rangle
+    \cdots
+    \langle\Psi|\hat{\Pi}_k|\Psi\rangle
+\end{equation}
+which defines the electronic density cumulant.
+\begin{equation}
+    \lambda^{p_1\cdots p_h}_{q_1\cdots q_h}
+    \equiv
+    \langle\Psi|\hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle_\mathrm{c}
+\end{equation}
+
 
 
 \section{Prospectus}
