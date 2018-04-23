@@ -518,6 +518,7 @@ into a general antisymmetric matrix element of the Hamiltonian, we find that the
 restriction of \(\hat{H}\) to antisymmetric states can be expressed in the
 following form.
 \begin{equation}
+    \label{eq:introduction:second-quantized-hamiltonian}
     \hat{H}
     =
     h_p^q\,
@@ -693,6 +694,43 @@ Most notable is the expansion theorem published by Gian-Carlo Wick in
     \end{landscape}
 }
 
+\begin{enumerate}
+    \item
+        In general, the goal of stationary-state electronic structure theory is
+        the determination of observables, such as the energy or the
+        electromagnetic moments an electronic state.
+    \item
+        For these purposes, the wavefunction actually contains vastly too much
+        information.
+    \item
+        The expectation value of any operator describing up to \(h\)-body
+        interactions can be determined from the {\itshape \(h\)-body
+        density matrix} of the wavefunction
+        \begin{equation}
+            \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
+            \equiv
+            \langle\Psi|\hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle
+        \end{equation}
+        which has \(m^h\) elements in an \(m\)-dimensional spin-orbital basis.
+    \item
+        As we have seen, the electronic energy involves two-body repulsion
+        interaction and hence requires the two-body density matrix.
+    \item
+        Most other properties require only the one-body density matrix.
+    \item
+        This raises the possibility of determining the elements of the two-body
+        density matrix directly, rather than from a wavefunction.
+    \item
+        This approach was first explored in a 1955 publication by Joseph
+        Mayer,\cite{Mayer:1955p1579} who showed that these elements can be
+        determined variationally subject to a set of {\itshape
+        \(n\)-representability conditions} to ensure that it actually describes
+        the density of an antisymmetric wavefunction.
+    \item
+        Kubo\cite{Kubo:1962p1100}
+\end{enumerate}
+
+\newpage
 It energy expectation value with respect to a generic state is given by
 \begin{equation}
     \langle\Psi|
