@@ -546,45 +546,12 @@ expansion theorem discovered by Gian-Carlo Wick in 1950.\cite{Wick:1950p268}
 
 \section{Density Cumulants}
 
-From the second quantized Hamiltonian, we see that the electronic energy
-is determined by the expectation values of the single and double
-excitations, i.e.\ the one- and two-body density matrices.
-A general {\itshape \(h\)-body density matrix} is defined as follows.
-\begin{equation}
-    \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
-    \equiv
-    \langle\Psi|\hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle
-\end{equation}
-This raises the possibility of determining the density matrices
-directly, rather than from a wavefunction.
-The variational determination of the two-body density matrix was first
-explored in a 1955 article by Joseph Mayer,\cite{Mayer:1955p1579} who
-showed that one requires a set of {\itshape \(n\)-representability
-constraints} to ensure that the density is derivable from a
-wavefunction.
-An unfortunate defect of this approach is that truncating the
-\(n\)-representability conditions for computational tractability spoils
-the size-extensivity and size-consistency of the model.
-Size-extensivity refers to the fact that the energy grows linearly with
-\(n\) in the limit of an infinite crystal, and size-consistency means
-that the energy of two non-interacting systems equals the sum of their
-individual energies, calculated separately.
-These properties are crucial for correctly describing chemical
-processes.
-One way around this comes from recognizing that the density matrices
-are statistical {\itshape moments} of the wavefunction's probability
-distribution.
-The moments of a distribution are its expectation values over a
-polynomial basis of basic variables, which can be used to evaluate
-expectations values for functions of these variables.
-
 \afterpage{%
     \clearpage
     \centering
     \begin{landscape}
         \vspace*{\fill}
         \captionof{table}{%
-            \label{tab:introduction:moment-cumulant-relations}
             The moment-cumulant relations, where
             \(
                 \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
@@ -733,44 +700,115 @@ expectations values for functions of these variables.
     \end{landscape}
 }
 
+\begin{enumerate}
+    \item
+        From the second quantized Hamiltonian, we see that the electronic energy
+        is determined by the expectation values of the single and double
+        excitation operators.
+    \item
+        These are the one- and two-body density matrices, where a general
+        {\itshape \(h\)-body density matrix} is given by the following.
+        \begin{equation}
+            \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
+            \equiv
+            \langle\Psi|\hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle
+        \end{equation}
+    \item
+        This tensor determines the expectation value of an \(h\)-body
+        interaction.
+    \item
+        This raises the possibility of determining the density matrices
+        directly, rather than from a wavefunction.
+    \item
+        The variational determination of the two-body density matrix was first
+        explored in a 1955 article by Joseph Mayer,\cite{Mayer:1955p1579} who
+        showed that one requires a set of {\itshape \(n\)-representability
+        constraints} to ensure that the density is derivable from a
+        wavefunction.
+    \item
+        An unfortunate defect of this approach is that truncating the
+        \(n\)-representability conditions for computational tractability spoils
+        the size-extensivity and size-consistency of the model.
+    \item
+        Size-extensivity refers to the fact that the energy grows linearly with
+        \(n\) in the limit of an infinite crystal, and size-consistency means
+        that the energy of two non-interacting systems equals the sum of their
+        individual energies, calculated separately.
+    \item
+        These properties are crucial for correctly describing chemical
+        processes.
+    \item
+        One way around this comes from recognizing that the density matrices
+        are statistical {\itshape moments} of the wavefunction's probability
+        distribution.
+    \item
+        The moments of a distribution are its expectation values over a
+        polynomial basis of basic variables, which can be used to evaluate the
+        expectation value of any analytic function of these variables.
+    \item
+        An alternative statistic for characterizing a distriubtion is the
+        cumulant, which can be defined as ``a combination of moments that
+        vanishes when some subset of the variates is independent of the
+        others.''\cite{Brillinger:1992}
+    \item
+        The definition of cumulants for quantum statistical distributions goes
+        back to the work of Ryogo Kubo in 1962.\cite{Kubo:1962p1100}
+    \item
+        The {\itshape \(h\)-body density cumulant} is given
+        by\cite{McCullagh:1987}
+        \begin{equation}
+            \lambda^{p_1\cdots p_h}_{q_1\cdots q_h}
+            =
+            \langle\Psi|
+            \hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}
+            |\Psi\rangle_\mathrm{c}
+        \end{equation}
+        \begin{equation}
+            \langle\Psi|\hat{Q}|\Psi\rangle_\mathrm{c}
+            \equiv
+            \sum_{k=1}^n
+            (-)^{k+1}
+            (k-1)!
+            \sum_{\Pi}^{\mathrm{Part}(\hat{Q}, k)}
+            (-)^{\Pi}
+            \langle\Psi|\hat{\Pi}_1|\Psi\rangle
+            \cdots
+            \langle\Psi|\hat{\Pi}_k|\Psi\rangle
+        \end{equation}
+        where \(\hat{Q}\) denotes an operator string, \(\Pi\) is a partition of
+        the operator string into \(k\) parts, and \((-)^\Pi\) is the signature
+        the permutation.
+\end{enumerate}
 
-An alternative statistic for characterizing a distribution is the
-cumulant, which can be defined as ``a combination of moments that
-vanishes when some subset of the variates is independent of the
-others.''\cite{Brillinger:1992}
-The definition of cumulants for quantum statistical distributions goes
-back to the work of Ryogo Kubo in 1962.\cite{Kubo:1962p1100}
-Following Kubo, we can express {\itshape \(h\)-body density cumulant} in
-terms of a so-called cumulant average.
+\newpage
+It energy expectation value with respect to a generic state is given by
 \begin{equation}
-    \lambda^{p_1\cdots p_h}_{q_1\cdots q_h}
-    =
     \langle\Psi|
-    \hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}
-    |\Psi\rangle_\mathrm{c}
+    \hat{H}
+    |\Psi\rangle
+    =
+    h_p^q
+    \gamma^p_q
+    +
+    \tfrac{1}{4}
+    \overline{g}_{pq}^{rs}
+    \gamma^{pq}_{rs}
 \end{equation}
-By analogy to the classical case, this ``average'' is defined as
-follows\cite{McCullagh:1987}
+in terms of the one- and two-body reduced density matrices.
 \begin{equation}
-    \langle\Psi|\hat{Q}|\Psi\rangle_\mathrm{c}
+    \gamma^{p_1\cdots p_h}_{q_1\cdots q_h}
     \equiv
-    \sum_{k=1}^n
-    (-)^{k+1}
-    (k-1)!
-    \sum_{\Pi}^{\mathrm{Part}(\hat{Q}, k)}
-    (-)^{\Pi}
-    \langle\Psi|\hat{\Pi}_1|\Psi\rangle
-    \cdots
-    \langle\Psi|\hat{\Pi}_k|\Psi\rangle
+    \langle\Psi|\hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle
 \end{equation}
-where \(\Pi\) is a partition of the excitation operator string \(\hat{Q}\) into
-\(k\) products and \((-)^\Pi\) is the signature the permutation.
-These partitions keep the relative orderings of the operators in each block.
-Only the products that have the form of an excitation operator have
-non-vanishing expectation values, so this defines an expansion for \(h\)-body
-cumulants in terms of \(h'\)-body moments, with \(h'\leq h\).
-\cref{tab:introduction:moment-cumulant-relations} shows several examples.
-The inverse relationship has a simpler form.
+In principle, all of the information needed to evaluate the energy is contained
+in the two-body density matrix, but the structure of this tensor is quite
+important.
+Truncating the linear expansion of \cref{eq:intro-ci-expansion} at some
+excitation level is known to produce artifactual ``unlinked'' contributions to
+the density matrix which spoil the qualitative behavior of the energy with
+respect to system size and independent subsystems.
+The correct structure with respect to connectivity is defined by the cumulant
+expansion.\cite{McCullagh:1987}
 \begin{equation}
     \langle\Psi|\hat{Q}|\Psi\rangle
     =
@@ -781,47 +819,64 @@ The inverse relationship has a simpler form.
     \cdots
     \langle\Psi|\hat{\Pi}_k|\Psi\rangle_\mathrm{c}
 \end{equation}
-As we have already mentioned, the defining property of the cumulants is that
-they vanish for independent variables.
-This insures that the cumulant set of a system separates into a union of
-cumulants for its non-interacting components.
-As a consequence, a description of the electron density in terms of cumulants
-ensures size-consistency and size-extensivity from the outset.
-
+Here, \(\hat{Q}\) is an excitation operator, \(\Pi\) is a partition of the
+operator string into \(k\) parts, \((-)^\Pi\) is the signature of the
+permutation, and the subscript `\(\mathrm{c}\)' denotes the connected
+contributions to the expectation value.
+The inverse relationship is given by
+\begin{equation}
+    \langle\Psi|\hat{Q}|\Psi\rangle_\mathrm{c}
+    =
+    \sum_{k=1}^n
+    (-)^{k+1}
+    (k-1)!
+    \sum_{\Pi}^{\mathrm{Part}(\hat{Q}, k)}
+    (-)^{\Pi}
+    \langle\Psi|\hat{\Pi}_1|\Psi\rangle
+    \cdots
+    \langle\Psi|\hat{\Pi}_k|\Psi\rangle
+\end{equation}
+which defines the electronic density cumulant.
+\begin{equation}
+    \lambda^{p_1\cdots p_h}_{q_1\cdots q_h}
+    \equiv
+    \langle\Psi|\hat{a}^{p_1\cdots p_h}_{q_1\cdots q_h}|\Psi\rangle_\mathrm{c}
+\end{equation}
 
 
 
 \section{Prospectus}
 
-The first method for variationally determining the two-body cumulant was
-proposed by Werner Kutzelnigg in 2006\cite{Kutzelnigg:2006p171101} and was first
-implemented by Andrew Simmonett four years later.\cite{Simmonett:2010p174122}
-Originally this approach was called density cumulant functional theory (DCFT),
-but more recent works have begun to shorten the name to density cumulant theory
-(DCT) to avoid confusion with density functional theory (DFT), which is
-unrelated.
-The DCT approach was brought to maturity by the contributions of Alexander
-Sokolov, who showed how determine the energy as an exact functional of the
-two-body cumulant\cite{Sokolov:2013p024107} and contributed several new
-variants, including an orbital-optimized model\cite{Sokolov:2013p204110} and a
-model which includes connected triples in the cumulant
-parametrization.\cite{Sokolov:2014p074111}
+Density cumulant theory (DCT) expresses the energy as a functional of the
+two-body cumulant.
+The first variant of the theory was proposed by Kutzelnigg in
+2006,\cite{Kutzelnigg:2006p171101} and was first implemented by Simmonett four
+years later.\cite{Simmonett:2010p174122}
+The theory was further developed by Sokolov, who developed several new
+variants.\cite{Sokolov:2013p024107,Sokolov:2013p204110,Sokolov:2014p074111}
 
-
-The main contribution of the present work is the generalization of density
-cumulant theory for excited electronic states.
 \cref{ch:benchmark} presents a benchmark study of the ground-state DCT variants,
 demonstrating that the best variant of the theory to date, ODC-12, consistently
 outperforms the popular CCSD method for the description of thermochemical and
 kinetic processes.
-\cref{ch:response} presents a model for excited states, which is derived from
-the linear response of ground-state density cumulant theory under time-dependent
-perturbations (LR-DCT).
+\cref{ch:response} presents the main contribution of this work, which is the
+extension of DCT for the description of excited states via linear response
+theory.
 We present a theoretical framework for LR-DCT, derive the linear response
 working equations for the ODC-12 model, as well as the initial implementation
 and verification of the theory.
 We also present the linearized variant of our model, which is the first
 implementation of a linear response theory for the orbital-optimized linearized
 coupled-cluster doubles (OLCCD) method.
+The benchmarks of the LR-ODC-12 model compared with EOM-CCSD look very
+promising.
+For well-behaved systems, the mean absolute errors are consistently halved by
+the new method.
+For the more challenging excited states of ethylene, butadiene, and hexatriene
+the differences are more stark.
+In the most extreme case, EOM-CCSD misses the \(2{}^1\mathrm{A_g}\) state of
+hexatriene by nearly 1~eV, whereas LR-ODC-12 is within 0.15~eV of the reference
+value and predicts this states energy gap with the \(1{}^1\mathrm{B_u}\) to
+nearly 0.01~eV.
 Finally, \cref{ch:davidson} presents the algorithms that were used for our study
 of larger systems, particularly hexatriene.
